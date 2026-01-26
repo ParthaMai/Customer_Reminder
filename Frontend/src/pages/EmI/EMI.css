@@ -1,0 +1,138 @@
+/* .add{
+    width: 70%;
+    margin-left: max(5vw,25px);
+    margin-top: 50px;
+    color: #6d6d6d;
+    font-size: max(1vw,15px);
+}
+.add form{
+    padding-top: 10px;
+    padding-left: 20%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.add-img-upload img{
+    width: 140px;
+    cursor: pointer;
+}
+.add-product-name, .add-product-description{
+    width: max(40%,280px);
+}
+.add-product-name input, .add-product-description textarea{
+    padding: 10px;
+}
+.add-btn{
+    max-width: 120px;
+    border: none;
+    padding: 10px;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+} */
+
+
+
+
+.add {
+    width: 90%;
+    max-width: 500px;
+    margin: 40px auto;
+    background-color: #f9f9f9; /* light grey background */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    font-family: Arial, sans-serif;
+    color: #333;
+    font-size: max(1vw,15px);
+}
+
+.add form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.add p {
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.add input[type="text"],
+.add input[type="tel"],
+.add input[type="number"],
+.add input[type="date"],
+.add textarea,
+.add select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: #fff;
+    box-sizing: border-box;
+}
+
+.add input:focus,
+.add textarea:focus,
+.add select:focus {
+    border-color: #888;
+    outline: none;
+}
+
+.add-img-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.add-img-upload label {
+    cursor: pointer;
+}
+.add-img-upload img {
+    width: 120px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.add-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.add-btn:hover {
+    background-color: #555;
+}
+
+.mobile-no input {
+    margin-bottom: 8px;
+}
+
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+@media (max-width: 400px) {
+    .add {
+        padding: 15px;
+    }
+    .add p {
+        font-size: 13px;
+    }
+    .add input, .add textarea, .add select {
+        font-size: 13px;
+    }
+    .add-btn {
+        padding: 10px;
+        font-size: 14px;
+    }
+}
