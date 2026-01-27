@@ -36,7 +36,7 @@
 
 .add {
     width: 90%;
-    max-width: 500px;
+    max-width: 600px;
     margin: 40px auto;
     background-color: #f9f9f9; /* light grey background */
     padding: 20px;
@@ -121,12 +121,12 @@ select {
     -moz-appearance: none;
 }
 
-@media (max-width: 400px) {
+@media (max-width: 500px) {
     .add {
         padding: 15px;
     }
     .add p {
-        font-size: 13px;
+        font-size: 16px;
     }
     .add input, .add textarea, .add select {
         font-size: 13px;

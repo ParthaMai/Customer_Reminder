@@ -1,4 +1,4 @@
-.navbar{
+/* .navbar{
     padding: 20px 0px;
     display: flex;
     justify-content: space-between;
@@ -6,7 +6,7 @@
 }
 
 .navbar .logo{
-    width: 150px;
+    width: 170px;
 }
 .navbar-menu{
     display: flex;
@@ -16,47 +16,69 @@
     font-size: 16px;
 }
 
-/* make it responsive for all screen use media query */
-@media (max-width: 1050px){
-    .navbar .logo{
-        width: 140px;
-    }
-    .navbar-menu{
-        gap: 20px;
-        font-size: 17px;
-    }
-    .navbar-right{
-        gap: 30px;
-    }
-    .navbar-right img{
-        width: 22px;
-    }
-    .navbar-right button{
-        padding: 8px 25px;
-    }
-}
+
 @media (max-width: 900px){
     .navbar .logo{
-        width: 120px;
+        width: 150px;
     }
     .navbar-menu{
-        gap: 15px;
-        font-size: 16px;
-    }
-    .navbar-right{
         gap: 20px;
-    }
-    .navbar-right img{
-        width: 20px;
-    }
-    .navbar-right button{
-        padding: 7px 20px;
         font-size: 15px;
     }
+} */
+
+/* Navbar.css */
+
+/* Navbar container */
+.navbar {
+    width: 100%;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    flex-wrap: wrap; /* allows wrapping on small screens */
 }
-@media (max-width: 750px){
-    .navbar-menu{
-        display: none;
+
+/* Logo */
+.navbar .logo {
+    width: 170px;
+    cursor: pointer;
+    transition: width 0.3s ease;
+}
+
+/* Navbar menu */
+.navbar-menu {
+    display: flex;
+    list-style: none;
+    gap: 20px;
+    font-size: 16px;
+    align-items: center;
+    flex-wrap: wrap; /* wrap on small screens */
+}
+
+/* Navbar links */
+.navbar-menu a {
+    text-decoration: none;
+    color: hsl(226, 26%, 42%);
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.navbar-menu a:hover {
+    color: #aa6565; 
+}
+
+/* Mobile styles */
+@media (max-width: 600px) {
+    .navbar-menu a {
+        font-size: 16px;
     }
-    
+    .navbar .logo {
+        width: 150px;
+    }
 }
