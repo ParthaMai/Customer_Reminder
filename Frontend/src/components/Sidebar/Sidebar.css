@@ -27,6 +27,6 @@
 
 @media (max-width: 600px){
     .sidebar{
-        font-size: max(1vw, 13px);
+        font-size: max(1vw, 15px);
     }
 }

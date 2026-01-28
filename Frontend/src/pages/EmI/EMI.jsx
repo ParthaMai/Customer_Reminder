@@ -175,7 +175,6 @@ const EMI = () => {
                         <option value="11">11 Months</option>
                         <option value="12">1 Year</option>
                         <option value="24">2 Years</option>
-                        <option value="36">3 Years</option>
                     </select>
                 </div>
 

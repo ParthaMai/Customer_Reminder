@@ -16,9 +16,13 @@ const Sidebar = () => {
                     <img src={assets.add_icon} alt="" />
                     <p>Add Cash Customer</p>
                 </NavLink>
-                <NavLink to='/list' className="sidebar-option">
+                <NavLink to='/list_EMI' className="sidebar-option">
                     <img src={assets.list_icon} alt="" />
-                    <p>List of Customer</p>
+                    <p>List of EMI Customer</p>
+                </NavLink>
+                <NavLink to='/list_Cash' className="sidebar-option">
+                    <img src={assets.list_icon} alt="" />
+                    <p>List of Cash Customer</p>
                 </NavLink>
             </div>
         </div>

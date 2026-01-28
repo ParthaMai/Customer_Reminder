@@ -1,0 +1,89 @@
+import EmiModel from "../models/EmiModel.js";
+import fs from 'fs'
+
+// Add EMi Customer
+
+const addEmi = async (req,res) => {
+    
+    // Check if image exist or not.
+    const image_filename = req.file ? req.file.filename : null;
+
+    const emi = new EmiModel({
+        name: req.body.name,
+        formNo: req.body.formNo,
+        purchaseDate: req.body.purchaseDate,
+
+        mobile1: req.body.mobile1,
+        mobile2: req.body.mobile2,
+        mobile3: req.body.mobile3,
+        mobile4: req.body.mobile4,
+
+        description: req.body.description,
+        fatherName: req.body.fatherName,
+
+        aadhar: req.body.aadhar,
+        voterId: req.body.voterId,
+
+        age: req.body.age,
+        pan: req.body.pan,
+        dob: req.body.dob,
+
+        cibil: req.body.cibil,
+        pinCode: req.body.pinCode,
+
+        qualification: req.body.qualification,
+        occupation: req.body.occupation,
+
+        mobileModel: req.body.mobileModel,
+        price: req.body.price,
+
+        emiCharges: req.body.emiCharges,
+        emiTenure: req.body.emiTenure,
+
+        failedEmi: req.body.failedEmi,
+        reminderPeriod: req.body.reminderPeriod,
+
+        image: image_filename
+    })
+    try{
+        await emi.save(); // This is save data in mongodb
+        res.json({success: true,message:"EMI Customer Data Added"})
+    }
+    catch(error){
+        console.log(error)
+        res.json({success:false,message:"Detect Error"})
+    }
+}
+
+
+// all EMi customer list
+const EmiList = async (req,res) => {
+    try {
+        const Emi = await EmiModel.find({});
+        res.json({success:true,data:Emi})
+    }
+    catch(error){
+        console.log(error);
+        res.json({success:false,message:"Error"})
+    }
+}
+
+// remove Emi customer 
+const removeCustomer = async (req,res) => {
+
+    try{
+        const customer = await EmiModel.findById(req.body.id);
+        // delete the image
+        fs.unlink(`uploads/${customer.image}`,()=>{})
+
+        // this is food data deleted from database
+        await EmiModel.findByIdAndDelete(req.body.id);
+        res.json({success:true, message:"Customer Removed"})
+    }catch(error){
+        console.log(error);
+        res.json({success:false,message:"Error"})
+    }
+}
+
+
+export {addEmi, EmiList, removeCustomer}

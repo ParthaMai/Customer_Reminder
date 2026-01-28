@@ -1,8 +1,14 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './Cash.css'
 import { assets } from '../../assets/assets'
 
 const Cash = () => {
+
+
+
+
+
+    
   return (
     <div className='cash'>
       <form className='flex-col'>

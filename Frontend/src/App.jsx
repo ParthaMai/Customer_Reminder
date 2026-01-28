@@ -4,8 +4,9 @@ import Sidebar from './components/Sidebar/Sidebar'
 import { Route, Routes } from 'react-router-dom'
 import EMI from './pages/EmI/EMI'
 import Cash from './pages/Cash/Cash'
-import List from './pages/List/List'
 import Home from './pages/Home/Home'
+import List_EMI from './pages/List_EMI/List_EMI'
+import List_Cash from './pages/List_Cash/List_Cash'
 
 
 const App = () => {
@@ -17,7 +18,8 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path='/emi' element={<EMI/>} />
           <Route path="/cash" element={<Cash/>} />
-          <Route path="/list" element={<List/>} />
+          <Route path="/list_EMI" element={<List_EMI/>} />
+          <Route path="/list_Cash" element={<List_Cash/>} />
         </Routes>
     </div>
   )

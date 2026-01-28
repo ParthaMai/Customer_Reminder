@@ -1,11 +1,11 @@
 import React from 'react'
 
-const List = () => {
+const List_EMI = () => {
   return (
     <div>
-      tuk
+      Tuk,tuk
     </div>
   )
 }
 
-export default List
+export default List_EMI
