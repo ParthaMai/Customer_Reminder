@@ -7,11 +7,13 @@ import Cash from './pages/Cash/Cash'
 import Home from './pages/Home/Home'
 import List_EMI from './pages/List_EMI/List_EMI'
 import List_Cash from './pages/List_Cash/List_Cash'
+import { ToastContainer} from 'react-toastify';
 
 
 const App = () => {
   return (
     <div className='app'>
+      <ToastContainer /> 
       <Navbar/>
       <hr/>
         <Routes>
