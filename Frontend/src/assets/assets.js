@@ -21,6 +21,7 @@ import logo from './logo.png'
 import upload_icon from './upload_area.png'
 import add_icon from './add_icon.png'
 import list_icon from './order_icon.png'
+import edit_icon from './Edit.png'
 
 
 export const assets = {
@@ -44,5 +45,6 @@ export const assets = {
     logo,
     upload_icon,
     add_icon,
-    list_icon
+    list_icon,
+    edit_icon
 }

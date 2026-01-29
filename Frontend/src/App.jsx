@@ -8,6 +8,7 @@ import Home from './pages/Home/Home'
 import List_EMI from './pages/List_EMI/List_EMI'
 import List_Cash from './pages/List_Cash/List_Cash'
 import { ToastContainer} from 'react-toastify';
+import FullList_Emi from './pages/List_EMI/FullList_Emi/FullList_Emi'
 
 
 const App = () => {
@@ -22,6 +23,7 @@ const App = () => {
           <Route path="/cash" element={<Cash/>} />
           <Route path="/list_EMI" element={<List_EMI/>} />
           <Route path="/list_Cash" element={<List_Cash/>} />
+          <Route path="/list_EMI/FullList_Emi" element ={<FullList_Emi/>} />
         </Routes>
     </div>
   )

@@ -28,6 +28,7 @@
   grid-template-columns: 
     0.7fr
     2fr
+    0.8fr 
     1fr
     1.2fr
     1.5fr
@@ -41,6 +42,20 @@
   border-bottom: 1px solid #ddd;
   font-size: 14px;
 }
+.edit-icon {
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  margin: auto;
+  display: block;
+  opacity: 0.7;
+}
+
+.edit-icon:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
 
 
 .list-table-format.title {
@@ -50,7 +65,7 @@
 }
 
 
-.list-table-format img {
+.list-table-format img:not(.edit-icon)  {
   width: 45px;
   height: 45px;
   object-fit: cover;
@@ -75,7 +90,8 @@
   .list-table-format {
     grid-template-columns: 
       0.8fr   /* Image */
-      2fr     /* Name */
+      2fr    /* Name */
+      0.6fr /* Update */
       1fr     /* Form No */
       1fr     /* Price */
       1fr     /* Failed EMI */
@@ -83,18 +99,18 @@
   }
 
   /* Hide Purchase Date (row) */
-  .list-table-format p:nth-child(4) {
-    display: none;
-  }
-
-  /* Hide Mobile No (row) */
   .list-table-format p:nth-child(5) {
     display: none;
   }
 
+  /* Hide Mobile No (row) */
+  .list-table-format p:nth-child(6) {
+    display: none;
+  }
+
   /* Hide headings */
-  .list-table-format.title b:nth-child(4),
-  .list-table-format.title b:nth-child(5) {
+  .list-table-format.title b:nth-child(5),
+  .list-table-format.title b:nth-child(6) {
     display: none;
   }
 }
