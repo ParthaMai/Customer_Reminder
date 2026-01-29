@@ -24,8 +24,8 @@ app.get("/",(req,res) =>{
     res.send("API Working")
 })
 
-app.listen(port,()=>{
-    console.log(`Server Started on http://localhost:${port}`)
+app.listen(port,"0.0.0.0", ()=>{
+    console.log(`Server Started on http://192.168.1.8:${port}`)
 })
 
 // mongodb+srv://parthamaity2004_db_user:Partha988373@cluster1.yr6zp7r.mongodb.net/?

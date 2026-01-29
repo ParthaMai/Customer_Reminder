@@ -59,7 +59,7 @@ const addEmi = async (req,res) => {
 // all EMi customer list
 const EmiList = async (req,res) => {
     try {
-        const Emi = await EmiModel.find({});
+        const Emi = await EmiModel.find({}).sort({ createdAt: -1 });
         res.json({success:true,data:Emi})
     }
     catch(error){
@@ -67,6 +67,45 @@ const EmiList = async (req,res) => {
         res.json({success:false,message:"Error"})
     }
 }
+// one EMi customer Fulllist
+const FullEmiList = async (req,res) => {
+    try {
+        const Emi = await EmiModel.findById(req.query.id);
+        res.json({success:true,data:Emi})
+    }
+    catch(error){
+        console.log(error);
+        res.json({success:false,message:"Error"})
+    }
+}
+
+const SearchEmi = async (req, res) => {
+  try {
+    const { field, value } = req.query;
+
+    const allowedFields = ["name", "formNo", "mobile1"];
+    if (!allowedFields.includes(field)) {
+      return res.json({ success: false, message: "Invalid search field" });
+    }
+
+    let query = {};
+
+    if (field === "formNo") {
+      query[field] = Number(value);
+    } 
+    else {
+      query[field] = { $regex: value, $options: "i" }; 
+    }
+
+    const data = await EmiModel.find(query).sort({ createdAt: -1 });
+
+    res.json({ success: true, data });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: "Error" });
+  }
+};
+
 
 // remove Emi customer 
 const removeCustomer = async (req,res) => {
@@ -86,4 +125,4 @@ const removeCustomer = async (req,res) => {
 }
 
 
-export {addEmi, EmiList, removeCustomer}
+export {addEmi, EmiList, removeCustomer, FullEmiList, SearchEmi}

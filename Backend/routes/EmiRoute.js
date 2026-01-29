@@ -1,5 +1,5 @@
 import express from "express"
-import { addEmi, EmiList, removeCustomer } from "../controllers/EmiCotroller.js"
+import { addEmi, EmiList, FullEmiList, removeCustomer, SearchEmi } from "../controllers/EmiCotroller.js"
 import multer from "multer"
 
 const EmiRouter = express.Router();
@@ -21,6 +21,10 @@ EmiRouter.post("/add",upload.single("image"),addEmi);
 EmiRouter.get("/list",EmiList)
 
 EmiRouter.post("/remove",removeCustomer);
+
+EmiRouter.get("/fullList",FullEmiList);
+
+EmiRouter.get("/searchEmi",SearchEmi);
 
 
 
