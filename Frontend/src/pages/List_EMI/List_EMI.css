@@ -84,6 +84,54 @@
 .list-table-format:not(.title):hover {
   background-color: #f2f2f2;
 }
+/* Search box */
+.search-box {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 15px;
+  align-items: center;
+}
+.search-input-wrapper {
+  position: relative;
+  width: 260px;
+  margin-bottom: 10px;
+}
+
+/* Search icon */
+.search-icon {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Input field */
+.search-input-wrapper input {
+  width: 100%;
+  padding: 8px 10px 8px 38px; /* IMPORTANT */
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  outline: none;
+}
+
+/* Select box */
+.search-box select {
+  width: 260px;
+  height: 38px;              /* force same height */
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  box-sizing: border-box;    /* VERY IMPORTANT */
+}
+.search-input-wrapper input:focus {
+  border-color: #888;
+}
 
 /* Mobile */
 @media (max-width: 600px) {

@@ -6,9 +6,9 @@ import { assets } from '../../assets/assets'
 import { useNavigate } from "react-router-dom";
 
 
-const List_EMI = () => {
+const List_EMI = ({url}) => {
 
-  const url = "http://192.168.1.8:4000"
+  // const url = "http://192.168.1.8:4000"
 
   const navigate = useNavigate();
   const handleUpdate = (id) => {
@@ -19,6 +19,30 @@ const List_EMI = () => {
 
   const [searchField, setSearchField] = useState("name");
   const [searchValue, setSearchValue] = useState("");
+
+  const searchEmi = async (value) => {
+    try {
+      if (!value.trim()) {
+        fetchList();
+        return;
+      }
+
+      const response = await axios.get(`${url}/api/emi/searchEmi`,{ params: { field: searchField, value: value}});
+
+      if (response.data.success) {
+        setList(response.data.data);
+      } else {
+        toast.error("Search error");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Server error");
+    }
+  };
+
+
+
+
 
 
   const [list, setList] = useState([]);
@@ -52,22 +76,30 @@ const List_EMI = () => {
     <div className='list add flex-col'>
       <p>All EMI Customer list</p>
       <div className="search-box">
-      <select 
-        value={searchField} 
-        onChange={(e) => setSearchField(e.target.value)}
-      >
-        <option value="name">Name</option>
-        <option value="formNo">Form No</option>
-        <option value="mobile1">Mobile No</option>
-      </select>
+        <div className="search-input-wrapper">
+          <input
+            type="text"
+            placeholder={`Search by ${searchField}`}
+            value={searchValue}
+            onChange={(e) =>{
+              setSearchValue(e.target.value);
+              const val = e.target.value;
+              searchEmi(val); 
 
-      <input 
-        type="text"
-        placeholder={`Search by ${searchField}`}
-        value={searchValue}
-        onChange={(e) => setSearchValue(e.target.value)}
-      />
-    </div>
+            }} 
+          />
+        </div>
+        <select
+          value={searchField}
+          onChange={(e) => setSearchField(e.target.value)}
+        >
+          <option value="name">Name</option>
+          <option value="formNo">Form No</option>
+          <option value="mobile1">Mobile No</option>
+        </select>
+
+        
+      </div>
       <div className="list-table">
         <div className="list-table-format title">
           <b>Image</b>

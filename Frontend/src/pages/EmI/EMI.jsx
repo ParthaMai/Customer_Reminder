@@ -4,9 +4,9 @@ import { assets } from '../../assets/assets'
 import axios from "axios"
 import { toast } from 'react-toastify'
 
-const EMI = () => {
+const EMI = ({url}) => {
 
-    const url = "http://192.168.1.8:4000"
+    // const url = "http://192.168.1.8:4000"
 
     const [image, setImage] = useState(false);
     const [data, setData] = useState({

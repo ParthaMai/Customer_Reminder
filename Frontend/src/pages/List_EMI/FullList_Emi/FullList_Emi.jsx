@@ -8,9 +8,9 @@ import { assets } from '../../../assets/assets';
 import './FullList_Emi.css'
 import { useNavigate } from "react-router-dom";
 
-const FullList_Emi = () => {
+const FullList_Emi = ({url}) => {
 
-    const url = "http://192.168.1.8:4000"
+    // const url = "http://192.168.1.8:4000"
     const navigate = useNavigate();
 
     const location = useLocation();

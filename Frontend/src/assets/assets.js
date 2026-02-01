@@ -22,6 +22,9 @@ import upload_icon from './upload_area.png'
 import add_icon from './add_icon.png'
 import list_icon from './order_icon.png'
 import edit_icon from './Edit.png'
+import search_icon from './search_icon.png'
+import user_details from './User_details.png'
+import download_icon from './download.png'
 
 
 export const assets = {
@@ -46,5 +49,8 @@ export const assets = {
     upload_icon,
     add_icon,
     list_icon,
-    edit_icon
+    edit_icon,
+    search_icon,
+    user_details,
+    download_icon
 }

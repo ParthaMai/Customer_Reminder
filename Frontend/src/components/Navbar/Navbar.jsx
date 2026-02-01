@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import './Navbar.css'
 import { assets } from '../../assets/assets'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 
 const navbar = () => {
 
@@ -10,8 +10,8 @@ const navbar = () => {
     <div className='navbar'>
       <img src={assets.logo} alt="" className='logo' />
       <ul className="navbar-menu">
-        <Link to='/'><a>Home</a></Link>
-        <a>Reminder</a>
+        <Link to='/'>Home</Link>
+        <NavLink to='/reminder'>Reminder</NavLink>
       </ul>
     </div>
   )

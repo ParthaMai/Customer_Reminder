@@ -46,7 +46,7 @@
 
 /* Logo */
 .navbar .logo {
-    width: 170px;
+    width: 50px;
     cursor: pointer;
     transition: width 0.3s ease;
 }
@@ -62,7 +62,7 @@
 }
 
 /* Navbar links */
-.navbar-menu a {
+.navbar-menu {
     text-decoration: none;
     color: hsl(226, 26%, 42%);
     font-weight: 500;
@@ -79,6 +79,6 @@
         font-size: 16px;
     }
     .navbar .logo {
-        width: 150px;
+        width: 50px;
     }
 }
