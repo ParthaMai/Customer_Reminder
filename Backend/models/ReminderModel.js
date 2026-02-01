@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
-const EmiSchema = new mongoose.Schema(
+
+const ReminderSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -136,25 +137,7 @@ const EmiSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// ===== Pre-save middleware: set first reminder =====
-EmiSchema.pre("save", function (next) {
-  if (this.purchaseDate && this.reminderPeriod != null && !this.nextReminderDate) {
-    const firstReminder = new Date(this.purchaseDate);
-    firstReminder.setMonth(firstReminder.getMonth() + this.reminderPeriod);
-    this.nextReminderDate = firstReminder;
-  }
-});
 
+const ReminderModel = mongoose.models.ReminderEmis || mongoose.model("ReminderEmis", ReminderSchema);
 
-// method
-EmiSchema.methods.markReminderSent = async function () {
-  const nextDate = new Date(this.nextReminderDate);
-  nextDate.setMonth(nextDate.getMonth() + this.reminderPeriod);
-  this.nextReminderDate = nextDate;
-  await this.save();
-};
-
-
-const EmiModel =mongoose.models.Emi || mongoose.model("EMI_Customer-data",EmiSchema)
-
-export default EmiModel;
+export default ReminderModel;
