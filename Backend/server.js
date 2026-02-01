@@ -20,7 +20,7 @@ connectDB();
 // APi Endpoint
 app.use("/api/emi",EmiRouter)
 app.use("/image",express.static('uploads'))
-app.use("/api/list",ReminderRouter)
+app.use("/api/reminder-list",ReminderRouter)
 
 
 
