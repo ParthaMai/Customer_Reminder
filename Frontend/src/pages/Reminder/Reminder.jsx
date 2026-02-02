@@ -3,11 +3,20 @@ import "./Reminder.css"
 import { assets } from '../../assets/assets';
 import axios from 'axios'
 import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom';
 
 const Reminder = ({url}) => {
 
-    const [list, setList] = useState([]);
 
+  const navigate = useNavigate();
+  const handleUpdate = (id) => {
+    navigate("/reminder/FullDetails", { state: { id } });
+  };
+
+
+
+
+    const [list, setList] = useState([]);
 
 
 

@@ -62,6 +62,9 @@ const List_EMI = ({url}) => {
   },[])
 
   const removeCustomer = async(itemId) => {
+        const isConfirmed = window.confirm("Are you sure you want to delete this customer?");
+        if (!isConfirmed) return;
+        try{
         const response = await axios.post(`${url}/api/emi/remove`,{id:itemId});
         await fetchList();
         if(response.data.success){
@@ -70,6 +73,10 @@ const List_EMI = ({url}) => {
         else{
           toast.error("Error")
         }
+      }catch(error){
+        toast.error("Server error");
+        console.error(error);
+      }
       }
 
   return (

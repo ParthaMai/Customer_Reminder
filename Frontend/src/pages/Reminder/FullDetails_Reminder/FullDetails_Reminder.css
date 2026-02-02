@@ -1,0 +1,170 @@
+.remind-full-list-container {
+  width: 95%;
+  max-width: 600px;
+  margin: 20px auto;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.remind-field-table {
+  width: 100%;
+}
+
+/* Each EMI card */
+.remind-field-table-format {
+  display: flex;
+  flex-direction: column; /* vertical stacking */
+  gap: 12px;
+  padding: 15px 20px;
+  margin-bottom: 15px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+.remind-field-card-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-size: 18px; /* optional, for bigger header */
+}
+
+
+.remind-field-table-format:hover {
+  background-color: #f2f2f2;
+}
+
+/* Each label-value row */
+.field {
+  display: flex;
+  flex-direction: row; /* label and value on the same line */
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+/* Label part */
+.field label {
+  font-weight: 600;
+  min-width: 120px; /* fixed width for labels */
+  text-align: left;
+}
+
+/* Value part */
+.field p {
+  margin: 0;
+  word-break: break-word;
+}
+
+/* Horizontal line under each field */
+.field + hr {
+  border: none;
+  border-bottom: 1px solid #ccc;
+  margin: 5px 0;
+  width: 100%; /* full width of the card */
+}
+
+/* Image style */
+.field img:not(.edit-icon) {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-bottom: 5px; /* space below image */
+}
+
+/* Edit icon */
+.edit-icon{
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+}
+
+/* Delete icon */
+.cursor {
+  color: red;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  align-self: flex-start;
+}
+/* Select box */
+.field select {
+  padding: 8px 12px;
+  min-width: 200px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  background-color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Hover */
+.field select:hover {
+  border-color: #888;
+}
+/* Focus */
+.field select:focus {
+  border-color: #c62828;
+  box-shadow: 0 0 0 2px rgba(198, 40, 40, 0.25);
+}
+
+/* Disabled option style */
+.field select option:disabled {
+  color: #999;
+}
+.field textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  resize: none;
+  font-size: 14px;
+}
+
+.field button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-right: 10px;
+  background: #e53935;
+  color: white;
+}
+
+.field button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.hint {
+  font-size: 12px;
+  color: #666;
+}
+
+
+.field input {
+  padding: 7px 12px;
+  min-width: 200px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+}
+
+
+/* Responsive */
+@media (max-width: 360px) {
+  .field {
+    flex-direction: column; /* stack label above value on small screens */
+    align-items: flex-start;
+  }
+  .field label {
+    min-width: auto;
+  }
+  .field select {
+    font-size: 14px;
+  }
+}

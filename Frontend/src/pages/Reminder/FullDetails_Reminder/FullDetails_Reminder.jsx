@@ -5,22 +5,79 @@ import { useLocation } from "react-router-dom";
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { assets } from '../../../assets/assets';
-import './FullList_Emi.css'
+import './FullDetails_Reminder.css'
 import { useNavigate } from "react-router-dom";
+import { useRef } from 'react';
 
-const FullList_Emi = ({url}) => {
-
-    // const url = "http://192.168.1.8:4000"
+const FullDetails_Reminder = ({ url }) => {
     const navigate = useNavigate();
 
     const location = useLocation();
     const itemId = location.state?.id; // previous state item id like props
 
+    const [selectedNumber, setSelectedNumber] = useState("");
 
     const [item, setItem] = useState([]);
 
+    const [reminderDate, setReminderDate] = useState("");
+    const [summary, setSummary] = useState("");
+    const [isRecording, setIsRecording] = useState(false);
+    const [audioURL, setAudioURL] = useState(null);
+    const mediaRecorderRef = useRef(null);
+    const audioChunksRef = useRef([]);
+
+    const startRecording = async () => {
+          if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            alert("Audio recording is not supported in this browser.");
+            return;
+        }
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+        const mediaRecorder = new MediaRecorder(stream);
+        mediaRecorderRef.current = mediaRecorder;
+        audioChunksRef.current = [];
+
+        mediaRecorder.ondataavailable = (event) => {
+            audioChunksRef.current.push(event.data);
+        };
+
+        mediaRecorder.onstop = () => {
+            const audioBlob = new Blob(audioChunksRef.current, { type: "audio/webm" });
+            const url = URL.createObjectURL(audioBlob);
+            setAudioURL(url);
+        };
+
+        mediaRecorder.start();
+        setIsRecording(true);
+
+        // Auto stop after 60 seconds
+        setTimeout(() => {
+            if (mediaRecorder.state === "recording") {
+                mediaRecorder.stop();
+                setIsRecording(false);
+            }
+        }, 60000);
+    };
+
+    const stopRecording = () => {
+        mediaRecorderRef.current.stop();
+        setIsRecording(false);
+    };
+
+
+
+    const handleUpdate = (mobileNumber) => {
+        if (!mobileNumber) {
+            alert("No number selected");
+            return;
+        }
+
+        window.location.href = `tel:${mobileNumber}`;
+    };
+
+
     const fetchFullList = async () => {
-        const response = await axios.get(`${url}/api/emi/fullList`, { params: { id: itemId } });
+        const response = await axios.get(`${url}/api/reminder-list/fullDetails`, { params: { id: itemId } });
         if (response.data.success) {
             setItem(response.data.data);
         }
@@ -34,29 +91,29 @@ const FullList_Emi = ({url}) => {
     }, [])
 
     const removeCustomer = async (itemId) => {
-        const isConfirmed = window.confirm("Are you sure you want to delete this customer?");
+        const isConfirmed = window.confirm("Are you sure Complete your Reminder task?");
         if (!isConfirmed) return;
-        try{
-        const response = await axios.post(`${url}/api/emi/remove`, { id: itemId });
-        await fetchFullList();
-        if (response.data.success) {
-            toast.success(response.data.message);
-            navigate("/list_EMI");
+        try {
+            const response = await axios.post(`${url}/api/reminder-list/remove-reminder`, { id: itemId });
+            await fetchFullList();
+            if (response.data.success) {
+                toast.success(response.data.message);
+                navigate("/reminder");
+            }
+            else {
+                toast.error("Error")
+            }
+        } catch (error) {
+            toast.error("Server error");
+            console.error(error);
         }
-        else {
-            toast.error("Error")
-        }
-    }catch(error){
-        toast.error("Server error");
-        console.error(error);
-    }
     }
     return (
-        <div className="full-list-container">
+        <div className="remind-full-list-container">
 
-            <div className="field-table">
-                <div className="field-table-format">
-                    <p className="field-card-title">EMI Customer Data</p>
+            <div className="remind-field-table">
+                <div className="remind-field-table-format">
+                    <p className="remind-field-card-title">EMI Customer Data</p>
                     <div className="field">
                         <label>Image:</label>
                         <img src={`${url}/image/${item.image}`} alt="Customer" />
@@ -235,13 +292,69 @@ const FullList_Emi = ({url}) => {
                     <hr />
 
                     <div className="field">
-                        <img
-                            src={assets.edit_icon}
-                            alt="edit"
-                            className="edit-icon"
-                            onClick={() => handleUpdate(item._id)}
+                        <select
+                            onChange={(e) => setSelectedNumber(e.target.value)}
+                            defaultValue=""
+                        >
+                            <option value="" disabled>
+                                Select number
+                            </option>
+
+                            {item.mobile1 && (
+                                <option value={item.mobile1}>Mobile 1 - {item.mobile1}</option>
+                            )}
+                            {item.mobile2 && (
+                                <option value={item.mobile2}>Mobile 2 - {item.mobile2}</option>
+                            )}
+                            {item.mobile3 && (
+                                <option value={item.mobile3}>Mobile 3 - {item.mobile3}</option>
+                            )}
+                            {item.mobile4 && (
+                                <option value={item.mobile4}>Mobile 4 - {item.mobile4}</option>
+                            )}
+                        </select>
+
+                        <img src={assets.call_icon} alt="edit" className="edit-icon"
+                            onClick={() => {
+                                if (!selectedNumber) {
+                                    alert("Please select a number first");
+                                    return;
+                                }
+                                handleUpdate(selectedNumber);
+                            }}
                         />
-                        <p onClick={() => removeCustomer(item._id)} className="cursor"> Delete </p>
+                    </div>
+                    <hr />
+                    {/* Summary field */}
+                    <div className="field">
+                        <label>Write Phone Call summary...</label>
+                        <textarea rows="4" placeholder="Write Phone Call summary..." value={summary} onChange={(e) => setSummary(e.target.value)} />
+                    </div>
+                    <hr />
+                    {/* Voice recorder */}
+                    <div className="field">
+                        <button onClick={startRecording} disabled={isRecording}>
+                            🎤 Start Recording
+                        </button>
+
+                        <button onClick={stopRecording} disabled={!isRecording}>
+                            ⏹ Stop
+                        </button>
+
+                        {audioURL && (
+                            <audio controls src={audioURL}></audio>
+                        )}
+                    </div>
+                    <hr />
+                    <div className="field">
+                        <label>Customer Reminder:</label>
+                        <input type="date"
+                            // value={reminderDate}
+                            onChange={(e) => setReminderDate(e.target.value)} min={new Date().toISOString().split("T")[0]} />
+                    </div>
+                    <hr />
+                    <div className="field">
+                        <p onClick={() => removeCustomer(item._id)} className="cursor"> Remove Reminder </p>
                     </div>
                 </div>
             </div>
@@ -249,4 +362,4 @@ const FullList_Emi = ({url}) => {
     )
 }
 
-export default FullList_Emi
+export default FullDetails_Reminder
