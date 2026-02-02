@@ -15,50 +15,107 @@ const List_EMI = ({url}) => {
     navigate("/list_EMI/FullList_Emi", { state: { id } });
   };
 
-
+  const [list, setList] = useState([]);
 
   const [searchField, setSearchField] = useState("name");
   const [searchValue, setSearchValue] = useState("");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const searchEmi = async (value) => {
-    try {
-      if (!value.trim()) {
-        fetchList();
-        return;
-      }
-
-      const response = await axios.get(`${url}/api/emi/searchEmi`,{ params: { field: searchField, value: value}});
-
-      if (response.data.success) {
-        setList(response.data.data);
-      } else {
-        toast.error("Search error");
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error("Server error");
-    }
+    // Debounce function
+  const debounce = (func, delay) => {
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => func(...args), delay);
+    };
   };
 
+  // Debounced search handler
+  const handleSearch = debounce((val) => searchEmi(val), 300);
 
+  // const searchEmi = async (value) => {
+  //   try {
+  //     if (!value.trim()) {
+  //       fetchList();
+  //       return;
+  //     }
 
+  //     const response = await axios.get(`${url}/api/emi/searchEmi`,{ params: { field: searchField, value: value}});
 
+  //     if (response.data.success) {
+  //       setList(response.data.data);
+  //     } else {
+  //       toast.error("Search error");
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //     toast.error("Server error");
+  //   }
+  // };
 
+  const searchEmi = async (value, pageNumber = 1) => {
+  try {
+    // If search box is empty, fallback to normal list
+    if (!value.trim()) {
+      fetchList(1); // fetch normal paginated list
+      return;
+    }
 
-  const [list, setList] = useState([]);
+    const response = await axios.get(`${url}/api/emi/searchEmi`, {
+      params: {
+        field: searchField,
+        value,
+        page: pageNumber,  // pass current page
+        limit: 10,         // limit per page
+      },
+    });
 
-  const fetchList = async () => {
-    const response = await axios.get(`${url}/api/emi/list`);
-    if(response.data.success) {
+    if (response.data.success) {
       setList(response.data.data);
+      setPage(response.data.pagination.currentPage);
+      setTotalPages(response.data.pagination.totalPages);
+    } else {
+      toast.error("Search error");
     }
-    else{
-      toast.error("Error");
-    }
+  } catch (error) {
+    console.log(error);
+    toast.error("Server error");
   }
+};
+
+
+
+  // const fetchList = async () => {
+  //   const response = await axios.get(`${url}/api/emi/list`);
+  //   if(response.data.success) {
+  //     setList(response.data.data);
+  //   }
+  //   else{
+  //     toast.error("Error");
+  //   }
+  // }
+
+const fetchList = async (page = 1, value = "") => {
+
+  const response = await axios.get(`${url}/api/emi/list`, {
+    params: {
+      field: searchField,
+      value,
+      page,
+      limit: 10
+    }
+  });
+
+  if (response.data.success) {
+    setList(response.data.data);
+    setTotalPages(response.data.pagination.totalPages);
+    setPage(response.data.pagination.currentPage);
+  }
+};
 
   useEffect(()=>{
-    fetchList()
+    fetchList(1)
   },[])
 
   const removeCustomer = async(itemId) => {
@@ -91,7 +148,7 @@ const List_EMI = ({url}) => {
             onChange={(e) =>{
               setSearchValue(e.target.value);
               const val = e.target.value;
-              searchEmi(val); 
+              handleSearch(val);
 
             }} 
           />
@@ -105,7 +162,7 @@ const List_EMI = ({url}) => {
           <option value="mobile1">Mobile No</option>
         </select>
 
-        
+
       </div>
       <div className="list-table">
         <div className="list-table-format title">
@@ -119,7 +176,42 @@ const List_EMI = ({url}) => {
           <b>Failed Emis</b>
           <b>Action</b>
         </div>
-        {list.map((item,index) =>{
+
+        {/* Unified pagination */}
+        {totalPages > 1 && (
+          <div className="pagination">
+            <button
+              disabled={page === 1}
+              onClick={() => {
+                if (searchValue.trim()) {
+                  searchEmi(searchValue, page - 1);
+                } else {
+                  fetchList(page - 1);
+                }
+              }}
+            >
+              Prev
+            </button>
+
+            <span>{page} / {totalPages}</span>
+
+            <button
+              disabled={page === totalPages}
+              onClick={() => {
+                if (searchValue.trim()) {
+                  searchEmi(searchValue, page + 1);
+                } else {
+                  fetchList(page + 1);
+                }
+              }}
+            >
+              Next
+            </button>
+          </div>
+        )}
+
+
+        {list.map((item, index) => {
           return (
             <div key={index} className="list-table-format">
               <img src={`${url}/image/`+item.image} alt="" />

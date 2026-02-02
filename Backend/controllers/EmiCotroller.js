@@ -57,16 +57,48 @@ const addEmi = async (req,res) => {
 
 
 // all EMi customer list
-const EmiList = async (req,res) => {
-    try {
-        const Emi = await EmiModel.find({}).sort({ createdAt: -1 });
-        res.json({success:true,data:Emi})
-    }
-    catch(error){
-        console.log(error);
-        res.json({success:false,message:"Error"})
-    }
-}
+// const EmiList = async (req,res) => {
+//     try {
+//         const Emi = await EmiModel.find({}).sort({ createdAt: -1 });
+//         res.json({success:true,data:Emi})
+//     }
+//     catch(error){
+//         console.log(error);
+//         res.json({success:false,message:"Error"})
+//     }
+// }
+
+
+
+// Enable paginatin concept
+const EmiList = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const data = await EmiModel.find({})
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    const totalRecords = await EmiModel.countDocuments();
+
+    res.json({
+      success: true,
+      data,
+      pagination: {
+        totalRecords,
+        totalPages: Math.ceil(totalRecords / limit),
+        currentPage: page,
+        limit
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
 // one EMi customer Fulllist
 const FullEmiList = async (req,res) => {
     try {
@@ -79,32 +111,64 @@ const FullEmiList = async (req,res) => {
     }
 }
 
+// const SearchEmi = async (req, res) => {
+//   try {
+//     const { field, value } = req.query;
+
+//     const allowedFields = ["name", "formNo", "mobile1"];
+//     if (!allowedFields.includes(field)) {
+//       return res.json({ success: false, message: "Invalid search field" });
+//     }
+
+//     let query = {};
+
+//     if (field === "formNo") {
+//       query[field] = Number(value);
+//     } 
+//     else {
+//       query[field] = { $regex: value, $options: "i" }; 
+//     }
+
+//     const data = await EmiModel.find(query).sort({ createdAt: -1 });
+
+//     res.json({ success: true, data });
+//   } catch (error) {
+//     console.log(error);
+//     res.json({ success: false, message: "Error" });
+//   }
+// };
+
 const SearchEmi = async (req, res) => {
   try {
-    const { field, value } = req.query;
-
-    const allowedFields = ["name", "formNo", "mobile1"];
-    if (!allowedFields.includes(field)) {
-      return res.json({ success: false, message: "Invalid search field" });
-    }
+    const { field, value, page = 1, limit = 10 } = req.query;
+    const skip = (page - 1) * limit;
 
     let query = {};
+    if (field === "formNo") query[field] = Number(value);
+    else query[field] = { $regex: value, $options: "i" };
 
-    if (field === "formNo") {
-      query[field] = Number(value);
-    } 
-    else {
-      query[field] = { $regex: value, $options: "i" }; 
-    }
+    const data = await EmiModel.find(query)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(Number(limit));
 
-    const data = await EmiModel.find(query).sort({ createdAt: -1 });
+    const totalRecords = await EmiModel.countDocuments(query);
 
-    res.json({ success: true, data });
+    res.json({
+      success: true,
+      data,
+      pagination: {
+        totalRecords,
+        totalPages: Math.ceil(totalRecords / limit),
+        currentPage: Number(page)
+      }
+    });
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: "Error" });
   }
 };
+
 
 
 // remove Emi customer 

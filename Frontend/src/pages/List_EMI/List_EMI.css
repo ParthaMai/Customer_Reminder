@@ -133,6 +133,35 @@
   border-color: #888;
 }
 
+/*Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.pagination button {
+  padding: 5px 12px;
+  border: 1px solid #ccc;
+  background: #f2f2f2;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.pagination span {
+  font-size: 14px;
+}
+
+
+
+
+
 /* Mobile */
 @media (max-width: 600px) {
   .list-table-format {

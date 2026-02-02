@@ -14,6 +14,16 @@ const Reminder = ({url}) => {
   };
 
 
+  // fix it in schedule way
+    useEffect(() => {
+      const cleanupAndFetch = async () => {
+       //Delete old reminders
+        await axios.post(`${url}/api/reminder-list/cleanup-old`);
+        console.log("helo")
+      };
+
+      cleanupAndFetch();
+    }, []);
 
 
     const [list, setList] = useState([]);

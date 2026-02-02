@@ -153,7 +153,22 @@
   font-size: 14px;
   outline: none;
 }
+.save-btn {
+    width: 50%;
+    padding: 12px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
 
+/* Hover */
+.save-btn:hover {
+  background-color: #555;
+}
 
 /* Responsive */
 @media (max-width: 360px) {

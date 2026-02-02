@@ -12,22 +12,66 @@ import { useRef } from 'react';
 const FullDetails_Reminder = ({ url }) => {
     const navigate = useNavigate();
 
+    const [data, setData] = useState({
+        summary: "",
+        extendReminder: ""
+    })
+
+    const onChangeHandler = (event) => {
+        const name = event.target.name;
+        const value = event.target.value;
+        setData(data => ({ ...data, [name]: value }))
+    }
+    const onSubmitHandler = async (id) => {
+        try {
+            const payload = {};
+
+            if (data.summary) payload.summary = data.summary;
+            if (data.extendReminder) payload.extendReminder = data.extendReminder;
+
+            // If nothing is filled
+            if (Object.keys(payload).length === 0) {
+                toast.error("Please fill at least one field");
+                return false;
+            }
+
+            payload._id = id;
+
+            const response = await axios.post( `${url}/api/emi/extend-reminder`,payload);
+
+            if (response.data.success) {
+                setData({
+                    summary: "",
+                    extendReminder: ""
+                });
+                toast.success(response.data.message);
+                 return true; 
+            } else {
+                toast.error(response.data.message);
+                return false;
+            }
+        } catch (error) {
+            toast.error("Something went wrong");
+            return false;   
+        }
+    };
+
+
     const location = useLocation();
     const itemId = location.state?.id; // previous state item id like props
 
     const [selectedNumber, setSelectedNumber] = useState("");
-
     const [item, setItem] = useState([]);
 
-    const [reminderDate, setReminderDate] = useState("");
-    const [summary, setSummary] = useState("");
+    // const [reminderDate, setReminderDate] = useState("");
+    // const [summary, setSummary] = useState("");
     const [isRecording, setIsRecording] = useState(false);
     const [audioURL, setAudioURL] = useState(null);
     const mediaRecorderRef = useRef(null);
     const audioChunksRef = useRef([]);
 
     const startRecording = async () => {
-          if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
             alert("Audio recording is not supported in this browser.");
             return;
         }
@@ -98,6 +142,22 @@ const FullDetails_Reminder = ({ url }) => {
             await fetchFullList();
             if (response.data.success) {
                 toast.success(response.data.message);
+                navigate("/reminder");
+            }
+            else {
+                toast.error("Error")
+            }
+        } catch (error) {
+            toast.error("Server error");
+            console.error(error);
+        }
+    }
+    const removeReminder = async (itemId) => {
+        try {
+            const response = await axios.post(`${url}/api/reminder-list/remove-reminder`, { id: itemId });
+            await fetchFullList();
+            if (response.data.success) {
+                toast.success("Removed Customer From Reminder");
                 navigate("/reminder");
             }
             else {
@@ -290,7 +350,14 @@ const FullDetails_Reminder = ({ url }) => {
                         <p>{item.reminderPeriod}</p>
                     </div>
                     <hr />
-
+                    {item.summary && (
+                        <>
+                            <div className="field">
+                                <label>Summary:</label>
+                                <p>{item.summary}</p>
+                            </div>
+                            <hr /></>
+                    )}
                     <div className="field">
                         <select
                             onChange={(e) => setSelectedNumber(e.target.value)}
@@ -328,7 +395,7 @@ const FullDetails_Reminder = ({ url }) => {
                     {/* Summary field */}
                     <div className="field">
                         <label>Write Phone Call summary...</label>
-                        <textarea rows="4" placeholder="Write Phone Call summary..." value={summary} onChange={(e) => setSummary(e.target.value)} />
+                        <textarea rows="4" name="summary" value={data.summary} onChange={onChangeHandler} placeholder="Write Phone Call summary..." />
                     </div>
                     <hr />
                     {/* Voice recorder */}
@@ -348,10 +415,17 @@ const FullDetails_Reminder = ({ url }) => {
                     <hr />
                     <div className="field">
                         <label>Customer Reminder:</label>
-                        <input type="date"
-                            // value={reminderDate}
-                            onChange={(e) => setReminderDate(e.target.value)} min={new Date().toISOString().split("T")[0]} />
+                        <input type="date" name="extendReminder" value={data.extendReminder} onChange={onChangeHandler} min={new Date().toISOString().split("T")[0]} />
                     </div>
+                    <hr />
+                    <button onClick={async () => {
+                        const isSuccess = await onSubmitHandler(item._id);
+                        if (isSuccess) {
+                            setTimeout(() => removeReminder(item._id), 500);
+                        }
+                    }} className="save-btn">
+                        Save & Changes 
+                    </button>
                     <hr />
                     <div className="field">
                         <p onClick={() => removeCustomer(item._id)} className="cursor"> Remove Reminder </p>
