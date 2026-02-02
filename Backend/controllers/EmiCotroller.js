@@ -125,4 +125,39 @@ const removeCustomer = async (req,res) => {
 }
 
 
-export {addEmi, EmiList, removeCustomer, FullEmiList, SearchEmi}
+const updateReminder = async (req, res) => {
+  try {
+    const { _id, summary, extendReminder } = req.body;
+
+    // Build dynamic payload
+    let payload = {};
+
+ // Update even if the value is null
+    if ("summary" in req.body) payload.summary = summary;
+    if ("extendReminder" in req.body) payload.extendReminder = extendReminder;
+
+    // If nothing to update
+    if (Object.keys(payload).length === 0) {
+      return res.json({ success: false, message: "Please provide at least one field to update" });
+    }
+
+    const updated = await EmiModel.findByIdAndUpdate(
+      _id,
+      { $set: payload },
+      { new: true }
+    );
+
+    if (!updated) {
+      return res.json({ success: false, message: "Reminder not found" });
+    }
+
+    res.json({ success: true, message: "Reminder updated successfully"});
+
+  } catch (error) {
+    console.error(error); 
+    res.json({ success: false, message: "Server error" });
+  }
+};
+
+
+export {addEmi, EmiList, removeCustomer, FullEmiList, SearchEmi, updateReminder}

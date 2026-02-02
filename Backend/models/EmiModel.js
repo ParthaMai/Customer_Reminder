@@ -132,6 +132,13 @@ const EmiSchema = new mongoose.Schema(
       type: Date, 
       index: true 
     },
+    summary: {
+      type: String
+    },
+    extendReminder: {
+      type: Date,
+      index: true
+    },
   },
   { timestamps: true }
 );
@@ -153,6 +160,14 @@ EmiSchema.methods.markReminderSent = async function () {
   this.nextReminderDate = nextDate;
   await this.save();
 };
+
+EmiSchema.methods.minimizeReminder = async function () {
+  if (!this.extendReminder) return; // safety check for null
+  const minimizeDate = new Date(this.extendReminder);
+  minimizeDate.setMonth(minimizeDate.getMonth() - 1);
+  this.extendReminder = minimizeDate;
+  await this.save();
+}
 
 
 const EmiModel =mongoose.models.Emi || mongoose.model("EMI_Customer-data",EmiSchema)

@@ -5,7 +5,7 @@ import fs from 'fs'
 
 // EMI customers whose reminder is today
 const TodayEmiList = async (req, res) => {
-    try {
+    try { 
         const startOfToday = new Date();
         startOfToday.setHours(0, 0, 0, 0);
 
@@ -20,10 +20,25 @@ const TodayEmiList = async (req, res) => {
         if (EmiList.length > 0) {
             await ReminderModel.insertMany(EmiList);
         }
-    
-        for (const emi of EmiList) {
-            await emi.markReminderSent();
+        if(EmiList.length > 0){
+            for (const emi of EmiList) {
+                await emi.markReminderSent();
+            }
         }
+
+        const emiExtendReminderList = await EmiModel.find({
+            extendReminder: { $gte: startOfToday, $lte: endOfToday }
+        });
+       
+        if(emiExtendReminderList.length >0){
+            await ReminderModel.insertMany(emiExtendReminderList);
+        } 
+        if(emiExtendReminderList.length > 0){
+            for (const extend of emiExtendReminderList){
+                await extend.minimizeReminder();
+            }
+        }
+
         
     //     // if for loop is  slow then use this // Update nextReminderDate in parallel
     // await Promise.all(EmiList.map(emi => emi.markReminderSent()));
@@ -35,6 +50,44 @@ const TodayEmiList = async (req, res) => {
         res.json({ success: false, message: "Error" });
     }
 };
+
+
+// update the nextReminder data and summary
+const updateReminder = async (req, res) => {
+  try {
+    const { _id, summary, extendReminder } = req.body;
+
+    // Build dynamic payload
+    let payload = {};
+
+ // Update even if the value is null
+    if ("summary" in req.body) payload.summary = summary;
+    if ("extendReminder" in req.body) payload.extendReminder = extendReminder;
+
+    // If nothing to update
+    if (Object.keys(payload).length === 0) {
+      return res.json({ success: false, message: "Please provide at least one field to update" });
+    }
+
+    const updated = await ReminderModel.findByIdAndUpdate(
+      _id,
+      { $set: payload },
+      { new: true }
+    );
+
+    if (!updated) {
+      return res.json({ success: false, message: "Reminder not found" });
+    }
+
+    res.json({ success: true, message: "Reminder updated successfully"});
+
+  } catch (error) {
+    console.error(error); 
+    res.json({ success: false, message: "Server error" });
+  }
+};
+
+
 
 
 // all Remind customer list
@@ -79,6 +132,25 @@ const removeReminder = async (req,res) => {
     }
 }
 
+// delete old reminder which is old morethan 10days
+const deleteOldReminders = async (req,res) => {
+  try {
+    const tenDaysAgo = new Date();
+    tenDaysAgo.setDate(tenDaysAgo.getDate() - 10);
+
+    const result = await ReminderModel.deleteMany({
+      createdAt: { $lt: tenDaysAgo }
+    });
+
+    res.json({success: true,deletedCount: result.deletedCount});
+  } catch (error) {
+    res.status(500).json({ success: false });
+  }
+};
 
 
-export {TodayEmiList, RemindList, FullRemindList, removeReminder};
+
+
+
+
+export {TodayEmiList, RemindList, FullRemindList, removeReminder, updateReminder, deleteOldReminders};

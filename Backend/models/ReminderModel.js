@@ -133,9 +133,25 @@ const ReminderSchema = new mongoose.Schema(
       type: Date, 
       index: true 
     },
+    summary: {
+      type: String
+    },
+    extendReminder: {
+      type: Date,
+      index: true
+    },
   },
   { timestamps: true }
 );
+
+
+
+// method
+ReminderSchema.methods.extendReminderSent = async function () {
+  this.nextReminderDate = new Date(this.extendReminder);
+  await this.save();
+};
+
 
 
 const ReminderModel = mongoose.models.ReminderEmis || mongoose.model("ReminderEmis", ReminderSchema);
