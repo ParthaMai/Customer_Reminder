@@ -153,9 +153,6 @@ const FullRemindList = async (req,res) => {
 const removeReminder = async (req,res) => {
 
     try{
-        const customer = await ReminderModel.findById(req.body.id);
-        // delete the image
-        fs.unlink(`uploads/${customer.image}`,()=>{})
 
         // this is food data deleted from database
         await ReminderModel.findByIdAndDelete(req.body.id);

@@ -5,6 +5,7 @@ import { connectDB } from "./config/db.js"
 import 'dotenv/config'
 import EmiRouter from "./routes/EmiRoute.js"
 import ReminderRouter from "./routes/ReminderRoute.js"
+import DobRouter from "./routes/DobRoute.js"
 
 
 
@@ -24,6 +25,7 @@ app.use("/api/emi",EmiRouter)
 // app.use("/image",express.static('uploads'))
 
 app.use("/api/reminder-list",ReminderRouter)
+app.use("/api/Birthday",DobRouter);
 
 
 

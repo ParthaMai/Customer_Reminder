@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const EmiSchema = new mongoose.Schema(
+const DobSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -148,59 +148,7 @@ const EmiSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// ===== Pre-save middleware: set first reminder =====
-EmiSchema.pre("save", function () {
-  if (this.purchaseDate && this.reminderPeriod != null && !this.nextReminderDate) {
-    const firstReminder = new Date(this.purchaseDate);
-    firstReminder.setMonth(firstReminder.getMonth() + this.reminderPeriod);
-    this.nextReminderDate = firstReminder;
-  }
-});
 
+const DobModel =mongoose.models.dob || mongoose.model("Birthday_Customer-data",DobSchema)
 
-// method
-EmiSchema.methods.markReminderSent = async function () {
-  const nextDate = new Date(this.nextReminderDate);
-  nextDate.setMonth(nextDate.getMonth() + this.reminderPeriod);
-  this.nextReminderDate = nextDate;
-  await this.save();
-};
-
-EmiSchema.methods.minimizeReminder = async function () {
-  if (!this.extendReminder) return; // safety check for null
-  const minimizeDate = new Date(this.extendReminder);
-  minimizeDate.setMonth(minimizeDate.getMonth() - 1);
-  this.extendReminder = minimizeDate;
-  await this.save();
-}
-
-// This is for calculate Birthday
-EmiSchema.pre("save", function () {
-  if (this.dob && !isNaN(new Date(this.dob))) {
-    const today = new Date();
-    const dob = new Date(this.dob);
-
-    // Create birthday for current year
-    const nextBirthday = new Date(Date.UTC(
-      today.getFullYear(),
-      dob.getMonth(),
-      dob.getDate()
-    ));
-
-    this.birthday = nextBirthday;
-  }
-});
-
-// calculate next birthday
-EmiSchema.methods.markDobSent = async function (){
-  if(!this.birthday) return;
-  const nextBirthday = new Date(this.birthday);
-  nextBirthday.setFullYear(nextBirthday.getFullYear() + 1);
-  this.birthday = nextBirthday;
-  await this.save();
-}
-
-
-const EmiModel =mongoose.models.Emi || mongoose.model("EMI_Customer-data",EmiSchema)
-
-export default EmiModel;
+export default DobModel;
