@@ -115,6 +115,40 @@
   filter: brightness(0) invert(1);
 }
 
+.reminder-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+  gap: 10px;
+  font-family: Arial, sans-serif;
+}
+
+.reminder-pagination button {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.reminder-pagination button:hover:not(:disabled) {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.reminder-pagination button:disabled {
+  background-color: #eee;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.reminder-pagination span {
+  font-weight: bold;
+  font-size: 14px;
+}
+
 
 
 /* Mobile Responsive */

@@ -350,6 +350,22 @@ const FullDetails_Reminder = ({ url }) => {
                         <p>{item.reminderPeriod}</p>
                     </div>
                     <hr />
+                    {item.nextReminderDate && (
+                        <>
+                            <div className="field">
+                                <label>NextRemider Date : </label>
+                                <p>{new Date(item.nextReminderDate).toISOString().split("T")[0]}</p>
+                            </div>
+                            <hr /></>
+                    )}
+                    {item.extendReminder && (
+                        <>
+                            <div className="field">
+                                <label>ExtendReminder Date : </label>
+                                <p>{new Date(item.extendReminder).toISOString().split("T")[0]}</p>
+                            </div>
+                            <hr /></>
+                    )}
                     {item.summary && (
                         <>
                             <div className="field">

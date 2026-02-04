@@ -32,7 +32,7 @@ const List_EMI = ({url}) => {
   };
 
   // Debounced search handler
-  const handleSearch = debounce((val) => searchEmi(val), 300);
+  const handleSearch = debounce((val) => searchEmi(val), 500);
 
   // const searchEmi = async (value) => {
   //   try {
