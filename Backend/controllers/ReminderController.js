@@ -91,16 +91,50 @@ const updateReminder = async (req, res) => {
 
 
 // all Remind customer list
-const RemindList = async (req,res) => {
-    try {
-        const Remind = await ReminderModel.find({}).sort({ createdAt: -1 });
-        res.json({success:true,data: Remind})
-    }
-    catch(error){
-        console.log(error);
-        res.json({success:false,message:"Error"})
-    }
-}
+// const RemindList = async (req,res) => {
+//     try {
+//         const Remind = await ReminderModel.find({}).sort({ createdAt: -1 });
+//         res.json({success:true,data: Remind})
+//     }
+//     catch(error){
+//         console.log(error);
+//         res.json({success:false,message:"Error"})
+//     }
+// }
+
+// all Remind customer list with pagination
+const RemindList = async (req, res) => {
+  try {
+    // Get page and limit from query params (default to 1 and 10)
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    // Fetch only the current page of reminders
+    const data = await ReminderModel.find({})
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    // Get total count of reminders for pagination info
+    const totalRecords = await ReminderModel.countDocuments();
+
+    // Send response
+    res.json({
+      success: true,
+      data,
+      pagination: {
+        totalRecords,
+        totalPages: Math.ceil(totalRecords / limit),
+        currentPage: page,
+        limit
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
 
 
 // one Remind customer Fulllist

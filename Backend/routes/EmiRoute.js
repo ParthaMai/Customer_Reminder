@@ -1,20 +1,22 @@
 import express from "express"
 import { addEmi, EmiList, FullEmiList, removeCustomer, SearchEmi, updateReminder } from "../controllers/EmiCotroller.js"
 import multer from "multer"
+import upload from "../middleware/upload.js";
 
 const EmiRouter = express.Router();
 
 
 // Image storage in upload file
 
-const storage = multer.diskStorage({
-    destination:"uploads",
-    filename:(req,file,cb)=>{
-        return cb(null,`${Date.now()}${file.originalname}`);
-    }
-})
+// const storage = multer.diskStorage({
+//     destination:"uploads",
+//     filename:(req,file,cb)=>{
+//         return cb(null,`${Date.now()}${file.originalname}`);
+//     }
+// })
 
-const upload = multer({storage:storage})
+// const upload = multer({storage:storage})
+
 
 EmiRouter.post("/add",upload.single("image"),addEmi);
 

@@ -1,6 +1,8 @@
+
 import express from "express"
 import cors from "cors"
 import { connectDB } from "./config/db.js"
+import 'dotenv/config'
 import EmiRouter from "./routes/EmiRoute.js"
 import ReminderRouter from "./routes/ReminderRoute.js"
 
@@ -19,7 +21,8 @@ connectDB();
 
 // APi Endpoint
 app.use("/api/emi",EmiRouter)
-app.use("/image",express.static('uploads'))
+// app.use("/image",express.static('uploads'))
+
 app.use("/api/reminder-list",ReminderRouter)
 
 

@@ -1,12 +1,14 @@
 import EmiModel from "../models/EmiModel.js";
 import fs from 'fs'
-
+import cloudinary from "../config/cloudinary.js";
 // Add EMi Customer
 
 const addEmi = async (req,res) => {
     
     // Check if image exist or not.
-    const image_filename = req.file ? req.file.filename : null;
+    // const image_filename = req.file ? req.file.filename : null;
+    // Cloudinary gives URL in req.file.path
+    const imageUrl = req.file ? req.file.path : null;
 
     const emi = new EmiModel({
         name: req.body.name,
@@ -43,7 +45,7 @@ const addEmi = async (req,res) => {
         failedEmi: req.body.failedEmi,
         reminderPeriod: req.body.reminderPeriod,
 
-        image: image_filename
+        image: imageUrl
     })
     try{
         await emi.save(); // This is save data in mongodb
@@ -176,8 +178,21 @@ const removeCustomer = async (req,res) => {
 
     try{
         const customer = await EmiModel.findById(req.body.id);
-        // delete the image
-        fs.unlink(`uploads/${customer.image}`,()=>{})
+
+        if (!customer) {
+            return res.json({ success: false, message: "Customer not found" });
+        }
+
+          // Delete image from Cloudinary
+        if (customer.image) {
+            // Extract public_id from URL
+            const publicId = customer.image
+                .split("/")
+                .pop()
+                .split(".")[0];
+
+            await cloudinary.uploader.destroy(`emi_customers/${publicId}`);
+        }
 
         // this is food data deleted from database
         await EmiModel.findByIdAndDelete(req.body.id);
