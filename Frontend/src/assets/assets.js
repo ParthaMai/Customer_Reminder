@@ -26,6 +26,7 @@ import search_icon from './search_icon.png'
 import user_details from './User_details.png'
 import download_icon from './download.png'
 import call_icon from './call_icon.png'
+import user_icon from './user_icon.png'
 
 
 export const assets = {
@@ -54,5 +55,6 @@ export const assets = {
     search_icon,
     user_details,
     download_icon,
-    call_icon
+    call_icon,
+    user_icon
 }

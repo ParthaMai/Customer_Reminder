@@ -32,7 +32,7 @@ const List_EMI = ({url}) => {
   };
 
   // Debounced search handler
-  const handleSearch = debounce((val) => searchEmi(val), 500);
+  const handleSearch = debounce((val) => searchEmi(val), 800);
 
   // const searchEmi = async (value) => {
   //   try {
@@ -214,7 +214,10 @@ const fetchList = async (page = 1, value = "") => {
         {list.map((item, index) => {
           return (
             <div key={index} className="list-table-format">
-              <img src={`${url}/image/`+item.image} alt="" />
+              <img 
+                src={item.image || assets.user_icon} 
+                alt="customer"
+              />
               <p>{item.name}</p>
               <img src={assets.edit_icon} alt="edit" className="edit-icon"onClick={() => handleUpdate(item._id)}/>
               <p>{item.formNo}</p>

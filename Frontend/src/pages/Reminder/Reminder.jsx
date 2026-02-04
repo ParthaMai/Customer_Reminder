@@ -111,8 +111,8 @@ const Reminder = ({ url }) => {
         {list.map((item, index) => {
           return (
             <div key={index} className="reminder-list-table-format">
-              <p>{new Date(item.purchaseDate).toISOString().split("T")[0]}</p>
-              <img src={`${url}/image/` + item.image} alt="" />
+              <p>{new Date(item.createdAt).toISOString().split("T")[0]}</p>
+              <img src={item.image || assets.user_icon} alt="" />
               <p>{item.name}</p>
               <img src={assets.user_details} alt="edit" className="user_details" onClick={() => handleUpdate(item._id)} />
               <p>{item.formNo}</p>

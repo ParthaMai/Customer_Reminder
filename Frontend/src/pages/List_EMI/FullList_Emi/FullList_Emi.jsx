@@ -59,7 +59,7 @@ const FullList_Emi = ({url}) => {
                     <p className="field-card-title">EMI Customer Data</p>
                     <div className="field">
                         <label>Image:</label>
-                        <img src={`${url}/image/${item.image}`} alt="Customer" />
+                        <img src={item.image || assets.user_icon} alt="Customer" />
                     </div>
                     <hr />
 

@@ -3,10 +3,14 @@ import './EMI.css'
 import { assets } from '../../assets/assets'
 import axios from "axios"
 import { toast } from 'react-toastify'
+import imageCompression from "browser-image-compression";
+
 
 const EMI = ({url}) => {
 
     // const url = "http://192.168.1.8:4000"
+
+    const [loading, setLoading] = useState(false);
 
     const [image, setImage] = useState(false);
     const [data, setData] = useState({
@@ -35,6 +39,25 @@ const EMI = ({url}) => {
         failedEmi: "",
         reminderPeriod: ""
     });
+    const handleImageChange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const options = {
+            maxSizeMB: 0.03,        // ~30 KB
+            maxWidthOrHeight: 600,
+            useWebWorker: true,
+        };
+
+        try {
+            const compressedFile = await imageCompression(file, options);
+            console.log("hello")
+            setImage(compressedFile);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
 
     const onChangeHandler = (event) => {
         const name = event.target.name;
@@ -44,74 +67,83 @@ const EMI = ({url}) => {
 
 const onSubmitHandler = async (event) => {
     event.preventDefault();
-    const formData = new FormData();
+    setLoading(true)
+    try{
+        const formData = new FormData();
 
-    formData.append("name", data.name);
-    formData.append("formNo", data.formNo);
-    formData.append("purchaseDate", data.purchaseDate);
-    formData.append("mobile1", data.mobile1);
-    formData.append("age", data.age);
-    formData.append("mobileModel", data.mobileModel);
+        formData.append("name", data.name);
+        formData.append("formNo", data.formNo);
+        formData.append("purchaseDate", data.purchaseDate);
+        formData.append("mobile1", data.mobile1);
+        formData.append("age", data.age);
+        formData.append("mobileModel", data.mobileModel);
 
-    // Required number fields (convert from string to number)
-    formData.append("price", Number(data.price));
-    formData.append("emiCharges", Number(data.emiCharges));
-    formData.append("emiTenure", Number(data.emiTenure));
-    formData.append("failedEmi", Number(data.failedEmi));
-    formData.append("reminderPeriod", Number(data.reminderPeriod));
+        // Required number fields (convert from string to number)
+        formData.append("price", Number(data.price));
+        formData.append("emiCharges", Number(data.emiCharges));
+        formData.append("emiTenure", Number(data.emiTenure));
+        formData.append("failedEmi", Number(data.failedEmi));
+        formData.append("reminderPeriod", Number(data.reminderPeriod));
 
-    // (append only if they present)
-    if (data.mobile2) formData.append("mobile2", data.mobile2);
-    if (data.mobile3) formData.append("mobile3", data.mobile3);
-    if (data.mobile4) formData.append("mobile4", data.mobile4);
-    if (data.description) formData.append("description", data.description);
-    if (data.fatherName) formData.append("fatherName", data.fatherName);
-    if (data.aadhar) formData.append("aadhar", data.aadhar);
-    if (data.voterId) formData.append("voterId", data.voterId);
-    if (data.pan) formData.append("pan", data.pan);
-    if (data.dob) formData.append("dob", data.dob);
-    if (data.cibil) formData.append("cibil", data.cibil);
-    if (data.pinCode) formData.append("pinCode", data.pinCode);
-    if (data.qualification) formData.append("qualification", data.qualification);
-    if (data.occupation) formData.append("occupation", data.occupation);
+        // (append only if they present)
+        if (data.mobile2) formData.append("mobile2", data.mobile2);
+        if (data.mobile3) formData.append("mobile3", data.mobile3);
+        if (data.mobile4) formData.append("mobile4", data.mobile4);
+        if (data.description) formData.append("description", data.description);
+        if (data.fatherName) formData.append("fatherName", data.fatherName);
+        if (data.aadhar) formData.append("aadhar", data.aadhar);
+        if (data.voterId) formData.append("voterId", data.voterId);
+        if (data.pan) formData.append("pan", data.pan);
+        if (data.dob) formData.append("dob", data.dob);
+        if (data.cibil) formData.append("cibil", data.cibil);
+        if (data.pinCode) formData.append("pinCode", data.pinCode);
+        if (data.qualification) formData.append("qualification", data.qualification);
+        if (data.occupation) formData.append("occupation", data.occupation);
 
-    // Optional image
-    if (image) formData.append("image", image);
+        // Optional image
+        if (image) formData.append("image", image);
 
-    const response = await axios.post(`${url}/api/emi/add`,formData);
-     if(response.data.success){
-        setData({
-            name: "",
-            formNo: "",
-            purchaseDate: "",
-            mobile1: "",
-            mobile2: "",
-            mobile3: "",
-            mobile4: "",
-            description: "",
-            fatherName: "",
-            aadhar: "",
-            voterId: "",
-            age: "",
-            pan: "",
-            dob: "",
-            cibil: "",
-            pinCode: "",
-            qualification: "",
-            occupation: "",
-            mobileModel: "",
-            price: "",
-            emiCharges: "",
-            emiTenure: "",
-            failedEmi: "",
-            reminderPeriod: ""
-        })
-        if(image) setImage(false);
-        toast.success(response.data.message);
+        const response = await axios.post(`${url}/api/emi/add`,formData);
+        if(response.data.success){
+            setData({
+                name: "",
+                formNo: "",
+                purchaseDate: "",
+                mobile1: "",
+                mobile2: "",
+                mobile3: "",
+                mobile4: "",
+                description: "",
+                fatherName: "",
+                aadhar: "",
+                voterId: "",
+                age: "",
+                pan: "",
+                dob: "",
+                cibil: "",
+                pinCode: "",
+                qualification: "",
+                occupation: "",
+                mobileModel: "",
+                price: "",
+                emiCharges: "",
+                emiTenure: "",
+                failedEmi: "",
+                reminderPeriod: ""
+            })
+            if(image) setImage(false);
+            toast.success(response.data.message);
+        }
+        else{
+            toast.error(response.data.message); // For notification
+        }
+    }catch(error){
+        toast.error("Something went wrong");
     }
-    else{
-        toast.error(response.data.message); // For notification
-    }
+    finally {
+    setLoading(false);  // stop loading
+  }
+    
 };
 
 
@@ -141,7 +173,7 @@ const onSubmitHandler = async (event) => {
                     <label htmlFor='image'>
                         <img src={image ? URL.createObjectURL(image) : assets.upload_icon} alt="" />
                     </label>
-                    <input onChange={(e) => setImage(e.target.files[0])} type="file" id="image" />
+                    <input onChange={handleImageChange} type="file" id="image" />
                 </div>
                 <div className="mobile-no">
                     <p>Mobile No.</p>
@@ -256,7 +288,9 @@ const onSubmitHandler = async (event) => {
                     </select>
                 </div>
 
-                <button type='submit' className='add-btn'>ADD</button>
+                <button type='submit' className='add-btn' disabled={loading}> 
+                    {loading ? <div className="loader"></div> : "ADD"}
+                </button>
             </form>
         </div>
     )

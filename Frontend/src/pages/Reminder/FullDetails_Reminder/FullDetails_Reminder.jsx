@@ -16,6 +16,8 @@ const FullDetails_Reminder = ({ url }) => {
         summary: "",
         extendReminder: ""
     })
+    const savingRef = useRef(false);
+    const [saving, setSaving] = useState(false);
 
     const onChangeHandler = (event) => {
         const name = event.target.name;
@@ -176,7 +178,7 @@ const FullDetails_Reminder = ({ url }) => {
                     <p className="remind-field-card-title">EMI Customer Data</p>
                     <div className="field">
                         <label>Image:</label>
-                        <img src={`${url}/image/${item.image}`} alt="Customer" />
+                        <img src={item.image || assets.user_icon} alt="Customer" />
                     </div>
                     <hr />
 
@@ -434,13 +436,28 @@ const FullDetails_Reminder = ({ url }) => {
                         <input type="date" name="extendReminder" value={data.extendReminder} onChange={onChangeHandler} min={new Date().toISOString().split("T")[0]} />
                     </div>
                     <hr />
-                    <button onClick={async () => {
-                        const isSuccess = await onSubmitHandler(item._id);
-                        if (isSuccess) {
-                            setTimeout(() => removeReminder(item._id), 500);
-                        }
-                    }} className="save-btn">
-                        Save & Changes 
+                    <button
+                        className="save-btn"
+                        disabled={saving}
+                        onClick={async () => {
+                            if (savingRef.current) return; // instant block
+
+                            savingRef.current = true; // lock immediately
+                            setSaving(true);
+
+                            try {
+                                const isSuccess = await onSubmitHandler(item._id);
+                                if (isSuccess) {
+                                    await new Promise(resolve => setTimeout(resolve, 500));
+                                    await removeReminder(item._id);
+                                }
+                            } finally {
+                                savingRef.current = false; // unlock
+                                setSaving(false);
+                            }
+                        }}
+                    >
+                        {saving ? "Saving..." : "Save & Changes"}
                     </button>
                     <hr />
                     <div className="field">
