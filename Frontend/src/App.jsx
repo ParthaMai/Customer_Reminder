@@ -30,11 +30,11 @@ const App = () => {
           <Route path="/cash" element={<Cash/>} />
           <Route path="/list_EMI" element={<List_EMI url={url}/>} />
           <Route path="/list_Cash" element={<List_Cash/>} />
-          <Route path="/list_EMI/FullList_Emi" element ={<FullList_Emi url={url}/>} />
+          <Route path="/list_EMI/FullList_Emi/:id" element={<FullList_Emi url={url} />} />
           <Route path="/reminder" element = {<Reminder url={url} />} />
-          <Route path="/reminder/FullDetails" element = {<FullDetails_Reminder url={url} />} />
+          <Route path="/reminder/:id" element={<FullDetails_Reminder url={url} />} />
           <Route path='/dob_reminder' element = {<Dob_reminder url={url} />} />
-          <Route path='/dob/dob_wish' element = {<Dob_wish url={url} />} />
+          <Route path='/dob/dob_wish/:id' element = {<Dob_wish url={url} />} />
         </Routes>
     </div>
   )

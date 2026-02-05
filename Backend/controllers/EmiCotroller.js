@@ -146,8 +146,16 @@ const SearchEmi = async (req, res) => {
     const skip = (page - 1) * limit;
 
     let query = {};
-    if (field === "formNo") query[field] = Number(value);
-    else query[field] = { $regex: value, $options: "i" };
+    if (field === "formNo") {
+      // exact match (case-insensitive)
+      query[field] = { $regex: `^${value}$`, $options: "i" };
+    }
+    else if (field === "aadhar") {
+      query[field] = { $regex: value, $options: "i" };
+    } else {
+      // partial match for other fields
+      query[field] = { $regex: value, $options: "i" };
+    }
 
     const data = await EmiModel.find(query)
       .sort({ createdAt: -1 })

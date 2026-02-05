@@ -12,8 +12,9 @@ const List_EMI = ({url}) => {
 
   const navigate = useNavigate();
   const handleUpdate = (id) => {
-    navigate("/list_EMI/FullList_Emi", { state: { id } });
+    navigate(`/list_EMI/FullList_Emi/${id}`);
   };
+
 
   const [list, setList] = useState([]);
 
@@ -160,6 +161,7 @@ const fetchList = async (page = 1, value = "") => {
           <option value="name">Name</option>
           <option value="formNo">Form No</option>
           <option value="mobile1">Mobile No</option>
+          <option value="aadhar">Aadhar</option>
         </select>
 
 

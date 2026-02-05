@@ -16,9 +16,18 @@ const Dob_reminder = ({ url }) => {
 
   const navigate = useNavigate();
   const handleUpdate = (id) => {
-    navigate("/dob/dob_wish", { state: { id } });
+    navigate(`/dob/dob_wish/${id}`);
   };
 
+    // fix it in schedule way
+    useEffect(() => {
+      const cleanupAndFetch = async () => {
+        //Delete old reminders
+        await axios.post(`${url}/api/Birthday/remove-old`);
+      };
+  
+      cleanupAndFetch();
+    }, []);
 
   const fetchDobList = async (pageNumber = 1) => {
     try {
@@ -53,7 +62,7 @@ const Dob_reminder = ({ url }) => {
   return (
     <div className='dob-list add flex-col'>
       <div className="header-row">
-        <p>Birthday Customers</p>
+        <p>Birthday of Customers</p>
       </div>
       <div className="dob-list-table">
         <div className="dob-list-table-format title">

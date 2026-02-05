@@ -5,14 +5,13 @@ import { useState } from 'react';
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { assets } from '../../../assets/assets';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const Dob_wish = ({ url }) => {
 
     const navigate = useNavigate();
 
-    const location = useLocation();
-    const itemId = location.state?.id;
+    const { id: itemId } = useParams();
 
     const [selectedNumber, setSelectedNumber] = useState("");
     const [item, setItem] = useState({});
@@ -59,7 +58,7 @@ const Dob_wish = ({ url }) => {
             await fetchDobFullList();
             if (response.data.success) {
                 toast.success(response.data.message);
-                navigate("/dob_reminder");
+                navigate("/dob_reminder", { replace: true });
             }
             else {
                 toast.error("Error")

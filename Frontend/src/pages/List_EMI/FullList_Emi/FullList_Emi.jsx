@@ -1,20 +1,18 @@
 import React from 'react'
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { useLocation } from "react-router-dom";
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { assets } from '../../../assets/assets';
 import './FullList_Emi.css'
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const FullList_Emi = ({url}) => {
 
     // const url = "http://192.168.1.8:4000"
     const navigate = useNavigate();
 
-    const location = useLocation();
-    const itemId = location.state?.id; // previous state item id like props
+    const { id: itemId } = useParams(); // previous state item id like props
 
 
     const [item, setItem] = useState([]);
@@ -41,7 +39,7 @@ const FullList_Emi = ({url}) => {
         await fetchFullList();
         if (response.data.success) {
             toast.success(response.data.message);
-            navigate("/list_EMI");
+            navigate("/reminder", { replace: true });
         }
         else {
             toast.error("Error")

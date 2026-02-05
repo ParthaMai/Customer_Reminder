@@ -1,13 +1,13 @@
 import React from 'react'
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { useLocation } from "react-router-dom";
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { assets } from '../../../assets/assets';
 import './FullDetails_Reminder.css'
 import { useNavigate } from "react-router-dom";
 import { useRef } from 'react';
+import { useParams } from "react-router-dom";
 
 const FullDetails_Reminder = ({ url }) => {
     const navigate = useNavigate();
@@ -59,8 +59,7 @@ const FullDetails_Reminder = ({ url }) => {
     };
 
 
-    const location = useLocation();
-    const itemId = location.state?.id; // previous state item id like props
+    const { id: itemId } = useParams();// previous state item id like props
 
     const [selectedNumber, setSelectedNumber] = useState("");
     const [item, setItem] = useState([]);
@@ -144,7 +143,7 @@ const FullDetails_Reminder = ({ url }) => {
             await fetchFullList();
             if (response.data.success) {
                 toast.success(response.data.message);
-                navigate("/reminder");
+                navigate("/reminder", { replace: true });
             }
             else {
                 toast.error("Error")
@@ -160,7 +159,7 @@ const FullDetails_Reminder = ({ url }) => {
             await fetchFullList();
             if (response.data.success) {
                 toast.success("Removed Customer From Reminder");
-                navigate("/reminder");
+                navigate("/reminder", { replace: true });
             }
             else {
                 toast.error("Error")

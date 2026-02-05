@@ -11,7 +11,7 @@ const ReminderSchema = new mongoose.Schema(
     },
 
     formNo: {
-      type: Number,
+      type: String,
       required: true,
       unique: true
     },

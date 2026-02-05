@@ -3,14 +3,18 @@ import "./Reminder.css"
 import { assets } from '../../assets/assets';
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'; 
+import * as XLSX from "xlsx";
 
 const Reminder = ({ url }) => {
 
-
+  const [list, setList] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const navigate = useNavigate();
+
   const handleUpdate = (id) => {
-    navigate("/reminder/FullDetails", { state: { id } });
+    navigate(`/reminder/${id}`);
   };
 
 
@@ -24,10 +28,33 @@ const Reminder = ({ url }) => {
     cleanupAndFetch();
   }, []);
 
+ 
 
-  const [list, setList] = useState([]);
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const handleDownloadExcel = () => {
+    if (!list || list.length === 0) {
+      alert("No data to export");
+      return;
+    }
+
+    // Prepare data (only name & mobile)
+    const excelData = list.map((item, index) => ({
+      SL: index + 1,
+      Name: item.name,
+      Mobile: item.mobile1
+    }));
+
+    // Create worksheet
+    const worksheet = XLSX.utils.json_to_sheet(excelData);
+
+    // Create workbook
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Customers");
+
+    // Download file
+    XLSX.writeFile(workbook, "Reminder_Customers.xlsx");
+  };
+
+
 
 
   // const fetchList = async () => {
@@ -73,7 +100,7 @@ const Reminder = ({ url }) => {
     <div className='reminder-list add flex-col'>
       <div className="header-row">
         <p>Reminder Customers</p>
-        <div className="download-box">
+        <div className="download-box" onClick={handleDownloadExcel}>
           <b>Download Excel</b>
           <img src={assets.download_icon} alt="download" className="download_icon" />
         </div>

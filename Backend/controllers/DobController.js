@@ -90,9 +90,26 @@ const removeDob = async (req,res) => {
     }
 }
 
+// Remove DOB after 1 day
+const deleteOldDob = async (req, res) => {
+  try {
+    const oneDayAgo = new Date();
+    oneDayAgo.setDate(oneDayAgo.getDate() - 1);
+
+    const result = await DobModel.deleteMany({
+      createdAt: { $lt: oneDayAgo }
+    });
+    res.json({ success: true, deletedCount: result.deletedCount });
+  } catch (error) {
+    res.status(500).json({ success: false });
+  }
+};
 
 
 
 
 
-export {TodayDobList, DobList, FullDobList, removeDob};
+
+
+
+export {TodayDobList, DobList, FullDobList, removeDob, deleteOldDob};
