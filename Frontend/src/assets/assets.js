@@ -27,7 +27,9 @@ import user_details from './User_details.png'
 import download_icon from './download.png'
 import call_icon from './call_icon.png'
 import user_icon from './user_icon.png'
-
+import birthday_icon from './birthday_icon.png'
+import celebration_icon from './celebration_icon.png'
+import whatsapp_icon from './whatsapp_icon.png'
 
 export const assets = {
     basket_icon,
@@ -56,5 +58,8 @@ export const assets = {
     user_details,
     download_icon,
     call_icon,
-    user_icon
+    user_icon,
+    birthday_icon,
+    celebration_icon,
+    whatsapp_icon
 }

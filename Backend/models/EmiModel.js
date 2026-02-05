@@ -176,7 +176,7 @@ EmiSchema.methods.minimizeReminder = async function () {
 
 // This is for calculate Birthday
 EmiSchema.pre("save", function () {
-  if (this.dob && !isNaN(new Date(this.dob))) {
+  if (this.isModified("dob") && this.dob && !isNaN(new Date(this.dob))) {
     const today = new Date();
     const dob = new Date(this.dob);
 
@@ -196,6 +196,7 @@ EmiSchema.methods.markDobSent = async function (){
   if(!this.birthday) return;
   const nextBirthday = new Date(this.birthday);
   nextBirthday.setFullYear(nextBirthday.getFullYear() + 1);
+  
   this.birthday = nextBirthday;
   await this.save();
 }

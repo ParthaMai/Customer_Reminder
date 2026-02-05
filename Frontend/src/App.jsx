@@ -11,6 +11,8 @@ import { ToastContainer} from 'react-toastify';
 import FullList_Emi from './pages/List_EMI/FullList_Emi/FullList_Emi'
 import Reminder from './pages/Reminder/Reminder'
 import FullDetails_Reminder from './pages/Reminder/FullDetails_Reminder/FullDetails_Reminder'
+import Dob_reminder from './pages/Dob/Dob_reminder'
+import Dob_wish from './pages/Dob/Wish/Dob_wish'
 
 
 const App = () => {
@@ -31,6 +33,8 @@ const App = () => {
           <Route path="/list_EMI/FullList_Emi" element ={<FullList_Emi url={url}/>} />
           <Route path="/reminder" element = {<Reminder url={url} />} />
           <Route path="/reminder/FullDetails" element = {<FullDetails_Reminder url={url} />} />
+          <Route path='/dob_reminder' element = {<Dob_reminder url={url} />} />
+          <Route path='/dob/dob_wish' element = {<Dob_wish url={url} />} />
         </Routes>
     </div>
   )

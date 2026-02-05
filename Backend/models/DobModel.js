@@ -142,6 +142,7 @@ const DobSchema = new mongoose.Schema(
     },
     birthday: {
       type: Date,
+      default: null,
       index: true
     }
   },

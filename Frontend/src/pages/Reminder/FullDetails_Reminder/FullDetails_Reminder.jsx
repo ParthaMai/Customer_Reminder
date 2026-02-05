@@ -16,7 +16,7 @@ const FullDetails_Reminder = ({ url }) => {
         summary: "",
         extendReminder: ""
     })
-    const savingRef = useRef(false);
+    const savingRef = useRef(false);  
     const [saving, setSaving] = useState(false);
 
     const onChangeHandler = (event) => {

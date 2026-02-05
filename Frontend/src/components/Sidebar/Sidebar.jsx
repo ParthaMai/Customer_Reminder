@@ -24,6 +24,10 @@ const Sidebar = () => {
                     <img src={assets.list_icon} alt="" />
                     <p>List of Cash Customer</p>
                 </NavLink>
+                <NavLink to='/dob_reminder' className="sidebar-option">
+                    <img src={assets.birthday_icon} alt="" />
+                    <p>Birthday Customer</p>
+                </NavLink>
             </div>
         </div>
     )

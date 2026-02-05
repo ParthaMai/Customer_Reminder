@@ -6,6 +6,18 @@ import axios from 'axios'
 
 const Home = ({url}) => {
 
+    const createList = async () => {
+    try {
+      const response = await axios.get(`${url}/api/Birthday/dob-remind`);
+      if (!response.data.success) {
+        toast.error("Error");
+      }
+    } catch (error) {
+      toast.error("Server error");
+      console.error(error);
+    }
+  }
+
   const fetchList = async () => {
      try {
     const response = await axios.get(`${url}/api/reminder-list/remind`);
@@ -21,7 +33,8 @@ const Home = ({url}) => {
 
   // use here to update only once or twice per day
   useEffect(() => {
-    fetchList()
+    fetchList(),
+    createList()
   }, [])
 
   return (

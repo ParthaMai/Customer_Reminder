@@ -149,7 +149,7 @@ const FullRemindList = async (req,res) => {
     }
 }
 
-// remove Emi customer 
+// remove Reminder customer 
 const removeReminder = async (req,res) => {
 
     try{

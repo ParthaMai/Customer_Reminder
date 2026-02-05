@@ -30,5 +30,69 @@ const TodayDobList = async (req, res) => {
     }
 };
 
+// all Dob Remind customer list
+const DobList = async (req, res) => {
+  try {
+    // Get page and limit from query params (default to 1 and 10)
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
 
-export {TodayDobList};
+    // Fetch only the current page of DOB records
+    const data = await DobModel.find({})
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    // Get total count for pagination
+    const totalRecords = await DobModel.countDocuments();
+
+    // Send response
+    res.json({
+      success: true,
+      data,
+      pagination: {
+        totalRecords,
+        totalPages: Math.ceil(totalRecords / limit),
+        currentPage: page,
+        limit
+      }
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// Full details
+const FullDobList = async (req,res) => {
+    try {
+        const Dob = await DobModel.findById(req.query.id);
+        res.json({success:true,data: Dob})
+    }
+    catch(error){
+        console.log(error);
+        res.json({success:false,message:"Error"})
+    }
+}
+
+// remove Dob customer 
+const removeDob = async (req,res) => {
+
+    try{
+        // this is food data deleted from database
+        await DobModel.findByIdAndDelete(req.body.id);
+        res.json({success:true, message:"Birthday Removed"})
+    }catch(error){
+        console.log(error);
+        res.json({success:false,message:"Error"})
+    }
+}
+
+
+
+
+
+
+export {TodayDobList, DobList, FullDobList, removeDob};

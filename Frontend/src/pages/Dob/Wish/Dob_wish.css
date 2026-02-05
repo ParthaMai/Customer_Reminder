@@ -1,0 +1,185 @@
+.dob-full-list-container {
+  width: 95%;
+  max-width: 600px;
+  margin: 20px auto;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.dob-field-table {
+  width: 100%;
+}
+
+/* Each DOB card */
+.dob-field-table-format {
+  display: flex;
+  flex-direction: column; /* vertical stacking */
+  gap: 12px;
+  padding: 15px 20px;
+  margin-bottom: 15px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+.dob-field-card-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: #556abb;
+}
+
+.dob-field-table-format:hover {
+  background-color: #f2f2f2;
+}
+
+/* Each label-value row */
+.field {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+/* Label */
+.field label {
+  font-weight: 600;
+  min-width: 140px;
+  text-align: left;
+}
+
+/* Value */
+.field p {
+  margin: 0;
+  word-break: break-word;
+}
+
+/* Horizontal line */
+.field + hr {
+  border: none;
+  border-bottom: 1px solid #ccc;
+  margin: 5px 0;
+  width: 100%;
+}
+
+/* Customer image */
+.field img:not(.edit-icon) {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-bottom: 5px;
+}
+
+/* Call / action icon */
+.whatsapp-icon {
+  width: 22px;
+  height: 22px;
+  max-width: 40px;
+  max-height: 40px;
+  cursor: pointer;
+  margin-left: 10px;
+  opacity: 0.8;
+  transition: 0.2s;
+}
+
+.whatsapp-icon:hover {
+  opacity: 1;
+  transform: scale(0.95);
+}
+
+/* Complete wishing */
+.cursor {
+  color: #e53935;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  align-self: flex-start;
+}
+
+/* Select box */
+.field select {
+  padding: 8px 12px;
+  min-width: 200px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  background-color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.field select:hover {
+  border-color: #888;
+}
+
+.field select:focus {
+  border-color: #556abb;
+  box-shadow: 0 0 0 2px rgba(85, 106, 187, 0.25);
+}
+
+.field select option:disabled {
+  color: #999;
+}
+
+/* Input fields (if added later) */
+.field input {
+  padding: 7px 12px;
+  min-width: 200px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+}
+
+/* Textarea (if added later) */
+.field textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  resize: none;
+  font-size: 14px;
+}
+
+/* Buttons (if added later) */
+.field button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-right: 10px;
+  background: #556abb;
+  color: white;
+}
+
+.field button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Small hint text */
+.hint {
+  font-size: 12px;
+  color: #666;
+}
+
+/* Responsive */
+@media (max-width: 360px) {
+  .field {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .field label {
+    min-width: auto;
+  }
+
+  .field select {
+    font-size: 14px;
+  }
+}
