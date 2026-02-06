@@ -247,4 +247,28 @@ const updateReminder = async (req, res) => {
 };
 
 
-export {addEmi, EmiList, removeCustomer, FullEmiList, SearchEmi, updateReminder}
+const updateField = async (req, res) => {
+  try {
+    const { _id, ...updateFields } = req.body;
+
+    const updated = await EmiModel.findByIdAndUpdate(
+      _id,
+      updateFields,
+      { new: true }
+    );
+
+    if (!updated) {
+      return res.status(404).json({ success: false, message: "Customer not found" });
+    }
+
+    res.json({success: true, data: updated, message: "Customer updated successfully" });
+
+  } catch (error) { 
+    console.error(error);
+    res.status(500).json({success: false, message: error.message
+    });
+  }
+};
+
+
+export {addEmi, EmiList, removeCustomer, FullEmiList, SearchEmi, updateReminder, updateField}

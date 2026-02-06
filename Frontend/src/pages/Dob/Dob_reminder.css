@@ -118,7 +118,7 @@
 @media (max-width: 600px) {
   .dob-list-table-format {
     grid-template-columns: 
-      1fr   /* Birth Date */
+      2.2fr   /* Birth Date */
       0.8fr /* Image */
       2fr   /* Name */
       0.6fr /* Wish */

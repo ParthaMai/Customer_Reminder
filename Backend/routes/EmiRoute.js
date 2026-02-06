@@ -1,5 +1,5 @@
 import express from "express"
-import { addEmi, EmiList, FullEmiList, removeCustomer, SearchEmi, updateReminder } from "../controllers/EmiCotroller.js"
+import { addEmi, EmiList, FullEmiList, removeCustomer, SearchEmi, updateField, updateReminder } from "../controllers/EmiCotroller.js"
 import multer from "multer"
 import upload from "../middleware/upload.js";
 
@@ -29,6 +29,8 @@ EmiRouter.get("/fullList",FullEmiList);
 EmiRouter.get("/searchEmi",SearchEmi);
 
 EmiRouter.post("/extend-reminder",updateReminder)
+
+EmiRouter.put("/update", updateField);
 
 
 

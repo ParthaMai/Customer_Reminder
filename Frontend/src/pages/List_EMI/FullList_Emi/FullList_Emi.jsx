@@ -7,7 +7,7 @@ import { assets } from '../../../assets/assets';
 import './FullList_Emi.css'
 import { useNavigate, useParams } from "react-router-dom";
 
-const FullList_Emi = ({url}) => {
+const FullList_Emi = ({ url }) => {
 
     // const url = "http://192.168.1.8:4000"
     const navigate = useNavigate();
@@ -16,6 +16,32 @@ const FullList_Emi = ({url}) => {
 
 
     const [item, setItem] = useState([]);
+
+    // For editing
+    const [isEditing, setIsEditing] = useState(false);
+    const [editData, setEditData] = useState({});
+
+    const handleUpdate = (id) => {
+        setEditData(item);
+        setIsEditing(true);
+    };
+
+    const submitUpdate = async () => {
+    try {
+        const response = await axios.put(`${url}/api/emi/update`, editData);
+        if(response.data.success){
+            toast.success("Updated successfully");
+            setIsEditing(false);
+            fetchFullList();
+        } else {
+            toast.error("Update failed");
+        }
+    } catch (error) {
+        toast.error("Server error");
+        console.error(error);
+    }
+    };
+
 
     const fetchFullList = async () => {
         const response = await axios.get(`${url}/api/emi/fullList`, { params: { id: itemId } });
@@ -34,20 +60,20 @@ const FullList_Emi = ({url}) => {
     const removeCustomer = async (itemId) => {
         const isConfirmed = window.confirm("Are you sure you want to delete this customer?");
         if (!isConfirmed) return;
-        try{
-        const response = await axios.post(`${url}/api/emi/remove`, { id: itemId });
-        await fetchFullList();
-        if (response.data.success) {
-            toast.success(response.data.message);
-            navigate("/reminder", { replace: true });
+        try {
+            const response = await axios.post(`${url}/api/emi/remove`, { id: itemId });
+            await fetchFullList();
+            if (response.data.success) {
+                toast.success(response.data.message);
+                navigate("/reminder", { replace: true });
+            }
+            else {
+                toast.error("Error")
+            }
+        } catch (error) {
+            toast.error("Server error");
+            console.error(error);
         }
-        else {
-            toast.error("Error")
-        }
-    }catch(error){
-        toast.error("Server error");
-        console.error(error);
-    }
     }
     return (
         <div className="full-list-container">
@@ -63,25 +89,57 @@ const FullList_Emi = ({url}) => {
 
                     <div className="field">
                         <label>Name:</label>
-                        <p>{item.name}</p>
+                        {isEditing ? (
+                            <input
+                                type="text"
+                                value={editData.name || ""}
+                                onChange={e => setEditData({ ...editData, name: e.target.value })}
+                            />
+                        ) : (
+                            <p>{item.name}</p>
+                        )}
                     </div>
                     <hr />
 
                     <div className="field">
                         <label>Form No:</label>
-                        <p>{item.formNo}</p>
+                        {isEditing ? (
+                            <input
+                                type="text"
+                                value={editData.formNo || ""}
+                                onChange={e => setEditData({ ...editData, formNo: e.target.value })}
+                            />
+                        ) : (
+                            <p>{item.formNo}</p>
+                        )}
                     </div>
                     <hr />
 
                     <div className="field">
                         <label>Purchase Date:</label>
-                        <p>{item.purchaseDate ? new Date(item.purchaseDate).toISOString().split("T")[0] : "-"}</p>
+                        {isEditing ? (
+                            <input
+                                type="date"
+                                value={editData.purchaseDate ? new Date(editData.purchaseDate).toISOString().split("T")[0] : ""}
+                                onChange={e => setEditData({ ...editData, purchaseDate: e.target.value })}
+                            />
+                        ) : (
+                            <p>{item.purchaseDate ? new Date(item.purchaseDate).toISOString().split("T")[0] : "-"}</p>
+                        )}
                     </div>
                     <hr />
 
                     <div className="field">
                         <label>Mobile1:</label>
-                        <p>{item.mobile1}</p>
+                        {isEditing ? (
+                            <input
+                                type="text"
+                                value={editData.mobile1 || ""}
+                                onChange={e => setEditData({ ...editData, mobile1: e.target.value })}
+                            />
+                        ) : (
+                            <p>{item.mobile1}</p>
+                        )}
                     </div>
                     <hr />
                     {item.mobile2 && (
@@ -124,7 +182,15 @@ const FullList_Emi = ({url}) => {
                         <>
                             <div className="field">
                                 <label>Father Name:</label>
-                                <p>{item.fatherName}</p>
+                                {isEditing ? (
+                                    <input
+                                        type="text"
+                                        value={editData.fatherName || ""}
+                                        onChange={e => setEditData({ ...editData, fatherName: e.target.value })}
+                                    />
+                                ) : (
+                                    <p>{item.fatherName}</p>
+                                )}
                             </div>
                             <hr /></>
                     )}
@@ -132,7 +198,15 @@ const FullList_Emi = ({url}) => {
                         <>
                             <div className="field">
                                 <label>Aadhar:</label>
-                                <p>{item.aadhar}</p>
+                                {isEditing ? (
+                                    <input
+                                        type="text"
+                                        value={editData.aadhar || ""}
+                                        onChange={e => setEditData({ ...editData, aadhar: e.target.value })}
+                                    />
+                                ) : (
+                                    <p>{item.aadhar}</p>
+                                )}
                             </div>
                             <hr /></>
                     )}
@@ -140,7 +214,15 @@ const FullList_Emi = ({url}) => {
                         <>
                             <div className="field">
                                 <label>Voter ID:</label>
-                                <p>{item.voterId}</p>
+                                {isEditing ? (
+                                    <input
+                                        type="text"
+                                        value={editData.voterId || ""}
+                                        onChange={e => setEditData({ ...editData, voterId: e.target.value })}
+                                    />
+                                ) : (
+                                    <p>{item.voterId}</p>
+                                )}
                             </div>
                             <hr /></>
                     )}
@@ -148,7 +230,15 @@ const FullList_Emi = ({url}) => {
                         <>
                             <div className="field">
                                 <label>Age:</label>
-                                <p>{item.age}</p>
+                                {isEditing ? (
+                                    <input
+                                        type="number"
+                                        value={editData.age || ""}
+                                        onChange={e => setEditData({ ...editData, age: e.target.value })}
+                                    />
+                                ) : (
+                                    <p>{item.age}</p>
+                                )}
                             </div>
                             <hr /></>
                     )}
@@ -156,7 +246,15 @@ const FullList_Emi = ({url}) => {
                         <>
                             <div className="field">
                                 <label>PAN:</label>
-                                <p>{item.pan}</p>
+                                {isEditing ? (
+                                    <input
+                                        type="text"
+                                        value={editData.pan || ""}
+                                        onChange={e => setEditData({ ...editData, pan: e.target.value })}
+                                    />
+                                ) : (
+                                    <p>{item.pan}</p>
+                                )}
                             </div>
                             <hr /></>
                     )}
@@ -164,7 +262,15 @@ const FullList_Emi = ({url}) => {
                         <>
                             <div className="field">
                                 <label>DOB:</label>
-                                <p>{item.dob ? new Date(item.dob).toISOString().split("T")[0] : "-"}</p>
+                                {isEditing ? (
+                                    <input
+                                        type="date"
+                                        value={editData.dob ? new Date(editData.dob).toISOString().split("T")[0] : ""}
+                                        onChange={e => setEditData({ ...editData, dob: e.target.value })}
+                                    />
+                                ) : (
+                                    <p>{item.dob ? new Date(item.dob).toISOString().split("T")[0] : "-"}</p>
+                                )}
                             </div>
                             <hr /></>
                     )}
@@ -172,7 +278,15 @@ const FullList_Emi = ({url}) => {
                         <>
                             <div className="field">
                                 <label>CIBIL:</label>
-                                <p>{item.cibil}</p>
+                                {isEditing ? (
+                                    <input
+                                        type="text"
+                                        value={editData.cibil || ""}
+                                        onChange={e => setEditData({ ...editData, cibil: e.target.value })}
+                                    />
+                                ) : (
+                                    <p>{item.cibil}</p>
+                                )}
                             </div>
                             <hr /></>
                     )}
@@ -180,7 +294,15 @@ const FullList_Emi = ({url}) => {
                         <>
                             <div className="field">
                                 <label>Pin Code:</label>
-                                <p>{item.pinCode}</p>
+                                {isEditing ? (
+                                    <input
+                                        type="text"
+                                        value={editData.pinCode || ""}
+                                        onChange={e => setEditData({ ...editData, pinCode: e.target.value })}
+                                    />
+                                ) : (
+                                    <p>{item.pinCode}</p>
+                                )}
                             </div>
                             <hr /></>
                     )}
@@ -203,32 +325,80 @@ const FullList_Emi = ({url}) => {
 
                     <div className="field">
                         <label>Mobile Model:</label>
-                        <p>{item.mobileModel}</p>
+                        {isEditing ? (
+                            <input
+                                type="text"
+                                value={editData.mobileModel || ""}
+                                onChange={e => setEditData({ ...editData, mobileModel: e.target.value })}
+                            />
+                        ) : (
+                            <p>{item.mobileModel}</p>
+                        )}
                     </div>
                     <hr />
                     <div className="field">
                         <label>Price:</label>
-                        <p>₹{item.price}</p>
+                        {isEditing ? (
+                            <input
+                                type="number"
+                                value={editData.price || ""}
+                                onChange={e => setEditData({ ...editData, price: e.target.value })}
+                            />
+                        ) : (
+                            <p>₹{item.price}</p>
+                        )}
                     </div>
                     <hr />
                     <div className="field">
                         <label>EMI Charges:</label>
-                        <p>₹{item.emiCharges}</p>
+                        {isEditing ? (
+                            <input
+                                type="number"
+                                value={editData.emiCharges || ""}
+                                onChange={e => setEditData({ ...editData, emiCharges: e.target.value })}
+                            />
+                        ) : (
+                            <p>₹{item.emiCharges}</p>
+                        )}
                     </div>
                     <hr />
                     <div className="field">
                         <label>EMI Tenure:</label>
-                        <p>{item.emiTenure}</p>
+                        {isEditing ? (
+                            <input
+                                type="number"
+                                value={editData.emiTenure || ""}
+                                onChange={e => setEditData({ ...editData, emiTenure: e.target.value })}
+                            />
+                        ) : (
+                            <p>{item.emiTenure}</p>
+                        )}
                     </div>
                     <hr />
                     <div className="field">
                         <label>Failed EMI:</label>
-                        <p>{item.failedEmi}</p>
+                        {isEditing ? (
+                            <input
+                                type="number"
+                                value={editData.failedEmi || ""}
+                                onChange={e => setEditData({ ...editData, failedEmi: e.target.value })}
+                            />
+                        ) : (
+                            <p>{item.failedEmi}</p>
+                        )}
                     </div>
                     <hr />
                     <div className="field">
                         <label>Reminder Period:</label>
-                        <p>{item.reminderPeriod}</p>
+                        {isEditing ? (
+                            <input
+                                type="number"
+                                value={editData.reminderPeriod || ""}
+                                onChange={e => setEditData({ ...editData, reminderPeriod: e.target.value })}
+                            />
+                        ) : (
+                            <p>{item.reminderPeriod}</p>
+                        )}
                     </div>
                     <hr />
                     {item.nextReminderDate && (
@@ -255,6 +425,14 @@ const FullList_Emi = ({url}) => {
                             </div>
                             <hr /></>
                     )}
+                    <div className="field">
+                        {isEditing && (
+                            <div className="edit-buttons">
+                                <button onClick={submitUpdate}>Save</button>
+                                <button onClick={() => setIsEditing(false)}>Cancel</button>
+                            </div>
+                        )}
+                    </div>
                     <div className="field">
                         <img
                             src={assets.edit_icon}
