@@ -121,6 +121,7 @@ const FullDetails_Reminder = ({ url }) => {
     };
 
 
+
     const fetchFullList = async () => {
         const response = await axios.get(`${url}/api/reminder-list/fullDetails`, { params: { id: itemId } });
         if (response.data.success) {
@@ -431,7 +432,7 @@ const FullDetails_Reminder = ({ url }) => {
                     </div>
                     <hr />
                     <div className="field">
-                        <label>Customer Reminder:</label>
+                        <label>Customer Next Reminder:</label>
                         <input type="date" name="extendReminder" value={data.extendReminder} onChange={onChangeHandler} min={new Date().toISOString().split("T")[0]} />
                     </div>
                     <hr />

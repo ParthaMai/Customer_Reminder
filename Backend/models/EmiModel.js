@@ -150,9 +150,16 @@ const EmiSchema = new mongoose.Schema(
 
 // ===== Pre-save middleware: set first reminder =====
 EmiSchema.pre("save", function () {
-  if (this.purchaseDate && this.reminderPeriod != null && !this.nextReminderDate) {
+  if (this.purchaseDate && this.reminderPeriod != null) {
+    const today = new Date();
     const firstReminder = new Date(this.purchaseDate);
-    firstReminder.setMonth(firstReminder.getMonth() + this.reminderPeriod);
+
+    while (firstReminder <= today) {
+      firstReminder.setMonth(
+        firstReminder.getMonth() + this.reminderPeriod
+      );
+    }
+
     this.nextReminderDate = firstReminder;
   }
 });
@@ -186,6 +193,9 @@ EmiSchema.pre("save", function () {
       dob.getMonth(),
       dob.getDate()
     ));
+    if (nextBirthday < today) {
+      nextBirthday.setFullYear(today.getFullYear() + 1);
+    }
 
     this.birthday = nextBirthday;
   }

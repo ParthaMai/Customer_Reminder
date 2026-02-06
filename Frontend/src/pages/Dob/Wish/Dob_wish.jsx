@@ -22,7 +22,8 @@ const Dob_wish = ({ url }) => {
         return;
     }
 
-   const message = "Happy birthday to you! 🎂🎉🥳\nWishing you a wonderful day! From Radhamoni Mi Store 😊";
+    const firstName = item.name.split(" ")[0];
+   const message = `Happy birthday ${firstName}! 🎂🎉🥳\nWishing you a wonderful day! From Radhamoni Mi Store 😊`;
 
 
 
