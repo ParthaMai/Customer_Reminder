@@ -162,7 +162,7 @@ const onSubmitHandler = async (event) => {
                 </div>
                 <div className="Form-no">
                     <p>Form No.</p>
-                    <input name="formNo" value={data.formNo} onChange={onChangeHandler} type="number" placeholder='285 (Required)' required />
+                    <input name="formNo" value={data.formNo} onChange={onChangeHandler} type="text" placeholder='285 (Required)' required />
                 </div>
                 <div className="Purchase-Date">
                     <p>Purchase Date(Required)</p>

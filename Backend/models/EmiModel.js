@@ -150,25 +150,42 @@ const EmiSchema = new mongoose.Schema(
 
 // ===== Pre-save middleware: set first reminder =====
 EmiSchema.pre("save", function () {
-  if (this.purchaseDate && this.reminderPeriod != null) {
-    const today = new Date();
-    const firstReminder = new Date(this.purchaseDate);
+  if (this.purchaseDate && this.reminderPeriod != null && !this.isModified("nextReminderDate")) {
 
-    while (firstReminder <= today) {
-      firstReminder.setMonth(
-        firstReminder.getMonth() + this.reminderPeriod
-      );
+    const today = new Date();
+    const todayUTC = new Date(Date.UTC(
+      today.getUTCFullYear(),
+      today.getUTCMonth(),
+      today.getUTCDate()
+    ));
+
+    const pd = new Date(this.purchaseDate);
+
+    const firstReminder = new Date(Date.UTC(
+      pd.getUTCFullYear(),
+      pd.getUTCMonth(),
+      pd.getUTCDate()
+    ));
+
+    // If purchase date is today → add reminder
+    if (firstReminder.getTime() === todayUTC.getTime()) {
+      firstReminder.setUTCMonth(firstReminder.getUTCMonth() + this.reminderPeriod);
+    }
+    // If purchase date is in past → roll forward
+    else if (firstReminder < todayUTC) {
+      while (firstReminder < todayUTC) {
+        firstReminder.setUTCMonth(firstReminder.getUTCMonth() + this.reminderPeriod);
+      }
     }
 
     this.nextReminderDate = firstReminder;
   }
 });
 
-
 // method
 EmiSchema.methods.markReminderSent = async function () {
   const nextDate = new Date(this.nextReminderDate);
-  nextDate.setMonth(nextDate.getMonth() + this.reminderPeriod);
+  nextDate.setUTCMonth(nextDate.getUTCMonth() + this.reminderPeriod);
   this.nextReminderDate = nextDate;
   await this.save();
 };
