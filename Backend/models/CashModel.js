@@ -1,7 +1,11 @@
 import mongoose from "mongoose";
 
-const EmiSchema = new mongoose.Schema(
+const CashSchema = new mongoose.Schema(
   {
+    payment: {
+        type: String,
+        default: "CASH"
+    },
     name: {
       type: String,
       required: true,
@@ -10,9 +14,7 @@ const EmiSchema = new mongoose.Schema(
     },
 
     formNo: {
-      type: String,
-      required: true,
-      unique: true
+      type: String
     },
 
     purchaseDate: {
@@ -62,7 +64,6 @@ const EmiSchema = new mongoose.Schema(
 
     age: {
       type: Number,
-      required: true
     },
 
     pan: {
@@ -102,33 +103,12 @@ const EmiSchema = new mongoose.Schema(
       required: true
     },
 
-    emiCharges: {
-      type: Number,
-      required: true,
-      min: 0
-    },
-
-    emiTenure: {
-      type: Number,
-      required: true
-    },
-
-    failedEmi: {
-      type: Number,
-      required: true,
-      min: 0
-    },
-
     reminderPeriod: {
       type: Number,
       required: true
     },
 
-    image: {
-      type: String 
-    },
-
-    // Store the next Upcoming Emi
+    // Store the next Upcoming Cash Reminder
      nextReminderDate: { 
       type: Date, 
       index: true 
@@ -149,7 +129,7 @@ const EmiSchema = new mongoose.Schema(
 );
 
 // ===== Pre-save middleware: set first reminder =====
-EmiSchema.pre("save", function () {
+CashSchema.pre("save", function () {
   if (this.purchaseDate && this.reminderPeriod != null && !this.isModified("nextReminderDate")) {
     const today = new Date();
     const firstReminder = new Date(this.purchaseDate);
@@ -165,14 +145,14 @@ EmiSchema.pre("save", function () {
 });
 
 // method
-EmiSchema.methods.markReminderSent = async function () {
+CashSchema.methods.markReminderSent = async function () {
   const nextDate = new Date(this.nextReminderDate);
   nextDate.setUTCMonth(nextDate.getUTCMonth() + this.reminderPeriod);
   this.nextReminderDate = nextDate;
   await this.save();
 };
 
-EmiSchema.methods.minimizeReminder = async function () {
+CashSchema.methods.minimizeReminder = async function () {
   if (!this.extendReminder) return; // safety check for null
   const minimizeDate = new Date(this.extendReminder);
   minimizeDate.setMonth(minimizeDate.getMonth() - 1);
@@ -181,7 +161,7 @@ EmiSchema.methods.minimizeReminder = async function () {
 }
 
 // This is for calculate Birthday
-EmiSchema.pre("save", function () {
+CashSchema.pre("save", function () {
   if (this.isModified("dob") && this.dob && !isNaN(new Date(this.dob))) {
     const today = new Date();
     const dob = new Date(this.dob);
@@ -201,7 +181,7 @@ EmiSchema.pre("save", function () {
 });
 
 // calculate next birthday
-EmiSchema.methods.markDobSent = async function (){
+CashSchema.methods.markDobSent = async function (){
   if(!this.birthday) return;
   const nextBirthday = new Date(this.birthday);
   nextBirthday.setFullYear(nextBirthday.getFullYear() + 1);
@@ -211,6 +191,6 @@ EmiSchema.methods.markDobSent = async function (){
 }
 
 
-const EmiModel =mongoose.models.Emi || mongoose.model("EMI_Customer-data",EmiSchema)
+const CashModel =mongoose.models.Cash || mongoose.model("Cash_Customer-data",CashSchema)
 
-export default EmiModel;
+export default CashModel;

@@ -3,6 +3,9 @@ import mongoose from "mongoose";
 
 const ReminderSchema = new mongoose.Schema(
   {
+    payment: {
+        type: String
+    },
     name: {
       type: String,
       required: true,
@@ -11,9 +14,7 @@ const ReminderSchema = new mongoose.Schema(
     },
 
     formNo: {
-      type: String,
-      required: true,
-      unique: true
+      type: String
     },
 
     purchaseDate: {
@@ -63,7 +64,6 @@ const ReminderSchema = new mongoose.Schema(
 
     age: {
       type: Number,
-      required: true
     },
 
     pan: {
@@ -104,18 +104,15 @@ const ReminderSchema = new mongoose.Schema(
 
     emiCharges: {
       type: Number,
-      required: true,
       min: 0
     },
 
     emiTenure: {
       type: Number,
-      required: true
     },
 
     failedEmi: {
       type: Number,
-      required: true,
       min: 0
     },
 

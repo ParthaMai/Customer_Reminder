@@ -6,6 +6,7 @@ import 'dotenv/config'
 import EmiRouter from "./routes/EmiRoute.js"
 import ReminderRouter from "./routes/ReminderRoute.js"
 import DobRouter from "./routes/DobRoute.js"
+import CashRouter from "./routes/CashRoute.js"
 
 
 
@@ -22,7 +23,7 @@ connectDB();
 
 // APi Endpoint
 app.use("/api/emi",EmiRouter)
-// app.use("/image",express.static('uploads'))
+app.use("/api/cash",CashRouter);
 
 app.use("/api/reminder-list",ReminderRouter)
 app.use("/api/Birthday",DobRouter);
