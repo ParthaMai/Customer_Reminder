@@ -35,25 +35,6 @@ const List_EMI = ({url}) => {
   // Debounced search handler
   const handleSearch = debounce((val) => searchEmi(val), 800);
 
-  // const searchEmi = async (value) => {
-  //   try {
-  //     if (!value.trim()) {
-  //       fetchList();
-  //       return;
-  //     }
-
-  //     const response = await axios.get(`${url}/api/emi/searchEmi`,{ params: { field: searchField, value: value}});
-
-  //     if (response.data.success) {
-  //       setList(response.data.data);
-  //     } else {
-  //       toast.error("Search error");
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     toast.error("Server error");
-  //   }
-  // };
 
   const searchEmi = async (value, pageNumber = 1) => {
   try {

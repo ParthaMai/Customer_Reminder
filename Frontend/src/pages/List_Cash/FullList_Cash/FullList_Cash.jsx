@@ -1,15 +1,14 @@
-import React from 'react'
 import { useEffect } from 'react';
+import '../../List_EMI/FullList_Emi/FullList_Emi.css';
 import { useState } from 'react';
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { assets } from '../../../assets/assets';
-import './FullList_Emi.css'
 import { useNavigate, useParams } from "react-router-dom";
+import React from 'react'
 
-const FullList_Emi = ({ url }) => {
+const FullList_Cash = ({ url }) => {
 
-    // const url = "http://192.168.1.8:4000"
     const navigate = useNavigate();
 
     const { id: itemId } = useParams(); // previous state item id like props
@@ -27,24 +26,24 @@ const FullList_Emi = ({ url }) => {
     };
 
     const submitUpdate = async () => {
-    try {
-        const response = await axios.put(`${url}/api/emi/update`, editData);
-        if(response.data.success){
-            toast.success("Updated successfully");
-            setIsEditing(false);
-            fetchFullList();
-        } else {
-            toast.error("Update failed");
+        try {
+            const response = await axios.put(`${url}/api/cash/update`, editData);
+            if (response.data.success) {
+                toast.success("Updated successfully");
+                setIsEditing(false);
+                fetchFullList();
+            } else {
+                toast.error("Update failed");
+            }
+        } catch (error) {
+            toast.error("Server error");
+            console.error(error);
         }
-    } catch (error) {
-        toast.error("Server error");
-        console.error(error);
-    }
     };
 
 
     const fetchFullList = async () => {
-        const response = await axios.get(`${url}/api/emi/fullList`, { params: { id: itemId } });
+        const response = await axios.get(`${url}/api/cash/fullList`, { params: { id: itemId } });
         if (response.data.success) {
             setItem(response.data.data);
         }
@@ -61,11 +60,11 @@ const FullList_Emi = ({ url }) => {
         const isConfirmed = window.confirm("Are you sure you want to delete this customer?");
         if (!isConfirmed) return;
         try {
-            const response = await axios.post(`${url}/api/emi/remove`, { id: itemId });
+            const response = await axios.post(`${url}/api/cash/remove`, { id: itemId });
             await fetchFullList();
             if (response.data.success) {
                 toast.success(response.data.message);
-                navigate("/list_EMI", { replace: true });
+                navigate("/list_Cash", { replace: true });
             }
             else {
                 toast.error("Error")
@@ -80,10 +79,10 @@ const FullList_Emi = ({ url }) => {
 
             <div className="field-table">
                 <div className="field-table-format">
-                    <p className="field-card-title">EMI Customer Data</p>
+                    <p className="field-card-title">Cash Customer Data</p>
                     <div className="field">
                         <label>Image:</label>
-                        <img src={item.image || assets.user_icon} alt="Customer" />
+                        <img src={assets.user_icon} alt="Customer" />
                     </div>
                     <hr />
 
@@ -101,19 +100,22 @@ const FullList_Emi = ({ url }) => {
                     </div>
                     <hr />
 
-                    <div className="field">
-                        <label>Form No:</label>
-                        {isEditing ? (
-                            <input
-                                type="text"
-                                value={editData.formNo || ""}
-                                onChange={e => setEditData({ ...editData, formNo: e.target.value })}
-                            />
-                        ) : (
-                            <p>{item.formNo}</p>
-                        )}
-                    </div>
-                    <hr />
+                    {item.formNo && (
+                        <>
+                        <div className="field">
+                            <label>Form No:</label>
+                            {isEditing ? (
+                                <input
+                                    type="text"
+                                    value={editData.formNo || ""}
+                                    onChange={e => setEditData({ ...editData, formNo: e.target.value })}
+                                />
+                            ) : (
+                                <p>{item.formNo}</p>
+                            )}
+                        </div>
+                        <hr /></>
+                    )}
 
                     <div className="field">
                         <label>Purchase Date:</label>
@@ -274,22 +276,6 @@ const FullList_Emi = ({ url }) => {
                             </div>
                             <hr /></>
                     )}
-                    {item.cibil && (
-                        <>
-                            <div className="field">
-                                <label>CIBIL:</label>
-                                {isEditing ? (
-                                    <input
-                                        type="text"
-                                        value={editData.cibil || ""}
-                                        onChange={e => setEditData({ ...editData, cibil: e.target.value })}
-                                    />
-                                ) : (
-                                    <p>{item.cibil}</p>
-                                )}
-                            </div>
-                            <hr /></>
-                    )}
                     {item.pinCode && (
                         <>
                             <div className="field">
@@ -346,45 +332,6 @@ const FullList_Emi = ({ url }) => {
                             />
                         ) : (
                             <p>₹{item.price}</p>
-                        )}
-                    </div>
-                    <hr />
-                    <div className="field">
-                        <label>EMI Charges:</label>
-                        {isEditing ? (
-                            <input
-                                type="number"
-                                value={editData.emiCharges || ""}
-                                onChange={e => setEditData({ ...editData, emiCharges: e.target.value })}
-                            />
-                        ) : (
-                            <p>₹{item.emiCharges}</p>
-                        )}
-                    </div>
-                    <hr />
-                    <div className="field">
-                        <label>EMI Tenure:</label>
-                        {isEditing ? (
-                            <input
-                                type="number"
-                                value={editData.emiTenure || ""}
-                                onChange={e => setEditData({ ...editData, emiTenure: e.target.value })}
-                            />
-                        ) : (
-                            <p>{item.emiTenure}</p>
-                        )}
-                    </div>
-                    <hr />
-                    <div className="field">
-                        <label>Failed EMI:</label>
-                        {isEditing ? (
-                            <input
-                                type="number"
-                                value={editData.failedEmi || ""}
-                                onChange={e => setEditData({ ...editData, failedEmi: e.target.value })}
-                            />
-                        ) : (
-                            <p>{item.failedEmi}</p>
                         )}
                     </div>
                     <hr />
@@ -448,4 +395,4 @@ const FullList_Emi = ({ url }) => {
     )
 }
 
-export default FullList_Emi
+export default FullList_Cash

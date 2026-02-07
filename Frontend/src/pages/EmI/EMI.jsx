@@ -51,7 +51,6 @@ const EMI = ({url}) => {
 
         try {
             const compressedFile = await imageCompression(file, options);
-            console.log("hello")
             setImage(compressedFile);
         } catch (error) {
             console.error(error);

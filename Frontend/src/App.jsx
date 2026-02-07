@@ -13,6 +13,7 @@ import Reminder from './pages/Reminder/Reminder'
 import FullDetails_Reminder from './pages/Reminder/FullDetails_Reminder/FullDetails_Reminder'
 import Dob_reminder from './pages/Dob/Dob_reminder'
 import Dob_wish from './pages/Dob/Wish/Dob_wish'
+import FullList_Cash from './pages/List_Cash/FullList_Cash/FullList_Cash'
 
 
 const App = () => {
@@ -27,9 +28,10 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home url={url} />} />
           <Route path='/emi' element={<EMI url={url}/>} />
-          <Route path="/cash" element={<Cash/>} />
+          <Route path="/cash" element={<Cash url={url}/>} />
           <Route path="/list_EMI" element={<List_EMI url={url}/>} />
-          <Route path="/list_Cash" element={<List_Cash/>} />
+          <Route path="/list_Cash" element={<List_Cash url={url}/>} />
+          <Route path="/list_Cash/FullList_Cash/:id" element={<FullList_Cash url={url} />} />
           <Route path="/list_EMI/FullList_Emi/:id" element={<FullList_Emi url={url} />} />
           <Route path="/reminder" element = {<Reminder url={url} />} />
           <Route path="/reminder/:id" element={<FullDetails_Reminder url={url} />} />
