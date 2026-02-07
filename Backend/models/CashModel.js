@@ -130,7 +130,7 @@ const CashSchema = new mongoose.Schema(
 
 // ===== Pre-save middleware: set first reminder =====
 CashSchema.pre("save", function () {
-  if (this.purchaseDate && this.reminderPeriod != null && !this.isModified("nextReminderDate")) {
+  if (this.isModified("purchaseDate") && this.purchaseDate && this.reminderPeriod != null && !this.isModified("nextReminderDate")) {
     const today = new Date();
     const firstReminder = new Date(this.purchaseDate);
     firstReminder.setMonth(firstReminder.getMonth() + this.reminderPeriod);
@@ -140,19 +140,20 @@ CashSchema.pre("save", function () {
         firstReminder.getMonth() + this.reminderPeriod
       );
     }
+    
     this.nextReminderDate = firstReminder;
   }
 });
 
 // method
-CashSchema.methods.markReminderSent = async function () {
+CashSchema.methods.markReminderCash = async function () {
   const nextDate = new Date(this.nextReminderDate);
   nextDate.setUTCMonth(nextDate.getUTCMonth() + this.reminderPeriod);
   this.nextReminderDate = nextDate;
   await this.save();
 };
 
-CashSchema.methods.minimizeReminder = async function () {
+CashSchema.methods.minimizeReminderCash = async function () {
   if (!this.extendReminder) return; // safety check for null
   const minimizeDate = new Date(this.extendReminder);
   minimizeDate.setMonth(minimizeDate.getMonth() - 1);

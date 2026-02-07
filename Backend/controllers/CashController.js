@@ -126,6 +126,80 @@ const SearchCash = async (req, res) => {
 };
 
 
+// one Cash customer Fulllist
+const FullCashList = async (req,res) => {
+    try {
+        const Emi = await CashModel.findById(req.query.id);
+        res.json({success:true,data:Emi})
+    }
+    catch(error){
+        console.log(error);
+        res.json({success:false,message:"Error"})
+    }
+}
+
+//update Customer Data
+const updateField = async (req, res) => {
+  try {
+    const { _id, ...updateFields } = req.body;
+
+    const updated = await CashModel.findByIdAndUpdate(
+      _id,
+      updateFields,
+      { new: true }
+    );
+
+    if (!updated) {
+      return res.status(404).json({ success: false, message: "Customer not found" });
+    }
+
+    res.json({success: true, data: updated, message: "Customer updated successfully" });
+
+  } catch (error) { 
+    console.error(error);
+    res.status(500).json({success: false, message: error.message
+    });
+  }
+};
+
+// update extend Reminder Details
+const updateReminder = async (req, res) => {
+  try {
+    const { _id, summary, extendReminder } = req.body;
+
+    // Build dynamic payload
+    let payload = {};
+
+ // Update even if the value is null
+    if ("summary" in req.body) payload.summary = summary;
+    if ("extendReminder" in req.body) payload.extendReminder = extendReminder;
+
+    // If nothing to update
+    if (Object.keys(payload).length === 0) {
+      return res.json({ success: false, message: "Please provide at least one field to update" });
+    }
+
+    const updated = await CashModel.findByIdAndUpdate(
+      _id,
+      { $set: payload },
+      { new: true }
+    );
+
+    if (!updated) {
+      return res.json({ success: false, message: "Reminder not found" });
+    }
+
+    res.json({ success: true, message: "Reminder updated successfully"});
+
+  } catch (error) {
+    console.error(error); 
+    res.json({ success: false, message: "Server error" });
+  }
+};
 
 
-export { addCash, CashList, removeCustomer, SearchCash}
+
+
+
+
+export { addCash, CashList, removeCustomer, SearchCash, FullCashList, updateField, updateReminder}

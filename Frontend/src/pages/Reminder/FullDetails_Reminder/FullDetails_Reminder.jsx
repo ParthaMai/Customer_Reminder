@@ -18,6 +18,15 @@ const FullDetails_Reminder = ({ url }) => {
     })
     const savingRef = useRef(false);  
     const [saving, setSaving] = useState(false);
+    const { id: itemId } = useParams();// previous state item id like props
+
+    const [selectedNumber, setSelectedNumber] = useState("");
+    const [item, setItem] = useState([]);
+    const [isRecording, setIsRecording] = useState(false);
+    const [audioURL, setAudioURL] = useState(null);
+    const mediaRecorderRef = useRef(null);
+    const audioChunksRef = useRef([]);
+
 
     const onChangeHandler = (event) => {
         const name = event.target.name;
@@ -39,8 +48,15 @@ const FullDetails_Reminder = ({ url }) => {
 
             payload._id = id;
 
-            const response = await axios.post( `${url}/api/emi/extend-reminder`,payload);
-
+            let response;
+            if(item.payment === "CASH"){
+                response = await axios.post( `${url}/api/cash/extend-reminder`,payload);
+            }
+            else{
+                response = await axios.post( `${url}/api/emi/extend-reminder`,payload);
+            }
+            
+                
             if (response.data.success) {
                 setData({
                     summary: "",
@@ -59,17 +75,7 @@ const FullDetails_Reminder = ({ url }) => {
     };
 
 
-    const { id: itemId } = useParams();// previous state item id like props
 
-    const [selectedNumber, setSelectedNumber] = useState("");
-    const [item, setItem] = useState([]);
-
-    // const [reminderDate, setReminderDate] = useState("");
-    // const [summary, setSummary] = useState("");
-    const [isRecording, setIsRecording] = useState(false);
-    const [audioURL, setAudioURL] = useState(null);
-    const mediaRecorderRef = useRef(null);
-    const audioChunksRef = useRef([]);
 
     const startRecording = async () => {
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -181,7 +187,14 @@ const FullDetails_Reminder = ({ url }) => {
                         <img src={item.image || assets.user_icon} alt="Customer" />
                     </div>
                     <hr />
-
+                    {item.payment && (
+                        <>
+                            <div className="field">
+                                <label>Payment Method:</label>
+                                <p>{item.payment}</p>
+                            </div>
+                            <hr /></>
+                    )}
                     <div className="field">
                         <label>Name:</label>
                         <p>{item.name}</p>
@@ -190,7 +203,7 @@ const FullDetails_Reminder = ({ url }) => {
 
                     <div className="field">
                         <label>Form No:</label>
-                        <p>{item.formNo}</p>
+                        <p>{item.formNo || "NA"}</p>
                     </div>
                     <hr />
 
@@ -332,16 +345,24 @@ const FullDetails_Reminder = ({ url }) => {
                         <p>₹{item.price}</p>
                     </div>
                     <hr />
+                    {item.emiCharges && (
+                        <>
                     <div className="field">
                         <label>EMI Charges:</label>
                         <p>₹{item.emiCharges}</p>
                     </div>
-                    <hr />
+                    <hr /></>
+                    )}
+                    {item.emiTenure && (
+                        <>
                     <div className="field">
                         <label>EMI Tenure:</label>
                         <p>{item.emiTenure}</p>
                     </div>
-                    <hr />
+                    <hr /></>
+                    )}
+                    {item.failedEmi && (
+                        <>
                     <div className="field">
                         <label>Failed EMI:</label>
                         <p>{item.failedEmi}</p>
@@ -351,7 +372,8 @@ const FullDetails_Reminder = ({ url }) => {
                         <label>Reminder Period:</label>
                         <p>{item.reminderPeriod}</p>
                     </div>
-                    <hr />
+                    <hr /></>
+                    )}
                     {item.nextReminderDate && (
                         <>
                             <div className="field">

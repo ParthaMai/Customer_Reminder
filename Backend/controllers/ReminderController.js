@@ -1,3 +1,4 @@
+import CashModel from "../models/CashModel.js";
 import EmiModel from "../models/EmiModel.js";
 import ReminderModel from "../models/ReminderModel.js";
 import fs from 'fs'
@@ -12,6 +13,7 @@ const TodayEmiList = async (req, res) => {
         const endOfToday = new Date();
         endOfToday.setHours(23, 59, 59, 999);
 
+         // ================= EMI NORMAL =================
         const EmiList = await EmiModel.find({
             nextReminderDate: { $gte: startOfToday, $lte: endOfToday }
         });
@@ -39,15 +41,35 @@ const TodayEmiList = async (req, res) => {
             }
         }
 
-        
-    //     // if for loop is  slow then use this // Update nextReminderDate in parallel
-    // await Promise.all(EmiList.map(emi => emi.markReminderSent()));
+           // ================= CASH NORMAL =================
+        const CashList = await CashModel.find({
+          nextReminderDate: { $gte: startOfToday, $lte: endOfToday }
+        });
+
+        if (CashList.length > 0) {
+          await ReminderModel.insertMany(CashList);
+          for (const cash of CashList) {
+            await cash.markReminderCash();
+          }
+        }
+
+        // ================= CASH EXTEND =================
+        const cashExtendReminderList = await CashModel.find({
+          extendReminder: { $gte: startOfToday, $lte: endOfToday }
+        });
+
+        if (cashExtendReminderList.length > 0) {
+          await ReminderModel.insertMany(cashExtendReminderList);
+          for (const extend of cashExtendReminderList) {
+            await extend.minimizeReminderCash();
+          }
+        }
    
 
     res.json({ success: true, message: "Reminders stored successfully" });
     } catch (error) {
         console.log(error);
-        res.json({ success: false, message: "Error" });
+        res.json({ success: false, message: "Already Stored in Reminder" });
     }
 };
 
