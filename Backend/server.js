@@ -38,6 +38,13 @@ app.get("/api/health", (req, res) => {
   console.log("Health check hit");
   res.json({ status: "ok" });
 });
+app.get("/cpu-test", (req, res) => {
+  let sum = 0;
+  for (let i = 0; i < 1e9; i++) {
+    sum += i;
+  }
+  res.send("Done " + sum);
+});
 
 
 app.listen(port,"0.0.0.0", ()=>{
