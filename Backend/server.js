@@ -8,7 +8,7 @@ import ReminderRouter from "./routes/ReminderRoute.js"
 import DobRouter from "./routes/DobRoute.js"
 import CashRouter from "./routes/CashRoute.js"
 
-
+import "./cron.js"; 
 
 // app config
 const app = express()
@@ -33,6 +33,11 @@ app.use("/api/Birthday",DobRouter);
 app.get("/",(req,res) =>{
     res.send("API Working")
 })
+app.get("/api/health", (req, res) => {
+  console.log("Health check hit");
+  res.json({ status: "ok" });
+});
+
 
 app.listen(port,"0.0.0.0", ()=>{
     console.log(`Server Started on http://10.126.209.219:${port}`)
