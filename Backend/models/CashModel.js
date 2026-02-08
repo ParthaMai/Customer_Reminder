@@ -182,7 +182,7 @@ CashSchema.pre("save", function () {
 });
 
 // calculate next birthday
-CashSchema.methods.markDobSent = async function (){
+CashSchema.methods.markDobCash = async function (){
   if(!this.birthday) return;
   const nextBirthday = new Date(this.birthday);
   nextBirthday.setFullYear(nextBirthday.getFullYear() + 1);

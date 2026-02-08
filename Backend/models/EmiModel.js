@@ -150,7 +150,7 @@ const EmiSchema = new mongoose.Schema(
 
 // ===== Pre-save middleware: set first reminder =====
 EmiSchema.pre("save", function () {
-  if (this.purchaseDate && this.reminderPeriod != null && !this.isModified("nextReminderDate")) {
+  if (this.isModified("purchaseDate") && this.purchaseDate && this.reminderPeriod != null && !this.isModified("nextReminderDate")) {
     const today = new Date();
     const firstReminder = new Date(this.purchaseDate);
     firstReminder.setMonth(firstReminder.getMonth() + this.reminderPeriod);

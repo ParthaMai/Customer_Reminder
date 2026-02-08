@@ -2,6 +2,9 @@ import mongoose from "mongoose";
 
 const DobSchema = new mongoose.Schema(
   {
+    payment: {
+        type: String
+    },
     name: {
       type: String,
       required: true,
@@ -10,9 +13,7 @@ const DobSchema = new mongoose.Schema(
     },
 
     formNo: {
-      type: String,
-      required: true,
-      unique: true
+      type: String
     },
 
     purchaseDate: {
@@ -61,8 +62,7 @@ const DobSchema = new mongoose.Schema(
     },
 
     age: {
-      type: Number,
-      required: true
+      type: Number
     },
 
     pan: {
@@ -104,18 +104,15 @@ const DobSchema = new mongoose.Schema(
 
     emiCharges: {
       type: Number,
-      required: true,
       min: 0
     },
 
     emiTenure: {
-      type: Number,
-      required: true
+      type: Number
     },
 
     failedEmi: {
       type: Number,
-      required: true,
       min: 0
     },
 

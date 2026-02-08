@@ -1,5 +1,6 @@
 import EmiModel from "../models/EmiModel.js";
 import DobModel from "../models/DobModel.js";
+import CashModel from "../models/CashModel.js";
 
 const TodayDobList = async (req, res) => {
     try { 
@@ -22,6 +23,20 @@ const TodayDobList = async (req, res) => {
                 await dob.markDobSent();
             }
         }
+
+        // ================= CASH Customer DOB =================
+        const CashDobList = await CashModel.find({
+          birthday: { $gte: startOfToday, $lte: endOfToday }
+        });
+
+        if (CashDobList.length > 0) {
+          await DobModel.insertMany(CashDobList);
+          for (const cash of CashDobList) {
+            await cash.markDobCash();
+          }
+        }
+
+
 
     res.json({ success: true, message: "Dob stored successfully" });
     } catch (error) {

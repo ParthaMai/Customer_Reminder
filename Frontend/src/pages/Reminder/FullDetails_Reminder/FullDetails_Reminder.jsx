@@ -187,13 +187,20 @@ const FullDetails_Reminder = ({ url }) => {
                         <img src={item.image || assets.user_icon} alt="Customer" />
                     </div>
                     <hr />
-                    {item.payment && (
+                    {item.payment ? (
                         <>
                             <div className="field">
                                 <label>Payment Method:</label>
                                 <p>{item.payment}</p>
                             </div>
                             <hr /></>
+                    ) : (
+                        <> 
+                        <div className="field">
+                            <label>Payment Method:</label>
+                            <p>EMI</p>
+                        </div>
+                        <hr /></>
                     )}
                     <div className="field">
                         <label>Name:</label>

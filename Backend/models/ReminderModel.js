@@ -63,7 +63,7 @@ const ReminderSchema = new mongoose.Schema(
     },
 
     age: {
-      type: Number,
+      type: Number
     },
 
     pan: {
