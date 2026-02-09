@@ -217,6 +217,24 @@ const updateReminder = async (req, res) => {
   }
 };
 
+// upload audio file
+// export const uploadAudioController = async (req, res) => {
+//   try {
+//     const audioUrl = req.file ? req.file.path : null;
+//     const publicId = req.file ? req.file.filename : null;
+//     res.json({
+//       success: true,
+//       url: audioUrl,       // Cloudinary secure URL
+//       public_id: publicId
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ success: false, message: "Audio upload failed"});
+//   }
+// };
+
+
+
 
 const updateField = async (req, res) => {
   try {

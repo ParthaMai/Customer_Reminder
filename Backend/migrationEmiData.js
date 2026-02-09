@@ -16,12 +16,22 @@ const migrateEmiData = async () => {
       let updated = false;
 
       // 1️⃣ nextReminderDate
-      if (emi.purchaseDate && emi.reminderPeriod != null && !emi.nextReminderDate) {
-        const firstReminder = new Date(emi.purchaseDate);
-        firstReminder.setMonth(firstReminder.getMonth() + emi.reminderPeriod);
-        emi.nextReminderDate = firstReminder;
-        updated = true;
+    if (
+      emi.purchaseDate &&
+      emi.reminderPeriod != null
+    ) {
+      const today = new Date();
+      const firstReminder = new Date(emi.purchaseDate);
+      firstReminder.setMonth(firstReminder.getMonth() + emi.reminderPeriod);
+
+      while (firstReminder < today) {
+        firstReminder.setMonth(
+          firstReminder.getMonth() + emi.reminderPeriod
+        );
       }
+
+      emi.nextReminderDate = firstReminder;
+    }
 
       // 2️⃣ summary → store as string "null" if missing
       if (emi.summary === undefined || emi.summary === null || emi.summary === "") {
