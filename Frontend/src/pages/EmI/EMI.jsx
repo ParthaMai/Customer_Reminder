@@ -8,7 +8,6 @@ import imageCompression from "browser-image-compression";
 
 const EMI = ({url}) => {
 
-    // const url = "http://192.168.1.8:4000"
 
     const [loading, setLoading] = useState(false);
 

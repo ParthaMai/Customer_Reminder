@@ -22,8 +22,15 @@ const Dob_reminder = ({ url }) => {
     // fix it in schedule way
     useEffect(() => {
       const cleanupAndFetch = async () => {
+        try {
         //Delete old reminders
         await axios.post(`${url}/api/Birthday/remove-old`);
+
+      await fetchDobList(1);
+    } catch (error) {
+      console.error(error);
+      toast.error("Server error");
+    }
       };
   
       cleanupAndFetch();
@@ -51,10 +58,6 @@ const Dob_reminder = ({ url }) => {
     }
   };
 
-
-  useEffect(() => {
-    fetchDobList(1)
-  }, [])
 
 
 

@@ -14,7 +14,8 @@ const ReminderSchema = new mongoose.Schema(
     },
 
     formNo: {
-      type: String
+      type: String,
+      index: true
     },
 
     purchaseDate: {

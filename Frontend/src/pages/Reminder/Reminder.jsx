@@ -17,17 +17,6 @@ const Reminder = ({ url }) => {
     navigate(`/reminder/${id}`);
   };
 
-
-  // fix it in schedule way
-  useEffect(() => {
-    const cleanupAndFetch = async () => {
-      //Delete old reminders
-      await axios.post(`${url}/api/reminder-list/cleanup-old`);
-    };
-
-    cleanupAndFetch();
-  }, []);
-
  
 
   const handleDownloadExcel = () => {
@@ -56,16 +45,26 @@ const Reminder = ({ url }) => {
 
 
 
+  // fix it in schedule way
+  useEffect(() => {
+    const cleanupAndFetch = async () => {
+      try{
+      //Delete old reminders
+      await axios.post(`${url}/api/reminder-list/cleanup-old`);
 
-  // const fetchList = async () => {
-  //   const response = await axios.get(`${url}/api/reminder-list/remind-list`);
-  //   if(response.data.success) {
-  //     setList(response.data.data);
-  //   }
-  //   else{
-  //     toast.error("Error");
-  //   }
-  // }
+      await fetchList(1);
+
+      }catch(error){
+        console.log(error);
+        toast.error("server Error")
+      }
+    };
+
+    cleanupAndFetch();
+  }, []);
+
+
+
   const fetchList = async (pageNumber = 1) => {
     try {
       const response = await axios.get(`${url}/api/reminder-list/remind-list`, {
@@ -89,9 +88,9 @@ const Reminder = ({ url }) => {
   };
 
 
-  useEffect(() => {
-    fetchList(1)
-  }, [])
+  // useEffect(() => {
+  //   fetchList(1)
+  // }, [])
 
 
 

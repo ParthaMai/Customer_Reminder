@@ -19,6 +19,7 @@ import FullList_Cash from './pages/List_Cash/FullList_Cash/FullList_Cash'
 const App = () => {
 
   const url = "https://customer-reminder-backend.onrender.com"
+  //  const url = "http://192.168.1.8:4000"
 
   return (
     <div className='app'>

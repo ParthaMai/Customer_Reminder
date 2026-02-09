@@ -111,19 +111,6 @@ const updateReminder = async (req, res) => {
 
 
 
-
-// all Remind customer list
-// const RemindList = async (req,res) => {
-//     try {
-//         const Remind = await ReminderModel.find({}).sort({ createdAt: -1 });
-//         res.json({success:true,data: Remind})
-//     }
-//     catch(error){
-//         console.log(error);
-//         res.json({success:false,message:"Error"})
-//     }
-// }
-
 // all Remind customer list with pagination
 const RemindList = async (req, res) => {
   try {
@@ -189,7 +176,7 @@ const removeReminder = async (req,res) => {
 const deleteOldReminders = async (req,res) => {
   try {
     const tenDaysAgo = new Date();
-    tenDaysAgo.setDate(tenDaysAgo.getDate() - 10);
+    tenDaysAgo.setDate(tenDaysAgo.getDate() - 7);
 
     const result = await ReminderModel.deleteMany({
       createdAt: { $lt: tenDaysAgo }

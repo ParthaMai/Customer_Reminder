@@ -6,8 +6,6 @@ import cloudinary from "../config/cloudinary.js";
 const addEmi = async (req,res) => {
     
     // Check if image exist or not.
-    // const image_filename = req.file ? req.file.filename : null;
-    // Cloudinary gives URL in req.file.path
     const imageUrl = req.file ? req.file.path : null;
 
     const emi = new EmiModel({
