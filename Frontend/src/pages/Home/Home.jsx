@@ -30,7 +30,6 @@ const Home = ({url}) => {
   }
   }
 
-
   // use here to update only once or twice per day
   useEffect(() => {
     fetchList(),

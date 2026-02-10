@@ -149,7 +149,6 @@ const fetchList = async (page = 1, value = "") => {
       </div>
       <div className="list-table">
         <div className="list-table-format title">
-          <b>Image</b>
           <b>Name</b>
           <b>Update</b>
           <b>Form No.</b>
@@ -197,10 +196,6 @@ const fetchList = async (page = 1, value = "") => {
         {list.map((item, index) => {
           return (
             <div key={index} className="list-table-format">
-              <img 
-                src={item.image || assets.user_icon} 
-                alt="customer"
-              />
               <p>{item.name}</p>
               <img src={assets.edit_icon} alt="edit" className="edit-icon"onClick={() => handleUpdate(item._id)}/>
               <p>{item.formNo}</p>

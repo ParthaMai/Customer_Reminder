@@ -53,7 +53,8 @@ const EmiSchema = new mongoose.Schema(
 
     aadhar: {
       type: String,
-      length: 12
+      length: 12,
+      index: true
     },
 
     voterId: {

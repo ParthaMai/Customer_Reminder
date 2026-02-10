@@ -26,7 +26,6 @@
 .list-table-format {
   display: grid;
   grid-template-columns: 
-    0.7fr
     2fr
     0.8fr 
     1fr
@@ -175,7 +174,6 @@
 @media (max-width: 600px) {
   .list-table-format {
     grid-template-columns: 
-      0.8fr   /* Image */
       2fr    /* Name */
       0.6fr /* Update */
       1fr     /* Form No */
