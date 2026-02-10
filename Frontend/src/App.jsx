@@ -15,7 +15,6 @@ import Dob_reminder from './pages/Dob/Dob_reminder'
 import Dob_wish from './pages/Dob/Wish/Dob_wish'
 import FullList_Cash from './pages/List_Cash/FullList_Cash/FullList_Cash'
 
-
 const App = () => {
 
   const url = "https://customer-reminder-backend.onrender.com"
@@ -23,8 +22,9 @@ const App = () => {
 
   return (
     <div className='app'>
-      <ToastContainer /> 
+      
       <Navbar/>
+      <ToastContainer /> 
       <hr/>
         <Routes>
           <Route path="/" element={<Home url={url} />} />
