@@ -10,4 +10,8 @@ cron.schedule("*/10 7-23 * * *", async () => {
   } catch (err) {
     console.error("Error sending request:", err.message);
   }
-});
+},
+  {
+    timezone: "Asia/Kolkata"
+  }
+);
