@@ -141,6 +141,10 @@ const ReminderSchema = new mongoose.Schema(
     birthday: {
       type: Date,
       index: true
+    },
+    create: {
+      type: Date,
+      default: Date.now
     }
   },
   { timestamps: true }

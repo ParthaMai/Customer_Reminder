@@ -19,15 +19,10 @@ const TodayEmiList = async (req, res) => {
         });
         // Insert found documents into the new collection
         if (EmiList.length > 0) {
-          console.log("hoye6e")
            const insertedDocs = await ReminderModel.insertMany(EmiList);
-
-            console.log("Inserted count:", insertedDocs.length);
-            console.log("First inserted ID:", insertedDocs[0]._id);
         }
         if(EmiList.length > 0){
             for (const emi of EmiList) {
-              console.log("+Reminder")
                 await emi.markReminderSent();
             }
         }
@@ -49,13 +44,10 @@ const TodayEmiList = async (req, res) => {
         const CashList = await CashModel.find({
           nextReminderDate: { $gte: startOfToday, $lte: endOfToday }
         });
-        console.log("yes")
 
         if (CashList.length > 0) {
           await ReminderModel.insertMany(CashList);
-          console.log("hel")
           for (const cash of CashList) {
-            console.log("hi")
             await cash.markReminderCash();
           }
         }
@@ -187,10 +179,8 @@ const deleteOldReminders = async (req,res) => {
     tenDaysAgo.setDate(tenDaysAgo.getDate() - 7);
 
     const result = await ReminderModel.deleteMany({
-      createdAt: { $lt: tenDaysAgo }
+      create: { $lt: tenDaysAgo }
     });
-    onsole.log("Deleted count:", result.deletedCount);
-
     res.json({success: true,deletedCount: result.deletedCount});
   } catch (error) {
     res.status(500).json({ success: false });
