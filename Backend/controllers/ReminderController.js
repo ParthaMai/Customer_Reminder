@@ -20,10 +20,12 @@ const TodayEmiList = async (req, res) => {
 
         // Insert found documents into the new collection
         if (EmiList.length > 0) {
+          console.log("hoye6e")
             await ReminderModel.insertMany(EmiList);
         }
         if(EmiList.length > 0){
             for (const emi of EmiList) {
+              console("+Reminder")
                 await emi.markReminderSent();
             }
         }
@@ -62,6 +64,7 @@ const TodayEmiList = async (req, res) => {
         });
 
         if (cashExtendReminderList.length > 0) {
+          console.log("Extend")
           await ReminderModel.insertMany(cashExtendReminderList);
           for (const extend of cashExtendReminderList) {
             await extend.minimizeReminderCash();
