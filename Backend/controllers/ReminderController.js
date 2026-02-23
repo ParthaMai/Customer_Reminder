@@ -17,15 +17,17 @@ const TodayEmiList = async (req, res) => {
         const EmiList = await EmiModel.find({
             nextReminderDate: { $gte: startOfToday, $lte: endOfToday }
         });
-
         // Insert found documents into the new collection
         if (EmiList.length > 0) {
           console.log("hoye6e")
-            await ReminderModel.insertMany(EmiList);
+           const insertedDocs = await ReminderModel.insertMany(EmiList);
+
+            console.log("Inserted count:", insertedDocs.length);
+            console.log("First inserted ID:", insertedDocs[0]._id);
         }
         if(EmiList.length > 0){
             for (const emi of EmiList) {
-              console("+Reminder")
+              console.log("+Reminder")
                 await emi.markReminderSent();
             }
         }
