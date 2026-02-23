@@ -45,10 +45,13 @@ const TodayEmiList = async (req, res) => {
         const CashList = await CashModel.find({
           nextReminderDate: { $gte: startOfToday, $lte: endOfToday }
         });
+        console.log("yes")
 
         if (CashList.length > 0) {
           await ReminderModel.insertMany(CashList);
+          console.log("hel")
           for (const cash of CashList) {
+            console.log("hi")
             await cash.markReminderCash();
           }
         }
