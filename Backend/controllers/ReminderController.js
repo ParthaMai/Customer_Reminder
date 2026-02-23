@@ -189,6 +189,7 @@ const deleteOldReminders = async (req,res) => {
     const result = await ReminderModel.deleteMany({
       createdAt: { $lt: tenDaysAgo }
     });
+    onsole.log("Deleted count:", result.deletedCount);
 
     res.json({success: true,deletedCount: result.deletedCount});
   } catch (error) {
