@@ -142,6 +142,10 @@ const DobSchema = new mongoose.Schema(
       type: Date,
       default: null,
       index: true
+    },
+    create: {
+      type: Date,
+      default: Date.now
     }
   },
   { timestamps: true }

@@ -112,7 +112,7 @@ const deleteOldDob = async (req, res) => {
     oneDayAgo.setDate(oneDayAgo.getDate() - 1);
 
     const result = await DobModel.deleteMany({
-      createdAt: { $lt: oneDayAgo }
+      create: { $lt: oneDayAgo }
     });
     res.json({ success: true, deletedCount: result.deletedCount });
   } catch (error) {
