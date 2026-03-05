@@ -1,0 +1,106 @@
+
+/* Navbar container */
+.navbar {
+    width: 100%;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    z-index: 9999;
+    flex-wrap: wrap; /* allows wrapping on small screens */
+}
+
+/* Logo */
+.navbar .logo {
+    width: 50px;
+    cursor: pointer;
+    transition: width 0.3s ease;
+}
+
+/* Navbar menu */
+.navbar-menu {
+    display: flex;
+    list-style: none;
+    gap: 20px;
+    font-size: 16px;
+    align-items: center;
+    flex-wrap: wrap; /* wrap on small screens */
+}
+
+/* Navbar links */
+.navbar-menu {
+    text-decoration: none;
+    color: hsl(226, 26%, 42%);
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.navbar-menu a:hover {
+    color: #aa6565; 
+}
+
+.navbar-profile{
+    position: relative;
+}
+.nav-profile-dropdown{
+    position: absolute;
+    display: none;
+    right: 0;
+    z-index: 1;
+}
+.navbar-profile:hover .nav-profile-dropdown{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #fff2ef;
+    padding:  12px 25px;
+    border-radius: 4px;
+    border: 1px solid  tomato;
+    outline: 2px solid white;
+    list-style: none;
+}
+.nav-profile-dropdown li{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+.nav-profile-dropdown img{
+    width: 20px;
+}
+.nav-profile-dropdown li:hover{
+    color: tomato;
+}
+
+
+/* Sign In Button */
+.signin-btn {
+  padding: 10px 20px;
+  background-color: #ffffff;   /* White background */
+  color: #000000;              /* Black text */
+  border: 1px solid #000000;   /* Black border */
+  border-radius: 30px;          /* Slight rounded corner */
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+/* Hover effect */
+.signin-btn:hover {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+/* Mobile styles */
+@media (max-width: 600px) {
+    .navbar-menu a {
+        font-size: 16px;
+    }
+    .navbar .logo {
+        width: 50px;
+    }
+}

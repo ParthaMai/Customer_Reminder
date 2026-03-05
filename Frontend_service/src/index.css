@@ -1,0 +1,13 @@
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  /* background-color: #f5f9ff; */
+}
+body{
+  min-height: 100dvh;
+}
+a{
+  text-decoration: none;
+  color: inherit;
+}

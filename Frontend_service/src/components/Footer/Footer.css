@@ -1,0 +1,43 @@
+.footer {
+  position: fixed;        /* 🔥 Important */
+  bottom: 0;
+  left: 0;
+  width: 100%;
+
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  height: 60px;
+  background-color: #eaf2ff;
+  border-top: 1px solid #d1d5db;
+
+  z-index: 1000;          /* stays above content */
+}
+
+/* Each Footer Item */
+.footer-item {
+    background-color: #eaf2ff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Icon */
+.footer-item img {
+    background-color: #eaf2ff;
+  width: 24px;
+  height: 24px;
+  margin-bottom: 2px;
+}
+
+/* Label */
+.footer-label {
+    background-color: #eaf2ff;
+  font-size: 12px;
+  color: #1e293b;
+}

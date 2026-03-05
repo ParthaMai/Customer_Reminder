@@ -1,0 +1,162 @@
+.cash {
+    width: 90%;
+    max-width: 600px;
+    margin: 40px auto;
+    background-color: #f9f9f9;
+     /* light grey background */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    font-family: Arial, sans-serif;
+    color: #333;
+    font-size: max(1vw,15px);
+    padding-bottom: 40px;
+}
+
+
+.cash form{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.cash p {
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 14px;
+}
+.cash input[type="text"],
+.cash input[type="tel"],
+.cash input[type="number"],
+.cash input[type="date"],
+.cash textarea,
+.cash select{
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: #fff;
+    box-sizing: border-box;
+}
+.cash input:focus,
+.cash textarea:focus,
+.cash select:focus {
+    border-color: #888;
+    outline: none;
+}
+.cash-add-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.cash-add-btn:hover {
+    background-color: #555;
+}
+/* Service Details Container */
+.add-product-description {
+    width: 100%;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Section Title */
+.add-product-description p {
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+/* Each Service Row */
+.service-row {
+     background-color: #ffffff; 
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+/* Label */
+.service-row label {
+    font-size: 16px;
+    color: #1b1b1b;
+    font-weight: 500;
+    margin-bottom: 5px;
+    display: block;
+}
+
+/* Textarea */
+.service-row textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    resize: none;
+    outline: none;
+    transition: 0.2s ease;
+}
+
+.service-row textarea:focus {
+    border-color: #000;
+}
+
+/* Remove Button */
+.remove-btn {
+    margin-top: 8px;
+    padding: 5px 10px;
+    font-size: 13px;
+    border-radius: 5px;
+    border: 1px solid #000;
+    background-color: #333;
+    color: #fff;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.remove-btn:hover {
+    background-color: #555;
+    color: #fff;
+}
+
+/* Add Button */
+.add-btn-service {
+    width: fit-content;
+    padding: 7px 14px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #000;
+    color: #fff;
+    background-color: #333;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.add-btn-service:hover {
+    background-color: #555;
+    color: #fff;
+}
+
+
+@media (max-width: 500px) {
+    .cash {
+        padding: 15px;
+          padding-bottom: 40px;
+    }
+    .cash p {
+        font-size: 16px;
+    }
+    .cash input, .cash textarea, .cash select {
+        font-size: 13px;
+    }
+    .cash-add-btn {
+        padding: 10px;
+        font-size: 14px;
+    }
+}
