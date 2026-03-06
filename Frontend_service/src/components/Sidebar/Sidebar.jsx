@@ -15,7 +15,7 @@ const Sidebar = () => {
           Add Customer
         </NavLink>
 
-        <NavLink to="/customer-list" className="box">
+        <NavLink to="/list_Service_Customer" className="box">
         <img src={assets.customer_list} alt="" />
           Customer List
         </NavLink>

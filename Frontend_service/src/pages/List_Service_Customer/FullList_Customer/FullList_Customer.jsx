@@ -1,0 +1,271 @@
+import { useContext, useEffect } from 'react';
+import './FullList_Customer.css';
+import { useState } from 'react';
+import axios from 'axios'
+import { toast } from 'react-toastify'
+import { assets } from '../../../assets/assets';
+import { useNavigate, useParams } from "react-router-dom";
+import React from 'react'
+import { StoreContext } from '../../../context/StoreContext';
+
+const FullList_Customer = () => {
+    const { token, url } = useContext(StoreContext);
+    const navigate = useNavigate();
+
+    const { id: itemId } = useParams(); // previous state item id like props
+
+
+    const [item, setItem] = useState({});
+
+    // For editing
+    const [isEditing, setIsEditing] = useState(false);
+    const [editData, setEditData] = useState({});
+
+    const handleUpdate = () => {
+        setEditData(item);
+        setIsEditing(true);
+    };
+
+    const submitUpdate = async () => {
+        try {
+            console.log(editData);
+            const response = await axios.put(`${url}/api/service_Customer/updateCustomer`, editData, {headers: { token }});
+            if (response.data.success) {
+                toast.success("Updated successfully");
+                setIsEditing(false);
+                fetchFullList();
+            } else {
+                toast.error(response.data.message);
+            }
+        } catch (error) {
+            toast.error("Server error");
+            console.error(error);
+        }
+    };
+
+
+    const fetchFullList = async () => {
+        const response = await axios.get(`${url}/api/service_Customer/fullList`, { params: { id: itemId }, headers: {token} });
+        if (response.data.success) {
+            setItem(response.data.data);
+        }
+        else {
+            toast.error("Error");
+        }
+    }
+
+    useEffect(() => {
+        fetchFullList()
+    }, [itemId])
+
+    const removeCustomer = async (itemId) => {
+        const isConfirmed = window.confirm("Are you sure you want to delete this customer?");
+        if (!isConfirmed) return;
+        try {
+            const response = await axios.post(`${url}/api/service_Customer/remove`, { id: itemId },{ headers: { token }});
+            await fetchFullList();
+            if (response.data.success) {
+                toast.success(response.data.message);
+                navigate("/list_Service_Customer", { replace: true });
+            }
+            else {
+                toast.error(response.data.message);
+            }
+        } catch (error) {
+            toast.error("Server error");
+            console.error(error);
+        }
+    }
+    return (
+        <div className="full-list-container">
+
+            <div className="field-table">
+                <div className="field-table-format">
+                    <p className="field-card-title">Cash Customer Data</p>
+                    <div className="field">
+                        <label>Image:</label>
+                        <img src={assets.user_icon} alt="Customer" />
+                    </div>
+                    <hr />
+
+                    <div className="field">
+                        <label>Name:</label>
+                        {isEditing ? (
+                            <input
+                                type="text"
+                                value={editData.name || ""}
+                                onChange={e => setEditData({ ...editData, name: e.target.value })}
+                            />
+                        ) : (
+                            <p>{item.name}</p>
+                        )}
+                    </div>
+                    <hr />
+
+                    <div className="field">
+                        <label>Service Date:</label>
+                        {isEditing ? (
+                            <input
+                                type="date"
+                                value={editData.serviceDate ? new Date(editData.serviceDate).toISOString().split("T")[0] : ""}
+                                onChange={e => setEditData({ ...editData, serviceDate: e.target.value })}
+                            />
+                        ) : (
+                            <p>{item.serviceDate ? new Date(item.serviceDate).toISOString().split("T")[0] : "-"}</p>
+                        )}
+                    </div>
+                    <hr />
+
+                    <div className="field">
+                        <label>Mobile1:</label>
+                        {isEditing ? (
+                            <input
+                                type="text"
+                                value={editData.mobile1 || ""}
+                                onChange={e => setEditData({ ...editData, mobile1: e.target.value })}
+                            />
+                        ) : (
+                            <p>{item.mobile1}</p>
+                        )}
+                    </div>
+                    <hr />
+                    {item.mobile2 && (
+                        <>
+                            <div className="field">
+                                <label>Mobile2:</label>
+                                <p>{item.mobile2}</p>
+                            </div>
+                            <hr />
+                        </>
+                    )}
+                    {item.description && (
+                        <>
+                            <div className="field">
+                                <label>Description:</label>
+                                <p>{item.description}</p>
+                            </div>
+                            <hr />
+                        </>
+                    )}
+                    {item.dob && (
+                        <>
+                            <div className="field">
+                                <label>DOB:</label>
+                                {isEditing ? (
+                                    <input
+                                        type="date"
+                                        value={editData.dob ? new Date(editData.dob).toISOString().split("T")[0] : ""}
+                                        onChange={e => setEditData({ ...editData, dob: e.target.value })}
+                                    />
+                                ) : (
+                                    <p>{item.dob ? new Date(item.dob).toISOString().split("T")[0] : "-"}</p>
+                                )}
+                            </div>
+                            <hr /></>
+                    )}
+                    <div className="field">
+                    <label>Services:</label>
+
+                    {isEditing ? (
+                        editData.services?.map((service, index) => (
+                        <div key={index} className="service-edit-row">
+
+                            <input
+                            type="text"
+                            placeholder="Service description"
+                            value={service.description}
+                            onChange={(e) => {
+                                const updated = [...editData.services];
+                                updated[index].description = e.target.value;
+                                setEditData({ ...editData, services: updated });
+                            }}
+                            />
+
+                            <input
+                            type="number"
+                            placeholder="Price"
+                            value={service.price}
+                            onChange={(e) => {
+                                const updated = [...editData.services];
+                                updated[index].price = Number(e.target.value);
+                                setEditData({ ...editData, services: updated });
+                            }}
+                            />
+
+                        </div>
+                        ))
+                    ) : (
+                        item.services?.map((service, index) => (
+                        <div key={index}>
+                            <p>
+                            {service.description} — ₹{service.price}
+                            </p>
+                        </div>
+                        ))
+                    )}
+
+                    </div>
+                    <hr />
+                    <div className="field">
+                        <label>Reminder Period:</label>
+                        {isEditing ? (
+                            <input
+                                type="number"
+                                value={editData.reminderPeriod || ""}
+                                onChange={e => setEditData({ ...editData, reminderPeriod: e.target.value })}
+                            />
+                        ) : (
+                            <p>{item.reminderPeriod}</p>
+                        )}
+                    </div>
+                    <hr />
+                    {item.nextReminderDate && (
+                        <>
+                            <div className="field">
+                                <label>NextRemider Date : </label>
+                                <p>{new Date(item.nextReminderDate).toISOString().split("T")[0]}</p>
+                            </div>
+                            <hr /></>
+                    )}
+                    {item.extendReminder && (
+                        <>
+                            <div className="field">
+                                <label>ExtendReminder Date : </label>
+                                <p>{new Date(item.extendReminder).toISOString().split("T")[0]}</p>
+                            </div>
+                            <hr /></>
+                    )}
+                    {item.summary && (
+                        <>
+                            <div className="field">
+                                <label>Summary :</label>
+                                <p>{item.summary}</p>
+                            </div>
+                            <hr /></>
+                    )}
+                    <div className="field">
+                        {isEditing && (
+                            <div className="edit-buttons">
+                                <button onClick={submitUpdate}>Save</button>
+                                <button onClick={() => setIsEditing(false)}>Cancel</button>
+                            </div>
+                        )}
+                    </div>
+                    <div className="field">
+                        <img
+                            src={assets.edit_icon}
+                            alt="edit"
+                            className="edit-icon"
+                            onClick={() => handleUpdate()}
+                        />
+                        <p onClick={() => removeCustomer(item._id)} className="cursor"> Delete </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+
+export default FullList_Customer
+
