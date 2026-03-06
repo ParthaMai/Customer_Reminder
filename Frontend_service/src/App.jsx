@@ -11,13 +11,13 @@ import Reminder from './pages/Reminder/Reminder'
 import FullDetails_Reminder from './pages/Reminder/FullDetails_Reminder/FullDetails_Reminder'
 import Dob_reminder from './pages/Dob/Dob_reminder'
 import Dob_wish from './pages/Dob/Wish/Dob_wish'
-import FullList_Cash from './pages/List_Cash/FullList_Cash/FullList_Cash'
 import { useState } from 'react'
 import LoginPopup from './components/LoginPopup/LoginPopup'
 import Footer from './components/Footer/Footer'
 import Customer from './pages/Customer/Customer'
 import List_Service_Customer from './pages/List_Service_Customer/List_Service_Customer'
 import FullList_Customer from './pages/List_Service_Customer/FullList_Customer/FullList_Customer'
+import Pending_Calls from './pages/Pending_Calls/Pending_Calls'
 
 const App = () => {
 
@@ -39,8 +39,8 @@ const App = () => {
           <Route path='/add-customer' element={<Customer/>} />
           <Route path="/list_Service_Customer" element={<List_Service_Customer/>} />
           <Route path="/list_Customer/FullList_Customer/:id" element={<FullList_Customer/>} />
+          <Route path="/list_Pending_Calls" element={<Pending_Calls/>} />
           <Route path="/list_EMI" element={<List_EMI url={url}/>} />
-          <Route path="/list_Cash/FullList_Cash/:id" element={<FullList_Cash url={url} />} />
           <Route path="/list_EMI/FullList_Emi/:id" element={<FullList_Emi url={url} />} />
           <Route path="/reminder" element = {<Reminder url={url} />} />
           <Route path="/reminder/:id" element={<FullDetails_Reminder url={url} />} />

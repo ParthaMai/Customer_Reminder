@@ -160,7 +160,7 @@ const List_Service_Customer = () => {
               disabled={page === 1}
               onClick={() => {
                 if (searchValue.trim()) {
-                  searchEmi(searchValue, page - 1);
+                 searchCustomer(searchValue, page - 1);
                 } else {
                   fetchList(page - 1);
                 }
@@ -175,7 +175,7 @@ const List_Service_Customer = () => {
               disabled={page === totalPages}
               onClick={() => {
                 if (searchValue.trim()) {
-                  searchEmi(searchValue, page + 1);
+                  searchCustomer(searchValue, page + 1);
                 } else {
                   fetchList(page + 1);
                 }

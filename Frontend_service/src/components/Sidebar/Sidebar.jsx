@@ -20,7 +20,7 @@ const Sidebar = () => {
           Customer List
         </NavLink>
 
-        <NavLink to="/pending-calls" className="box">
+        <NavLink to="/list_Pending_Calls" className="box">
         <img src={assets.pending_icon} alt="" />
           Pending Calls
         </NavLink>
