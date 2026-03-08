@@ -1,18 +1,18 @@
-.full-list-container {
+.remind-full-list-container {
   width: 95%;
   max-width: 600px;
   margin: 20px auto;
   font-family: Arial, sans-serif;
   color: #333;
-  padding-bottom: 50px;
+  padding-bottom: 60px;
 }
 
-.field-table {
+.remind-field-table {
   width: 100%;
 }
 
 /* Each EMI card */
-.field-table-format {
+.remind-field-table-format {
   display: flex;
   flex-direction: column; /* vertical stacking */
   gap: 12px;
@@ -22,14 +22,14 @@
   border-radius: 10px;
   box-shadow: 0 3px 8px rgba(0,0,0,0.1);
 }
-.field-card-title {
+.remind-field-card-title {
   font-weight: bold;
   margin-bottom: 10px;
   font-size: 18px; /* optional, for bigger header */
 }
 
 
-.field-table-format:hover {
+.remind-field-table-format:hover {
   background-color: #f2f2f2;
 }
 
@@ -75,7 +75,7 @@
 }
 
 /* Edit icon */
-.edit-icon {
+.edit-icon{
   width: 22px;
   height: 22px;
   cursor: pointer;
@@ -89,14 +89,98 @@
   margin-top: 10px;
   align-self: flex-start;
 }
+/* Select box */
+.field select {
+  padding: 8px 12px;
+  min-width: 200px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  background-color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Hover */
+.field select:hover {
+  border-color: #888;
+}
+/* Focus */
+.field select:focus {
+  border-color: #c62828;
+  box-shadow: 0 0 0 2px rgba(198, 40, 40, 0.25);
+}
+
+/* Disabled option style */
+.field select option:disabled {
+  color: #999;
+}
+.field textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  resize: none;
+  font-size: 14px;
+}
+
+.field button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-right: 10px;
+  background: #e53935;
+  color: white;
+}
+
+.field button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.hint {
+  font-size: 12px;
+  color: #666;
+}
+
+
+.field input {
+  padding: 7px 12px;
+  min-width: 200px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+}
+.save-btn {
+    width: 50%;
+    padding: 12px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover */
+.save-btn:hover {
+  background-color: #555;
+}
 
 /* Responsive */
-@media (max-width: 400px) {
+@media (max-width: 360px) {
   .field {
     flex-direction: column; /* stack label above value on small screens */
     align-items: flex-start;
   }
   .field label {
     min-width: auto;
+  }
+  .field select {
+    font-size: 14px;
   }
 }

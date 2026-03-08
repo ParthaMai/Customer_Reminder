@@ -8,11 +8,36 @@ const StoreContextProvider = (props) => {
     // const url = "https://customer-reminder-backend.onrender.com"
 
     const[token,setToken] = useState("");
+    const[reminder_list,setReminderList] = useState([]);
+
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
 
 
+
+      const fetchReminderList = async (pageNumber = 1) => {
+    try {
+      const response = await axios.get(`${url}/api/reminder-list/remind-list`, {
+        params: {
+          page: pageNumber,
+          limit: 10
+        }
+      });
+
+      if (response.data.success) {
+        setReminderList(response.data.data);
+        setPage(response.data.pagination.currentPage);
+        setTotalPages(response.data.pagination.totalPages);
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
     useEffect(()=>{
     async function laodData() {
+        await fetchReminderList();
         if (localStorage.getItem("token")) {
             setToken(localStorage.getItem("token"));
         }
@@ -24,7 +49,11 @@ const StoreContextProvider = (props) => {
 
         url,
         token,
-        setToken
+        setToken,
+        reminder_list,
+        page,
+        totalPages,
+        fetchReminderList
     }
 
   return (

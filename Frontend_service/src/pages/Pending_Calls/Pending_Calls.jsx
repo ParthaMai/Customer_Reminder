@@ -13,7 +13,7 @@ const Pending_Calls = () => {
     const { token, url } = useContext(StoreContext);
     const navigate = useNavigate();
     const handleUpdate = (id) => {
-        navigate(`/list_Customer/FullList_Customer/${id}`);
+        navigate(`/list_Pending/FullList_Pending/${id}`);
     };
 
 
@@ -71,7 +71,7 @@ const Pending_Calls = () => {
     );
     const fetchList = async (page = 1, value = "") => {
 
-        const response = await axios.get(`${url}/api/service_Customer/list`, {
+        const response = await axios.get(`${url}/api/pending-list/pending-list`, {
             params: {
                 field: searchField,
                 value,
@@ -94,26 +94,6 @@ const Pending_Calls = () => {
     useEffect(() => {
         fetchList(1)
     }, [])
-
-
-    const removeCustomer = async (itemId) => {
-        const isConfirmed = window.confirm("Are you sure you want to delete this customer?");
-        if (!isConfirmed) return;
-        try {
-            const response = await axios.post(`${url}/api/service_Customer/remove`, { id: itemId }, { headers: { token } });
-
-            if (response.data.success) {
-                toast.success(response.data.message);
-                await fetchList();
-            }
-            else {
-                toast.error(response.data.message);
-            }
-        } catch (error) {
-            toast.error("Server error");
-            console.error(error);
-        }
-    }
 
     return (
         <div className='list-cash add flex-col'>

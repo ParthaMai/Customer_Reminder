@@ -5,12 +5,15 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'; 
 import * as XLSX from "xlsx";
+import { useContext } from 'react';
+import { StoreContext } from '../../context/StoreContext';
 
 const Reminder = ({ url }) => {
 
+  const { reminder_list, page, totalPages, fetchReminderList } = useContext(StoreContext);
   const [list, setList] = useState([]);
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  // const [page, setPage] = useState(1);
+  // const [totalPages, setTotalPages] = useState(1);
   const navigate = useNavigate();
 
   const handleUpdate = (id) => {
@@ -20,7 +23,7 @@ const Reminder = ({ url }) => {
  
 
   const handleDownloadExcel = () => {
-    if (!list || list.length === 0) {
+    if (!reminder_list || reminder_list.length === 0) {
       alert("No data to export");
       return;
     }
@@ -52,7 +55,7 @@ const Reminder = ({ url }) => {
       //Delete old reminders
       await axios.post(`${url}/api/reminder-list/cleanup-old`);
 
-      await fetchList(1);
+      // await fetchList(1);
 
       }catch(error){
         console.log(error);
@@ -65,34 +68,46 @@ const Reminder = ({ url }) => {
 
 
 
-  const fetchList = async (pageNumber = 1) => {
-    try {
-      const response = await axios.get(`${url}/api/reminder-list/remind-list`, {
-        params: {
-          page: pageNumber,
-          limit: 10,
-        }
-      });
+  // const fetchList = async (pageNumber = 1) => {
+  //   try {
+  //     const response = await axios.get(`${url}/api/reminder-list/remind-list`, {
+  //       params: {
+  //         page: pageNumber,
+  //         limit: 10,
+  //       }
+  //     });
 
-      if (response.data.success) {
-        setList(response.data.data);
-        setPage(response.data.pagination.currentPage);
-        setTotalPages(response.data.pagination.totalPages);
-      } else {
-        toast.error("Error");
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error("Server error");
-    }
-  };
+  //     if (response.data.success) {
+  //       setList(response.data.data);
+  //       setPage(response.data.pagination.currentPage);
+  //       setTotalPages(response.data.pagination.totalPages);
+  //     } else {
+  //       toast.error("Error");
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //     toast.error("Server error");
+  //   }
+  // };
 
 
   // useEffect(() => {
   //   fetchList(1)
   // }, [])
 
+  useEffect(() => {
 
+    async function loadData() {
+
+      if (!reminder_list || reminder_list.length === 0) {
+        await fetchReminderList(1)
+      }
+
+    }
+
+    loadData()
+
+  }, [])
 
 
   return (
@@ -119,7 +134,7 @@ const Reminder = ({ url }) => {
         <div className="reminder-pagination">
           <button
             disabled={page === 1}
-            onClick={() => fetchList(page - 1)}
+            onClick={() => fetchReminderList(page - 1)}
           >
             Prev
           </button>
@@ -128,13 +143,13 @@ const Reminder = ({ url }) => {
 
           <button
             disabled={page === totalPages}
-            onClick={() => fetchList(page + 1)}
+            onClick={() => fetchReminderList(page + 1)}
           >
             Next
           </button>
         </div>
 
-        {list.map((item, index) => {
+        {reminder_list.map((item, index) => {
           return (
             <div key={index} className="reminder-list-table-format">
               <p>{new Date(item.createdAt).toISOString().split("T")[0]}</p>

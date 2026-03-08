@@ -18,6 +18,7 @@ import Customer from './pages/Customer/Customer'
 import List_Service_Customer from './pages/List_Service_Customer/List_Service_Customer'
 import FullList_Customer from './pages/List_Service_Customer/FullList_Customer/FullList_Customer'
 import Pending_Calls from './pages/Pending_Calls/Pending_Calls'
+import FullDetails_Pending from './pages/Pending_Calls/FullDetails_Pending/FullDetails_Pending'
 
 const App = () => {
 
@@ -35,11 +36,12 @@ const App = () => {
       <ToastContainer /> 
       <hr/>
         <Routes>
-          <Route path="/" element={<Home url={url} />} />
+          <Route path="/" element={<Home />} />
           <Route path='/add-customer' element={<Customer/>} />
           <Route path="/list_Service_Customer" element={<List_Service_Customer/>} />
           <Route path="/list_Customer/FullList_Customer/:id" element={<FullList_Customer/>} />
-          <Route path="/list_Pending_Calls" element={<Pending_Calls/>} />
+          <Route path="/list_Pending_Calls" element={<Pending_Calls/>} />\
+          <Route path="/list_Pending/FullList_Pending/:id" element={<FullDetails_Pending/>} />
           <Route path="/list_EMI" element={<List_EMI url={url}/>} />
           <Route path="/list_EMI/FullList_Emi/:id" element={<FullList_Emi url={url} />} />
           <Route path="/reminder" element = {<Reminder url={url} />} />

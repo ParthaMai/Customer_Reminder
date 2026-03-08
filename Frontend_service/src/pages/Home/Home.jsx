@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Sidebar from '../../components/Sidebar/Sidebar'
 import { useEffect } from 'react';
 import { toast } from 'react-toastify'
 import axios from 'axios'
+import { StoreContext } from '../../context/StoreContext';
 
-const Home = ({url}) => {
+const Home = () => {
+
+  const { token, url } = useContext(StoreContext);
 
     const createList = async () => {
     try {
@@ -20,7 +23,7 @@ const Home = ({url}) => {
 
   const fetchList = async () => {
      try {
-    const response = await axios.get(`${url}/api/reminder-list/remind`);
+    const response = await axios.get(`${url}/api/pending-list/pending`,{headers: { token }});
     if (!response.data.success) {
       toast.error("Already Stored in Reminder Please complete the all Reminder and check again");
     }
