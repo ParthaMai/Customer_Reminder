@@ -2,11 +2,8 @@ import React from 'react'
 import Navbar from './components/Navbar/Navbar'
 import Sidebar from './components/Sidebar/Sidebar'
 import { Route, Routes } from 'react-router-dom'
-import EMI from './pages/EmI/EMI'
 import Home from './pages/Home/Home'
-import List_EMI from './pages/List_EMI/List_EMI'
 import { ToastContainer} from 'react-toastify';
-import FullList_Emi from './pages/List_EMI/FullList_Emi/FullList_Emi'
 import Reminder from './pages/Reminder/Reminder'
 import FullDetails_Reminder from './pages/Reminder/FullDetails_Reminder/FullDetails_Reminder'
 import Dob_reminder from './pages/Dob/Dob_reminder'
@@ -40,12 +37,11 @@ const App = () => {
           <Route path='/add-customer' element={<Customer/>} />
           <Route path="/list_Service_Customer" element={<List_Service_Customer/>} />
           <Route path="/list_Customer/FullList_Customer/:id" element={<FullList_Customer/>} />
-          <Route path="/list_Pending_Calls" element={<Pending_Calls/>} />\
+          <Route path="/list_Pending_Calls" element={<Pending_Calls/>} />
           <Route path="/list_Pending/FullList_Pending/:id" element={<FullDetails_Pending/>} />
-          <Route path="/list_EMI" element={<List_EMI url={url}/>} />
-          <Route path="/list_EMI/FullList_Emi/:id" element={<FullList_Emi url={url} />} />
           <Route path="/reminder" element = {<Reminder url={url} />} />
-          <Route path="/reminder/:id" element={<FullDetails_Reminder url={url} />} />
+          <Route path="/reminder/:id" element={<FullDetails_Reminder/>} />
+          
           <Route path='/dob_reminder' element = {<Dob_reminder url={url} />} />
           <Route path='/dob/dob_wish/:id' element = {<Dob_wish url={url} />} />
         </Routes>

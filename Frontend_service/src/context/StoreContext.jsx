@@ -17,11 +17,15 @@ const StoreContextProvider = (props) => {
 
       const fetchReminderList = async (pageNumber = 1) => {
     try {
-      const response = await axios.get(`${url}/api/reminder-list/remind-list`, {
+      console.log("hello hi")
+      const response = await axios.get(`${url}/api/service-remind-list/remind-list`, {
         params: {
           page: pageNumber,
           limit: 10
-        }
+        },
+        headers: {
+          token: token
+      }
       });
 
       if (response.data.success) {

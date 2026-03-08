@@ -20,7 +20,17 @@ const Home = () => {
       console.error(error);
     }
   }
-
+  const RemindList = async () => {
+     try {
+    const response = await axios.get(`${url}/api/service-remind-list/remind`,{headers: { token }});
+    if (!response.data.success) {
+      toast.error("Already Stored in Reminder Please complete the all Reminder and check again");
+    }
+  }catch(error){
+    toast.error("Server error");
+    console.error(error);
+  }
+  }
   const fetchList = async () => {
      try {
     const response = await axios.get(`${url}/api/pending-list/pending`,{headers: { token }});
@@ -35,6 +45,7 @@ const Home = () => {
 
   // use here to update only once or twice per day
   useEffect(() => {
+    RemindList(),
     fetchList(),
     createList()
   }, [])

@@ -97,7 +97,7 @@ const Pending_Calls = () => {
 
     return (
         <div className='list-cash add flex-col'>
-            <p>All Customer list</p>
+            <p>Pending Calls list</p>
             <div className="search-box">
                 <div className="search-input-wrapper">
                     <input

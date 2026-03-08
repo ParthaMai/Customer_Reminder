@@ -8,9 +8,9 @@ import * as XLSX from "xlsx";
 import { useContext } from 'react';
 import { StoreContext } from '../../context/StoreContext';
 
-const Reminder = ({ url }) => {
+const Reminder = () => {
 
-  const { reminder_list, page, totalPages, fetchReminderList } = useContext(StoreContext);
+  const { url, token, reminder_list, page, totalPages, fetchReminderList } = useContext(StoreContext);
   const [list, setList] = useState([]);
   // const [page, setPage] = useState(1);
   // const [totalPages, setTotalPages] = useState(1);
@@ -53,7 +53,7 @@ const Reminder = ({ url }) => {
     const cleanupAndFetch = async () => {
       try{
       //Delete old reminders
-      await axios.post(`${url}/api/reminder-list/cleanup-old`);
+      await axios.post(`${url}/api/service-remind-list/cleanup-old`, {}, {headers: { token }});
 
       // await fetchList(1);
 
@@ -121,15 +121,13 @@ const Reminder = ({ url }) => {
       </div>
       <div className="reminder-list-table">
         <div className="reminder-list-table-format title">
-          <b>Date</b>
+          <b>Remind Date</b>
           <b>Image</b>
           <b>Name</b>
           <b>Show-Details</b>
-          <b>Form No.</b>
-          <b>Purchase Date</b>
+          <b>Service Date</b>
           <b>Mobile No.</b>
-          <b>Price</b>
-          <b>Failed Emis</b>
+          <b>Service Cost</b>
         </div>
         <div className="reminder-pagination">
           <button
@@ -152,15 +150,13 @@ const Reminder = ({ url }) => {
         {reminder_list.map((item, index) => {
           return (
             <div key={index} className="reminder-list-table-format">
-              <p>{new Date(item.createdAt).toISOString().split("T")[0]}</p>
-              <img src={item.image || assets.user_icon} alt="" />
+              <p>{new Date(item.create).toISOString().split("T")[0]}</p>
+              <img src={assets.user_icon} alt="" />
               <p>{item.name}</p>
               <img src={assets.user_details} alt="edit" className="user_details" onClick={() => handleUpdate(item._id)} />
-              <p>{item.formNo}</p>
-              <p>{new Date(item.purchaseDate).toISOString().split("T")[0]}</p>
+              <p>{new Date(item.serviceDate).toISOString().split("T")[0]}</p>
               <p>{item.mobile1}</p>
-              <p>₹{item.price}</p>
-              <p>{item.failedEmi}</p>
+              <p>₹{item.totalPrice}</p>
             </div>
           )
         })}

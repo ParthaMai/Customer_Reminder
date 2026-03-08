@@ -9,6 +9,7 @@
   font-family: Arial, sans-serif;
   color: #333;
   font-size: max(1vw, 14px);
+  padding-bottom: 40px;
 }
 .header-row {
   display: flex;
@@ -34,15 +35,13 @@
 .reminder-list-table-format {
   display: grid;
   grid-template-columns: 
-    0.8fr /*remove */
+    0.8fr /*Date */
     0.7fr   /* Image */
     2fr     /* Name */
     1.2fr   /* Show Details */
-    1fr     /* Form No */
     1.2fr   /* Purchase Date */
     1.5fr   /* Mobile */
-    1fr     /* Price */
-    1fr;  /* Failed EMI */
+    1fr;     /* Price */
     
   align-items: center;
   gap: 10px;
@@ -163,26 +162,12 @@
       0.5fr;  /* Failed EMI */
   }
 
-  /* Hide Purchase Date */
+  /* Hide Mobile no */
   .reminder-list-table-format p:nth-child(6) {
     display: none;
   }
-
-  /* Hide Mobile No */
-  .reminder-list-table-format p:nth-child(7) {
-    display: none;
-  }
-   /* Hide price */
-  .reminder-list-table-format p:nth-child(8) {
-    display: none;
-  }
-
   /* Hide headings */
-  .reminder-list-table-format.title b:nth-child(6),
-  .reminder-list-table-format.title b:nth-child(7) {
-    display: none;
-  }
-  .reminder-list-table-format.title b:nth-child(8) {
+  .reminder-list-table-format.title b:nth-child(6) {
     display: none;
   }
 }
