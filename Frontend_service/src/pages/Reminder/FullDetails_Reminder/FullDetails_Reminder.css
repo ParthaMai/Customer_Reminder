@@ -169,6 +169,38 @@
 .save-btn:hover {
   background-color: #555;
 }
+/* Book appointment button */
+.field .save-service {
+  margin-top: 8px;
+  padding: 8px 14px;
+  background: #409945;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.field .save-service:hover {
+  background: #1b5e20;
+}
+/* Service denial button */
+.field .service-denied {
+  margin-top: 8px;
+  padding: 8px 14px;
+  background: #c62828;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.field .service-denied:hover {
+  background: #8e0000;
+}
 
 /* Responsive */
 @media (max-width: 360px) {

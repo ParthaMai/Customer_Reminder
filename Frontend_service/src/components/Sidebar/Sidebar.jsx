@@ -92,7 +92,10 @@ const Sidebar = () => {
           Discounted Customers
         </NavLink>
 
-        <div className="box empty"></div>
+        <div className="box">
+        <img src={assets.appointment_icon} alt="" />
+          Today's Appointments
+        </div>
         <div className="box empty"></div>
       </div>
       <div className="row">

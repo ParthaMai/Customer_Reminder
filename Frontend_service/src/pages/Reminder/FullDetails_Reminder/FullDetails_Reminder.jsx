@@ -287,6 +287,34 @@ const FullDetails_Reminder = () => {
                            {saving ? "Saving..." : "Save & Changes"}
                        </button>
                        <hr />
+                        <div className="field">
+                        <label>Service Type</label>
+                        <textarea rows="2" placeholder="Enter the type of service..."></textarea>
+                        </div>
+
+                        <hr />
+
+                        <div className="field">
+                        <label>Customer Address</label>
+                        <textarea rows="3" placeholder="Enter customer address..."></textarea>
+
+                        <button className="save-service">
+                            Book Appointment
+                        </button>
+                        </div>
+
+                        <hr />
+
+                        <div className="field">
+                        <label>Reason for Service Denial</label>
+                        <textarea rows="3" placeholder="Enter reason..."></textarea>
+
+                        <button className="service-denied">
+                            Submit Denial
+                        </button>
+                        </div>
+                                            
+                       <hr />
                        <div className="field">
                            <p onClick={() => removeCustomer(item._id)} className="cursor"> Remove Reminder </p>
                        </div>
