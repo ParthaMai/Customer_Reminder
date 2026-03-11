@@ -1,0 +1,160 @@
+.booking-list {
+  width: 90%;
+  max-width: 1100px;
+  margin: 40px auto;
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  font-family: Arial, sans-serif;
+  color: #333;
+  font-size: max(1vw, 14px);
+  padding-bottom: 40px;
+}
+
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.header-row p {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 5px;
+  color: #556abb;
+}
+
+.booking-list-table {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* Row layout */
+.booking-list-table-format {
+  display: grid;
+  grid-template-columns: 
+    0.8fr /* Booking Date */
+    0.7fr /* Image */
+    2fr   /* Name */
+    1.2fr /* Service Type */
+    1.5fr /* Address */
+    1fr   /* Complete Service */;
+    
+  align-items: center;
+  gap: 10px;
+  padding: 12px 10px;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.user_details {
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  margin: auto;
+  display: block;
+  opacity: 0.7;
+  transition: 0.2s;
+}
+
+.user_details:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.booking-list-table-format.title {
+  background-color: #ebe6e6;
+  font-weight: 600;
+  border-radius: 6px 6px 0 0;
+}
+
+.booking-list-table-format img:not(.user_details) {
+  width: 45px;
+  height: 45px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.booking-list-table-format:not(.title):hover {
+  background-color: #f2f2f2;
+}
+
+.download-box {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  width: fit-content;
+  margin-left: auto;
+  margin-bottom: 5px;
+  padding: 8px 12px;
+  background: #4caf50;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+  transition: 0.2s ease;
+}
+
+.download-box:hover {
+  background: #43a047;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(0,0,0,0.2);
+}
+
+.download_icon {
+  width: 18px;
+  height: 18px;
+  filter: brightness(0) invert(1);
+}
+
+.booking-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+  gap: 10px;
+  font-family: Arial, sans-serif;
+}
+
+.booking-pagination button {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.booking-pagination button:hover:not(:disabled) {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.booking-pagination button:disabled {
+  background-color: #eee;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.booking-pagination span {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+  .booking-list-table-format {
+    grid-template-columns: 
+      0.8fr /* Booking Date */
+      0.8fr /* Image */
+      2fr   /* Name */
+      0.6fr /* Service Type */
+      1fr   /* Address */
+      0.5fr; /* Complete Service */
+  }
+}
