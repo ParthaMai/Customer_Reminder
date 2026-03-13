@@ -71,7 +71,7 @@ const Appointment = () => {
     );
     const fetchList = async (page = 1, value = "") => {
 
-        const response = await axios.get(`${url}/api/pending-list/pending-list`, {
+        const response = await axios.get(`${url}/api/booking/Booking-list`, {
             params: {
                 field: searchField,
                 value,

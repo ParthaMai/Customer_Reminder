@@ -9,7 +9,7 @@ const Home = () => {
 
   const { token, url } = useContext(StoreContext);
 
-    const createList = async () => {
+  const DobList = async () => {
     try {
       const response = await axios.get(`${url}/api/Birthday/dob-remind`);
       if (!response.data.success) {
@@ -21,33 +21,45 @@ const Home = () => {
     }
   }
   const RemindList = async () => {
-     try {
-    const response = await axios.get(`${url}/api/service-remind-list/remind`,{headers: { token }});
-    if (!response.data.success) {
-      toast.error("Already Stored in Reminder Please complete the all Reminder and check again");
+    try {
+      const response = await axios.get(`${url}/api/service-remind-list/remind`, { headers: { token } });
+      if (!response.data.success) {
+        toast.error("Already Stored in Reminder Please complete the all Reminder and check again");
+      }
+    } catch (error) {
+      toast.error("Server error");
+      console.error(error);
     }
-  }catch(error){
-    toast.error("Server error");
-    console.error(error);
-  }
   }
   const fetchList = async () => {
-     try {
-    const response = await axios.get(`${url}/api/pending-list/pending`,{headers: { token }});
-    if (!response.data.success) {
-      toast.error("Already Stored in Reminder Please complete the all Reminder and check again");
+    try {
+      const response = await axios.get(`${url}/api/pending-list/pending`, { headers: { token } });
+      if (!response.data.success) {
+        toast.error("Already Stored in Reminder Please complete the all Reminder and check again");
+      }
+    } catch (error) {
+      toast.error("Server error");
+      console.error(error);
     }
-  }catch(error){
-    toast.error("Server error");
-    console.error(error);
   }
+  const BookingList = async () => {
+    try {
+      const response = await axios.get(`${url}/api/booking/Booking`, { headers: { token } });
+      if (!response.data.success) {
+        toast.error("No Internet");
+      }
+    } catch (error) {
+      toast.error("Server error");
+      console.error(error);
+    }
   }
 
   // use here to update only once or twice per day
   useEffect(() => {
     RemindList(),
-    fetchList(),
-    createList()
+      fetchList(),
+      DobList(),
+      BookingList()
   }, [])
 
   return (

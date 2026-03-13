@@ -61,9 +61,9 @@ const Sidebar = () => {
 
       {/* Actions Row 2 */}
       <div className="row">
-        <NavLink to="/work-complete" className="box action-box">
-        <img src={assets.work_complete} alt="" />
-          Work Complete
+        <NavLink to="/appointment" className="box action-box">
+        <img src={assets.appointment_icon} alt="" />
+          Today's Appointments
         </NavLink>
 
         <NavLink to="/total-earning" className="box action-box">
@@ -94,7 +94,7 @@ const Sidebar = () => {
 
         <NavLink to="/appointment" className="box">
         <img src={assets.appointment_icon} alt="" />
-          Today's Appointments
+          Add Appointments
         </NavLink>
         <div className="box empty"></div>
       </div>
