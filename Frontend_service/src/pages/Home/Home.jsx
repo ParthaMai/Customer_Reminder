@@ -35,7 +35,7 @@ const Home = () => {
     try {
       const response = await axios.get(`${url}/api/pending-list/pending`, { headers: { token } });
       if (!response.data.success) {
-        toast.error("Already Stored in Reminder Please complete the all Reminder and check again");
+        toast.error(response.data.message || "Something went wrong");
       }
     } catch (error) {
       toast.error("Server error");
@@ -56,11 +56,13 @@ const Home = () => {
 
   // use here to update only once or twice per day
   useEffect(() => {
+
+    if (!token) return; 
     RemindList(),
       fetchList(),
       DobList(),
       BookingList()
-  }, [])
+  }, [token])
 
   return (
     <div>

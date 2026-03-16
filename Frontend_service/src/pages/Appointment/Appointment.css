@@ -145,6 +145,23 @@
   font-weight: bold;
   font-size: 14px;
 }
+.action-icons{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-icons .done-icon{
+   width:22px !important;
+  height:22px !important;
+  cursor: pointer;
+  object-fit: contain;
+  transition: transform 0.2s ease;
+}
+
+.action-icons .done-icon:hover{
+  transform: scale(1.15);
+}
 
 /* Mobile Responsive */
 @media (max-width: 600px) {

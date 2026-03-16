@@ -93,8 +93,9 @@ const List_Service_Customer = () => {
   };
 
   useEffect(() => {
+    if (!token) return;
     fetchList(1)
-  }, [])
+  }, [token])
 
 
   const removeCustomer = async (itemId) => {

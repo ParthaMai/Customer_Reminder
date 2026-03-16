@@ -1,0 +1,459 @@
+.appointment-fulldetails-list-container {
+  width: 95%;
+  max-width: 600px;
+  margin: 20px auto;
+  font-family: Arial, sans-serif;
+  color: #333;
+  padding-bottom: 50px;
+}
+
+.appointment-fulldetails-table {
+  width: 100%;
+}
+
+/* Each card */
+.appointment-fulldetails-format {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 15px 20px;
+  margin-bottom: 15px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+.appointment-fulldetails-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.appointment-fulldetails-format:hover {
+  background-color: #f2f2f2;
+}
+
+/* Each label-value row */
+.field {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+/* Label */
+.field label {
+  font-weight: 600;
+  min-width: 120px;
+  text-align: left;
+}
+
+/* Value */
+.field p {
+  margin: 0;
+  word-break: break-word;
+}
+
+/* Divider */
+.field + hr {
+  border: none;
+  border-bottom: 1px solid #ccc;
+  margin: 5px 0;
+  width: 100%;
+}
+
+/* Image */
+.field img:not(.edit-icon) {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-bottom: 5px;
+}
+
+/* Edit icon */
+.edit-icon{
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+}
+
+/* Delete icon */
+.cursor {
+  color: red;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  align-self: flex-start;
+}
+
+/* Select */
+.field select {
+  padding: 8px 12px;
+  min-width: 200px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  background-color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.field select:hover {
+  border-color: #888;
+}
+
+.field select:focus {
+  border-color: #c62828;
+  box-shadow: 0 0 0 2px rgba(198, 40, 40, 0.25);
+}
+
+.field select option:disabled {
+  color: #999;
+}
+
+/* Textarea */
+.field textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  resize: none;
+  font-size: 14px;
+}
+
+/* Buttons */
+.field button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-right: 10px;
+  background: #e53935;
+  color: white;
+}
+
+.field button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Hint */
+.hint {
+  font-size: 12px;
+  color: #666;
+}
+
+/* Input */
+.field input {
+  padding: 7px 12px;
+  min-width: 200px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* Save button */
+.save-btn {
+  width: 50%;
+  padding: 12px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.save-btn:hover {
+  background-color: #555;
+}
+
+/* Book appointment button */
+.field .save-service {
+  margin-top: 8px;
+  padding: 8px 14px;
+  background: #409945;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.field .save-service:hover {
+  background: #1b5e20;
+}
+
+/* Service denial button */
+.field .service-denied {
+  margin-top: 8px;
+  padding: 8px 14px;
+  background: #c62828;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.field .service-denied:hover {
+  background: #8e0000;
+}
+
+/* Remove Button */
+.remove-btn {
+    margin-top: 8px;
+    padding: 5px 10px;
+    font-size: 13px;
+    border-radius: 5px;
+    border: 1px solid #000;
+    background-color: #333;
+    color: #fff;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.remove-btn:hover {
+    background-color: #555;
+    color: #fff;
+}
+
+/* Add Button */
+.add-btn-service {
+    width: fit-content;
+    padding: 7px 14px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #000;
+    color: #fff;
+    background-color: #333;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.add-btn-service:hover {
+    background-color: #555;
+    color: #fff;
+}
+
+/* Service Details Container */
+.appointment-fulldetails-services {
+    width: 100%;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Section Title */
+.appointment-fulldetails-services p {
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+/* Each Service Row */
+.appointment-fulldetails-service-row {
+    background-color: #ffffff;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+/* Label */
+.appointment-fulldetails-service-row label {
+    font-size: 16px;
+    color: #1b1b1b;
+    font-weight: 500;
+    margin-bottom: 5px;
+    display: block;
+}
+
+/* Description */
+.appointment-fulldetails-service-row textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    resize: none;
+    outline: none;
+    transition: 0.2s ease;
+    margin-bottom: 8px;
+}
+
+.appointment-fulldetails-service-row textarea:focus {
+    border-color: #000;
+}
+
+/* Price input */
+.appointment-fulldetails-service-price {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    outline: none;
+    transition: 0.2s ease;
+}
+
+.appointment-fulldetails-service-price:focus {
+    border-color: #000;
+}
+
+/* Remove Button */
+.appointment-fulldetails-remove-btn {
+    margin-top: 8px;
+    padding: 5px 10px;
+    font-size: 13px;
+    border-radius: 5px;
+    border: 1px solid #000;
+    background-color: #333;
+    color: #fff;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.appointment-fulldetails-remove-btn:hover {
+    background-color: #555;
+}
+
+/* Add Button */
+.appointment-fulldetails-add-btn {
+    width: fit-content;
+    padding: 7px 14px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #000;
+    color: #fff;
+    background-color: #333;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.appointment-fulldetails-add-btn:hover {
+    background-color: #555;
+}
+
+/* Total Price Section */
+.appointment-fulldetails-total-price {
+    margin-top: 20px;
+}
+
+.appointment-fulldetails-total-price p {
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.appointment-fulldetails-total-price input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+/* Reminder column */
+.appointment-fulldetails-reminder {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* Label */
+.appointment-fulldetails-reminder p {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 3px;
+}
+
+/* Select box */
+.appointment-fulldetails-reminder select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+/* Hover */
+.appointment-fulldetails-reminder select:hover {
+    border-color: #888;
+}
+
+/* Focus */
+.appointment-fulldetails-reminder select:focus {
+    border-color: #000;
+    outline: none;
+}
+/* Add button */
+.apppointment.add-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    font-weight: bold;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover */
+.apppointment.add-btn:hover {
+    background-color: #555;
+}
+
+/* Disabled state */
+.apppointment.add-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Loader spinner */
+.loader {
+    width: 18px;
+    height: 18px;
+    border: 3px solid #fff;
+    border-top: 3px solid transparent;
+    border-radius: 50%;
+    margin: auto;
+    animation: spin 0.8s linear infinite;
+}
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+/* Responsive */
+@media (max-width: 360px) {
+  .field {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .field label {
+    min-width: auto;
+  }
+
+  .field select {
+    font-size: 14px;
+  }
+}

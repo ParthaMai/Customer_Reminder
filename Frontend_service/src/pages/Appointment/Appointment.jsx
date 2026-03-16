@@ -92,8 +92,9 @@ const Appointment = () => {
     };
 
     useEffect(() => {
+        if (!token) return;
         fetchList(1)
-    }, [])
+    }, [token])
 return (
   <div className='booking-list add flex-col'>
     <div className="header-row">
@@ -151,7 +152,14 @@ return (
           <p>{item.name}</p>
           <p>{item.serviceType || "-"}</p>
           <p>{item.address || "-"}</p>
-          <p>{item.completeService ? "Yes" : "No"}</p>
+          <div className="action-icons">
+            <img
+                src={assets.done_icon}
+                alt="approve"
+                className="done-icon approve"
+                onClick={() => navigate(`/appointment/FullList/${item._id}`)}
+            />
+            </div>
         </div>
       ))}
     </div>

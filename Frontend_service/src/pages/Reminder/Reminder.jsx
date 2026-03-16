@@ -17,7 +17,7 @@ const Reminder = () => {
   const navigate = useNavigate();
 
   const handleUpdate = (id) => {
-    navigate(`/reminder/${id}`);
+    navigate(`/reminder/Fullist/${id}`);
   };
 
  
@@ -96,6 +96,7 @@ const Reminder = () => {
   // }, [])
 
   useEffect(() => {
+    if (!token) return;
 
     async function loadData() {
 
@@ -107,7 +108,7 @@ const Reminder = () => {
 
     loadData()
 
-  }, [])
+  }, [token])
 
 
   return (

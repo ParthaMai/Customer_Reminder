@@ -143,8 +143,9 @@ const FullDetails_Reminder = () => {
     }
 
     useEffect(() => {
+        if (!token) return;
         fetchFullList()
-    }, [])
+    }, [token])
 
 
     const removeCustomer = async (itemId) => {

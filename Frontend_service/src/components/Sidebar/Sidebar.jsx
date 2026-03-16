@@ -94,7 +94,7 @@ const Sidebar = () => {
 
         <NavLink to="/appointment" className="box">
         <img src={assets.appointment_icon} alt="" />
-          Add Appointments
+          Book Appointment
         </NavLink>
         <div className="box empty"></div>
       </div>

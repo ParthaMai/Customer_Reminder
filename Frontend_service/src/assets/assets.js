@@ -35,6 +35,7 @@ import report_icon from './report_icon.png'
 import subscription_icon from './subscription_icon.png'
 import about_icon from './about_icon.png'
 import appointment_icon from './appointment_icon.png'
+import done_icon from './done_icon.png'
 
 export const assets = {
     cross_icon,
@@ -70,5 +71,6 @@ export const assets = {
     report_icon,
     subscription_icon,
     about_icon,
-    appointment_icon
+    appointment_icon,
+    done_icon
 }

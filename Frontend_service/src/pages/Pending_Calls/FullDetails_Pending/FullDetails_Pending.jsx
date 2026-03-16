@@ -93,8 +93,9 @@ const FullDetails_Pending = () => {
     }
 
     useEffect(() => {
+        if (!token) return;
         fetchFullList()
-    }, [])
+    }, [token])
 
     const removeCustomer = async (itemId) => {
         const isConfirmed = window.confirm("Are you sure Complete your Pending call task?");

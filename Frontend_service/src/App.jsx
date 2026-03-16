@@ -17,6 +17,7 @@ import FullList_Customer from './pages/List_Service_Customer/FullList_Customer/F
 import Pending_Calls from './pages/Pending_Calls/Pending_Calls'
 import FullDetails_Pending from './pages/Pending_Calls/FullDetails_Pending/FullDetails_Pending'
 import Appointment from './pages/Appointment/Appointment'
+import AppointmentDetails from './pages/Appointment/AppointmentDetails/AppointmentDetails'
 
 const App = () => {
 
@@ -41,8 +42,9 @@ const App = () => {
           <Route path="/list_Pending_Calls" element={<Pending_Calls/>} />
           <Route path="/list_Pending/FullList_Pending/:id" element={<FullDetails_Pending/>} />
           <Route path="/reminder" element = {<Reminder />} />
-          <Route path="/reminder/:id" element={<FullDetails_Reminder/>} />
+          <Route path="/reminder/Fullist/:id" element={<FullDetails_Reminder/>} />
           <Route path="/appointment" element = {<Appointment/>} />
+          <Route path="/appointment/FullList/:id" element = {<AppointmentDetails/>} />
 
           
           <Route path='/dob_reminder' element = {<Dob_reminder url={url} />} />

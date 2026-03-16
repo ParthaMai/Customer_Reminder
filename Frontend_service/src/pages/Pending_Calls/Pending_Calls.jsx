@@ -92,8 +92,9 @@ const Pending_Calls = () => {
     };
 
     useEffect(() => {
+        if (!token) return; 
         fetchList(1)
-    }, [])
+    }, [token])
 
     return (
         <div className='list-cash add flex-col'>

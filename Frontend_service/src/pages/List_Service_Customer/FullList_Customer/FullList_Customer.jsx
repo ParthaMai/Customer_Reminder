@@ -55,8 +55,9 @@ const FullList_Customer = () => {
     }
 
     useEffect(() => {
+        if (!token) return;
         fetchFullList()
-    }, [itemId])
+    }, [itemId, token])
 
     const removeCustomer = async (itemId) => {
         const isConfirmed = window.confirm("Are you sure you want to delete this customer?");
