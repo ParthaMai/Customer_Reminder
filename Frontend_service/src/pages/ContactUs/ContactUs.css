@@ -1,0 +1,159 @@
+/* Container */
+.contact-container {
+  width: 90%;
+  max-width: 520px;
+  margin: 50px auto;
+  padding: 28px;
+  background: linear-gradient(145deg, #ffffff, #f8fafc);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Heading */
+.contact-container h2 {
+  text-align: center;
+  color: #0ea5e9;
+  margin-bottom: 6px;
+  font-size: 22px;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 14px;
+  color: #64748b;
+  margin-bottom: 25px;
+}
+
+/* 📞 Call Box */
+/* 📞 Call Box - FIXED COLORS */
+.call-box {
+  background: #f8fafc; /* soft neutral */
+  border: 1px solid #e2e8f0;
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.call-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #334155; /* dark clean text */
+  margin-bottom: 12px;
+}
+
+/* Field layout */
+.field {
+  display: flex;
+  gap: 10px;
+}
+
+/* Select */
+.field select {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  background: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.field select:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 2px rgba(56,189,248,0.15);
+}
+
+/* Call Button - CLEAN GREEN */
+.call-btn {
+  padding: 10px 16px;
+  background: #22c55e !important;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.call-btn:hover {
+  background: #16a34a;
+  transform: translateY(-1px);
+}
+
+/* 🔥 PERFECT CENTERED OR */
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* important */
+  margin: 25px 0;
+  width: 100%;
+}
+
+.divider hr {
+  flex: 1;
+  border: none;
+  height: 1px;
+  background: #e5e7eb;
+}
+
+.divider span {
+  margin: 0 14px;
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Form */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.contact-form label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.contact-form input,
+.contact-form select,
+.contact-form textarea {
+  padding: 11px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease;
+  background: #f9fafb;
+}
+
+.contact-form input:focus,
+.contact-form select:focus,
+.contact-form textarea:focus {
+  border-color: #38bdf8;
+  background: #fff;
+  box-shadow: 0 0 0 2px rgba(56,189,248,0.15);
+}
+
+/* Submit Button */
+.contact-form button {
+  margin-top: 12px;
+  padding: 12px;
+  background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.contact-form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(56,189,248,0.4);
+}
