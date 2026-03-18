@@ -19,6 +19,7 @@ import FullDetails_Pending from './pages/Pending_Calls/FullDetails_Pending/FullD
 import Appointment from './pages/Appointment/Appointment'
 import AppointmentDetails from './pages/Appointment/AppointmentDetails/AppointmentDetails'
 import TodayEarn from './pages/TodayEarn/TodayEarn'
+import ServiceHistory from './pages/ServiceHistory/ServiceHistory'
 
 const App = () => {
 
@@ -47,6 +48,7 @@ const App = () => {
           <Route path="/appointment" element = {<Appointment/>} />
           <Route path="/appointment/FullList/:id" element = {<AppointmentDetails/>} />
           <Route path="/today-earn" element = {<TodayEarn/>} />
+          <Route path="/service-history" element = {<ServiceHistory/>} />
 
           
           <Route path='/dob_reminder' element = {<Dob_reminder url={url} />} />

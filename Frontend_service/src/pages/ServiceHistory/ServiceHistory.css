@@ -1,0 +1,209 @@
+/* Page */
+.history-page {
+  width: 95%;
+  max-width: 950px;
+  margin: 30px auto;
+  font-family: "Inter", "Segoe UI", sans-serif;
+  color: #1e293b;
+}
+
+/* Title */
+.history-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+
+  text-align: center;       /* ✅ center text */
+  color: #0284c7;           /* 🔥 modern blue */
+
+  position: relative;
+  display: inline-block;
+}
+
+/* Center align block */
+.history-page h2 {
+  display: block;
+  width: fit-content;
+  margin: 0 auto 20px;
+}
+
+
+/* Calendar Box */
+.calendar-box {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 25px;
+}
+
+/* Calendar Base */
+.react-calendar {
+  border: none;
+  border-radius: 18px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+/* Selected date */
+.react-calendar__tile--active {
+  background: linear-gradient(135deg, #38bdf8, #6366f1) !important;
+  color: white !important;
+  border-radius: 12px;
+}
+
+/* Today date (🔥 NEW) */
+.react-calendar__tile--now {
+  background: #e0f2fe !important;
+  color: #0284c7 !important;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+/* Hover */
+.react-calendar__tile:hover {
+  background: #f0f9ff;
+  border-radius: 12px;
+  transition: 0.2s ease;
+}
+
+/* History List */
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding-bottom: 60px;
+}
+
+
+/* Card */
+.history-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+  transition: all 0.3s ease;
+  border-left: 5px solid transparent;
+  border-image: linear-gradient(180deg, #38bdf8, #6366f1) 1;
+}
+
+.history-card:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+}
+
+/* Top section */
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.top h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Price badge */
+.top span {
+  font-weight: 600;
+  background: linear-gradient(135deg, #38bdf8, #6366f1);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  box-shadow: 0 4px 10px rgba(99,102,241,0.2);
+}
+
+/* Date text */
+.history-card p {
+  margin: 8px 0;
+  font-size: 14px;
+  color: #475569;
+}
+
+/* Services */
+.services {
+  margin-top: 12px;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 10px;
+}
+
+/* Service row */
+.service-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 8px;
+  font-size: 14px;
+  border-bottom: 1px dashed #e2e8f0;
+}
+
+.service-row:last-child {
+  border-bottom: none;
+}
+
+/* Price text */
+.service-row span:last-child {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+/* Empty state */
+.history-list p {
+  text-align: center;
+  color: #94a3b8;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+
+@media (max-width: 600px) {
+
+  .history-page {
+    width: 92%;
+  }
+
+  .top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .top span {
+    align-self: flex-end;
+  }
+
+  /* ✅ FIXED: keep row layout */
+  .service-row {
+    display: flex;
+    flex-direction: row; /* 🔥 IMPORTANT */
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* Service name */
+  .service-row span:first-child {
+    flex: 1;
+    min-width: 0; /* 🔥 KEY FIX */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Price */
+  .service-row span:last-child {
+    white-space: nowrap;
+    font-weight: 600;
+  }
+
+  .history-card {
+    padding: 14px;
+  }
+
+  .history-page h2 {
+    font-size: 22px;
+  }
+}
