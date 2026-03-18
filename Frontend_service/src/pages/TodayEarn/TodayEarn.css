@@ -1,0 +1,88 @@
+.earn-container {
+  width: 95%;
+  max-width: 900px;
+  margin: 30px auto;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.earn-title {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #333;
+}
+
+.earn-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 15px;
+}
+
+.earn-card {
+  background: linear-gradient(135deg, #f5f7fa, #e4ecf7);
+  border-radius: 12px;
+  padding: 18px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.earn-card:hover {
+  transform: translateY(-5px);
+}
+
+.day {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.earn-card h3 {
+  font-size: 20px;
+  color: #222;
+}
+
+/* Highlight Today */
+.earn-card.today {
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  color: white;
+}
+
+.earn-card.today h3 {
+  color: white;
+}
+
+.earn-card.today .day {
+  color: #e0f7ff;
+}
+
+@media (max-width: 600px) {
+
+  .earn-container {
+    width: 95%;
+    margin: 20px auto;
+  }
+
+  .earn-title {
+    font-size: 18px;
+  }
+
+  .earn-grid {
+    grid-template-columns: repeat(3, 1fr); /* 2 cards per row */
+    gap: 10px;
+  }
+
+  .earn-card {
+    padding: 12px;
+    border-radius: 10px;
+  }
+
+  .earn-card h3 {
+    font-size: 16px;
+  }
+
+  .day {
+    font-size: 12px;
+  }
+
+}

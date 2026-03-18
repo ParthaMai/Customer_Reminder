@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import './AppointmentDetails.css'
 
 import axios from 'axios'
@@ -11,6 +11,7 @@ import html2pdf from "html2pdf.js";
 const AppointmentDetails = () => {
     const { token, url } = useContext(StoreContext);
     const [totalPrice, setTotalPrice] = useState(0);
+    const loadingRef = useRef(false);
     const [loading, setLoading] = useState(false);
     const [selectedNumber, setSelectedNumber] = useState("");
 
@@ -21,48 +22,48 @@ const AppointmentDetails = () => {
 
 
 
-const sendInvoice = async () => {
+    const sendInvoice = async () => {
 
-    try {
+        try {
 
-        const element = document.getElementById("invoice");
+            const element = document.getElementById("invoice");
 
-        const opt = {
-            margin: 10,
-            html2canvas: { scale: 3 },
-            jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
-        };
+            const opt = {
+                margin: 10,
+                html2canvas: { scale: 3 },
+                jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+            };
 
-        const pdfBlob = await html2pdf()
-            .set(opt)
-            .from(element)
-            .outputPdf("blob");
+            const pdfBlob = await html2pdf()
+                .set(opt)
+                .from(element)
+                .outputPdf("blob");
 
-        const file = new File([pdfBlob], `invoice-${item.name}.pdf`, {
-            type: "application/pdf"
-        });
-
-        if (navigator.share) {
-
-            await navigator.share({
-                title: "Service Invoice",
-                text: "Invoice for your service",
-                files: [file]
+            const file = new File([pdfBlob], `invoice-${item.name}.pdf`, {
+                type: "application/pdf"
             });
 
-        } else {
+            if (navigator.share) {
 
-            alert("Your browser does not support file sharing.");
+                await navigator.share({
+                    title: "Service Invoice",
+                    text: "Invoice for your service",
+                    files: [file]
+                });
+
+            } else {
+
+                alert("Your browser does not support file sharing.");
+
+            }
+
+        } catch (error) {
+
+            console.error("Sharing failed:", error);
+            alert("Sharing failed on this device.");
 
         }
-
-    } catch (error) {
-
-        console.error("Sharing failed:", error);
-        alert("Sharing failed on this device.");
-
-    }
-};
+    };
     const onChangeHandler = (event) => {
         const name = event.target.name;
         const value = event.target.value;
@@ -106,6 +107,81 @@ const sendInvoice = async () => {
         totalPrice: "",
         reminderPeriod: ""
     });
+
+
+    // add data to database
+const onSubmitHandler = async (id) => {
+    try {
+        const validServices = data.services.filter(
+            (s) => s.description && s.price
+        );
+
+        const payload = {
+            _id: id,
+            totalPrice: totalPrice
+        };
+    if (!data.serviceDate) {
+        toast.error("Service date is required");
+        return false;
+    }
+        // ✅ Only send if filled
+        if (data.serviceDate) {
+            payload.serviceDate = data.serviceDate;
+        }
+
+        if (data.reminderPeriod) {
+            payload.reminderPeriod = data.reminderPeriod;
+        }
+
+        if (validServices.length > 0) {
+            payload.services = validServices;
+        }
+
+        console.log("PAYLOAD:", payload);
+
+        const response = await axios.put(
+            `${url}/api/booking/Booking-update`,
+            payload,
+            { headers: { token } }
+        );
+
+        if (response.data.success) {
+            setData({
+                serviceDate: "",
+                services: [{ description: "", price: "" }],
+                reminderPeriod: ""
+            });
+
+            toast.success(response.data.message);
+            return true;
+        } else {
+            toast.error(response.data.message);
+            return false;
+        }
+
+    } catch (error) {
+        console.error(error);
+        toast.error("Something went wrong");
+        return false;
+    }
+};
+    // Remove booking
+        const removeBooking = async (itemId) => {
+        try {
+            const response = await axios.post(`${url}/api/booking/Booking-remove`, { id: itemId }, { headers: { token } });
+            await fetchFullList();
+            if (response.data.success) {
+                toast.success("Complete Appointment");
+                navigate("/appointment", { replace: true });
+            }
+            else {
+                toast.error(response.data.message);
+            }
+        } catch (error) {
+            toast.error("Server error");
+            console.error(error);
+        }
+    }
 
     const fetchFullList = async () => {
         const response = await axios.get(`${url}/api/booking/Booking-FullDetails`, { params: { id: itemId }, headers: { token } });
@@ -173,6 +249,11 @@ const sendInvoice = async () => {
                                 ?.map(service => `${service.description} — ₹${service.price}`)
                                 .join(", ")}
                         </p>
+                    </div>
+                    <hr />
+                     <div className="Service-Date">
+                        <p className="appointment-fulldetails-title">Service Date(Required)</p>
+                        <input name="serviceDate" value={data.serviceDate} onChange={onChangeHandler} type="date" required />
                     </div>
                     <hr />
                     <div className="appointment-fulldetails-services">
@@ -296,9 +377,56 @@ const sendInvoice = async () => {
                             <option value="24">2 Years</option>
                         </select>
                     </div>
-                    <button type='submit' className='apppointment add-btn' disabled={loading}>
-                        {loading ? <div className="loader"></div> : "ADD"}
+                    <hr />
+                    <button
+                        type="button"
+                        className="apppointment add-btn"
+                        disabled={loading}
+                        onClick={async () => {
+                            if (loadingRef.current) return; // instant block
+
+                            loadingRef.current = true; // lock immediately
+                            setLoading(true);
+
+                            try {
+                                const isSuccess = await onSubmitHandler(itemId); // your submit function
+
+                                if (isSuccess) {
+                                    await axios.post(`${url}/api/service_Customer/booking-complete`, {
+                                        id: itemId
+                                    }, {
+                                        headers: { token }
+                                    });
+                                }
+                                if (isSuccess) {
+                                    // optional delay (like your save button)
+                                    await new Promise(resolve => setTimeout(resolve, 400));
+                                    // await removeBooking(itemId);
+                                }
+
+                            } finally {
+                                loadingRef.current = false; // unlock
+                                setLoading(false);
+                            }
+                        }}
+                    >
+                        {loading ? <div className="loader"></div> : "Submit"}
                     </button>
+
+                    <div className="field">
+                        <label>If Customer Denied service</label>
+                    </div>
+                    <hr />
+                    <div className="field">
+                        <label>Reason for Service Denial</label>
+                        <textarea rows="3" placeholder="Enter reason..."></textarea>
+
+                        <button className="service-denied">
+                            Submit Denial
+                        </button>
+                    </div>
+
+
 
 
                 </div>

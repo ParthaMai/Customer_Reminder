@@ -442,6 +442,19 @@
         transform: rotate(360deg);
     }
 }
+
+
+.appointment-fulldetails-table input[type="date"],
+.appointment-fulldetails-table textarea,
+.appointment-fulldetails-table select{
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: #fff;
+    box-sizing: border-box;
+}
 /* Responsive */
 @media (max-width: 360px) {
   .field {
