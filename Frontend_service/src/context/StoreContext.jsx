@@ -4,18 +4,75 @@ import axios from "axios";
 export const StoreContext = createContext(null)
 
 const StoreContextProvider = (props) => {
-    const url = "http://192.168.1.8:4000"
-    // const url = "https://customer-reminder-backend.onrender.com"
+  const url = "http://192.168.1.8:4000"
+  // const url = "https://customer-reminder-backend.onrender.com"
 
-    const[token,setToken] = useState("");
-    const[reminder_list,setReminderList] = useState([]);
+  const [token, setToken] = useState("");
 
-    const [page, setPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
+  // ✅ Customer List State
+  const [customerCache, setCustomerCache] = useState({});
+  const [customerList, setCustomerList] = useState([]);
+  const [customerPage, setCustomerPage] = useState(1);
+  const [customerTotalPages, setCustomerTotalPages] = useState(1);
+  const [customerCategory, setCustomerCategory] = useState("RO");
+
+  const [reminder_list, setReminderList] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  // ✅ Fetch with Cache
+  const fetchCustomerList = async (pageNumber = 1, category = customerCategory) => {
+    const cacheKey = `${category}_page_${pageNumber}`;
+
+    // 🔥 1. Check cache first for Customer list
+    if (customerCache[cacheKey]) {
+      const cachedData = customerCache[cacheKey];
+
+      setCustomerList(cachedData.data);
+      setCustomerPage(cachedData.page);
+      setCustomerTotalPages(cachedData.totalPages);
+
+      console.log("⚡ Loaded from cache");
+      return;
+    }
+
+    try {
+      console.log("🌐 API called");
+
+      const response = await axios.get(`${url}/api/service_Customer/list`, {
+        params: {
+          page: pageNumber,
+          limit: 10,
+          serviceCategory: category
+        },
+        headers: { token }
+      });
+
+      if (response.data.success) {
+        const { data, pagination } = response.data;
+
+        setCustomerList(data);
+        setCustomerPage(pagination.currentPage);
+        setCustomerTotalPages(pagination.totalPages);
+
+        // 🔥 2. Save to cache
+        setCustomerCache(prev => ({
+          ...prev,
+          [cacheKey]: {
+            data,
+            page: pagination.currentPage,
+            totalPages: pagination.totalPages
+          }
+        }));
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
 
-
-      const fetchReminderList = async (pageNumber = 1) => {
+  const fetchReminderList = async (pageNumber = 1) => {
     try {
       console.log("hello hi")
       const response = await axios.get(`${url}/api/service-remind-list/remind-list`, {
@@ -25,7 +82,7 @@ const StoreContextProvider = (props) => {
         },
         headers: {
           token: token
-      }
+        }
       });
 
       if (response.data.success) {
@@ -39,32 +96,44 @@ const StoreContextProvider = (props) => {
     }
   };
 
-    useEffect(()=>{
+  useEffect(() => {
     async function laodData() {
-        await fetchReminderList();
-        if (localStorage.getItem("token")) {
-            setToken(localStorage.getItem("token"));
-        }
+      await fetchReminderList();
+      if (localStorage.getItem("token")) {
+        setToken(localStorage.getItem("token"));
+      }
     }
     laodData();
-    },[])
+  }, [])
 
-    const contextValue = {
+  const contextValue = {
 
-        url,
-        token,
-        setToken,
-        reminder_list,
-        page,
-        totalPages,
-        fetchReminderList
-    }
+    url,
+    token,
+    setToken,
+
+    // Customer
+    customerList,
+    customerPage,
+    customerTotalPages,
+    customerCategory,
+
+    setCustomerCategory,
+    setCustomerPage,
+    fetchCustomerList,
+
+
+    reminder_list,
+    page,
+    totalPages,
+    fetchReminderList
+  }
 
   return (
     <div>
       <StoreContext.Provider value={contextValue}>
-            {props.children}
-        </StoreContext.Provider>
+        {props.children}
+      </StoreContext.Provider>
     </div>
   )
 }

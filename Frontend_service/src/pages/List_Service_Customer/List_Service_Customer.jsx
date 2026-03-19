@@ -7,38 +7,38 @@ import { assets } from '../../assets/assets'
 import { useNavigate } from "react-router-dom";
 import { useContext } from 'react'
 import { StoreContext } from '../../context/StoreContext'
-import { useMemo, useCallback } from "react";
+import { useCallback } from "react";
+import { useRef } from 'react'
 
 const List_Service_Customer = () => {
 
-  const { token, url } = useContext(StoreContext);
+  const {
+    token, url,
+    // ✅ Context states
+    customerList, customerPage, customerTotalPages, customerCategory, setCustomerCategory, setCustomerPage, fetchCustomerList, setCustomerCache } = useContext(StoreContext);
+
+
   const navigate = useNavigate();
   const handleUpdate = (id) => {
     navigate(`/list_Customer/FullList_Customer/${id}`);
   };
 
-
-  const [list, setList] = useState([]);
+  const [searchResults, setSearchResults] = useState(null);
 
   const [searchField, setSearchField] = useState("name");
   const [searchValue, setSearchValue] = useState("");
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
 
   // Debounce function
-  const debounce = (func, delay) => {
-    let timer;
-    return (...args) => {
-      clearTimeout(timer);
-      timer = setTimeout(() => func(...args), delay);
-    };
-  };
+  const debounceRef = useRef(null);
+
+
 
 
   const searchCustomer = useCallback(async (value, pageNumber = 1) => {
     try {
       if (!value.trim()) {
-        fetchList(1);
+        setSearchResults(null); // ✅ reset
+        fetchCustomerList(1);
         return;
       }
 
@@ -47,15 +47,15 @@ const List_Service_Customer = () => {
           field: searchField,
           value,
           page: pageNumber,
-          limit: Number(10),
+          limit: 10,
+          serviceCategory: customerCategory
         },
         headers: { token }
       });
 
       if (response.data.success) {
-        setList(response.data.data);
-        setPage(response.data.pagination.currentPage);
-        setTotalPages(response.data.pagination.totalPages);
+        setSearchResults(response.data.data); // ✅ IMPORTANT
+        setCustomerPage(response.data.pagination.currentPage);
       } else {
         toast.error("Search error");
       }
@@ -64,62 +64,100 @@ const List_Service_Customer = () => {
       console.log(error);
       toast.error("Server error");
     }
-  }, [searchField, token]);
+  }, [searchField, token, customerCategory]);
 
-  const handleSearch = useMemo(
-    () => debounce((val) => searchCustomer(val), 700),
-    [searchCustomer]
-  );
-  const fetchList = async (page = 1, value = "") => {
-
-    const response = await axios.get(`${url}/api/service_Customer/list`, {
-      params: {
-        field: searchField,
-        value,
-        page,
-        limit: 10
-      },
-      headers: { token }
-    });
-
-    if (response.data.success) {
-      setList(response.data.data);
-      setTotalPages(response.data.pagination.totalPages);
-      setPage(response.data.pagination.currentPage);
-    }
-    else {
-      toast.error(response.data.message);
-    }
-  };
+const handleSearch = (val) => {
+  clearTimeout(debounceRef.current);
+  debounceRef.current = setTimeout(() => {
+    searchCustomer(val);
+  }, 700);
+};
 
   useEffect(() => {
     if (!token) return;
-    fetchList(1)
-  }, [token])
+
+    // if searching → skip normal fetch
+    if (searchValue.trim()) return;
+
+    fetchCustomerList(customerPage, customerCategory);
+
+  }, [token, customerCategory, customerPage]);
 
 
   const removeCustomer = async (itemId) => {
     const isConfirmed = window.confirm("Are you sure you want to delete this customer?");
     if (!isConfirmed) return;
+
     try {
-      const response = await axios.post(`${url}/api/service_Customer/remove`, { id: itemId },{ headers: { token }});
-      
+      const response = await axios.post(
+        `${url}/api/service_Customer/remove`,
+        { id: itemId },
+        { headers: { token } }
+      );
+
       if (response.data.success) {
         toast.success(response.data.message);
-        await fetchList();
-      }
-      else {
+
+        // 🔥 clear cache
+        setCustomerCache({});
+
+        const isSearching = searchValue.trim();
+
+        if (isSearching) {
+          // ✅ Stay in search mode
+          const newPage =
+            (searchResults?.length || 0) === 1 && customerPage > 1
+              ? customerPage - 1
+              : customerPage;
+
+          setCustomerPage(newPage);
+          searchCustomer(searchValue, newPage); // ✅ IMPORTANT
+        } else {
+          // ✅ Normal list mode
+          const newPage =
+            customerList.length === 1 && customerPage > 1
+              ? customerPage - 1
+              : customerPage;
+
+          setCustomerPage(newPage);
+          fetchCustomerList(newPage, customerCategory);
+        }
+
+      } else {
         toast.error(response.data.message);
       }
+
     } catch (error) {
       toast.error("Server error");
       console.error(error);
     }
-  }
-
+  };
+  const displayList = searchResults || customerList;
   return (
     <div className='list-cash add flex-col'>
+
+      {/* ✅ Category */}
+      <div className="service-type-selector">
+        {["RO", "Chimney", "AC"].map((type) => (
+          <button
+            key={type}
+            type="button"
+            className={customerCategory === type ? "active" : ""}
+            onClick={() => {
+              setCustomerCategory(type);
+              setSearchValue("");
+              setSearchResults(null);
+              setCustomerPage(1);
+            }}
+          >
+            {type}
+          </button>
+        ))}
+      </div>
+
       <p>All Customer list</p>
+
+      {/* 🔍 Search */}
       <div className="search-box">
         <div className="search-input-wrapper">
           <input
@@ -127,12 +165,13 @@ const List_Service_Customer = () => {
             placeholder={`Search by ${searchField}`}
             value={searchValue}
             onChange={(e) => {
-              setSearchValue(e.target.value);
               const val = e.target.value;
+              setSearchValue(val);
               handleSearch(val);
             }}
           />
         </div>
+
         <select
           value={searchField}
           onChange={(e) => setSearchField(e.target.value)}
@@ -140,10 +179,11 @@ const List_Service_Customer = () => {
           <option value="name">Name</option>
           <option value="mobile1">Mobile No</option>
         </select>
-
-
       </div>
+
+      {/* 📋 Table */}
       <div className="list-cash-table">
+
         <div className="list-cash-table-format title">
           <b>Image</b>
           <b>Name</b>
@@ -154,31 +194,37 @@ const List_Service_Customer = () => {
           <b>Action</b>
         </div>
 
-        {/* Unified pagination */}
-        {totalPages > 1 && (
+        {/* 🔁 Pagination */}
+        {customerTotalPages > 1 && (
           <div className="pagination">
             <button
-              disabled={page === 1}
+              disabled={customerPage === 1}
               onClick={() => {
+                const newPage = customerPage - 1;
+                setCustomerPage(newPage);
+
                 if (searchValue.trim()) {
-                 searchCustomer(searchValue, page - 1);
+                  searchCustomer(searchValue, newPage);
                 } else {
-                  fetchList(page - 1);
+                  fetchCustomerList(newPage);
                 }
               }}
             >
               Prev
             </button>
 
-            <span>{page} / {totalPages}</span>
+            <span>{customerPage} / {customerTotalPages}</span>
 
             <button
-              disabled={page === totalPages}
+              disabled={customerPage === customerTotalPages}
               onClick={() => {
+                const newPage = customerPage + 1;
+                setCustomerPage(newPage);
+
                 if (searchValue.trim()) {
-                  searchCustomer(searchValue, page + 1);
+                  searchCustomer(searchValue, newPage);
                 } else {
-                  fetchList(page + 1);
+                  fetchCustomerList(newPage);
                 }
               }}
             >
@@ -187,26 +233,38 @@ const List_Service_Customer = () => {
           </div>
         )}
 
+        {/* ❌ No Data */}
+        {displayList.length === 0 && (
+          <p className="no-data">
+            {searchValue.trim()
+              ? "No search results found"
+              : `No customers found for ${customerCategory}`}
+          </p>
+        )}
+        {/* 📄 Data */}
+        {displayList.map((item, index) => (
+          <div key={index} className="list-cash-table-format">
+            <img src={assets.user_icon} alt="customer" />
+            <p>{item.name}</p>
 
-        {list.map((item, index) => {
-          return (
-            <div key={index} className="list-cash-table-format">
-              <img
-                src={assets.user_icon}
-                alt="customer"
-              />
-              <p>{item.name}</p>
-              <img src={assets.edit_icon} alt="edit" className="edit-icon" onClick={() => handleUpdate(item._id)} />
-              <p>{new Date(item.serviceDate).toISOString().split("T")[0]}</p>
-              <p>{item.mobile1}</p>
-              <p>₹{item.totalPrice}</p>
-              <p onClick={() => removeCustomer(item._id)} className='cursor'>x</p>
-            </div>
-          )
-        })}
+            <img
+              src={assets.edit_icon}
+              alt="edit"
+              className="edit-icon"
+              onClick={() => handleUpdate(item._id)}
+            />
+
+            <p>{new Date(item.serviceDate).toISOString().split("T")[0]}</p>
+            <p>{item.mobile1}</p>
+            <p>₹{item.totalPrice}</p>
+
+            <p onClick={() => removeCustomer(item._id)} className='cursor'>x</p>
+          </div>
+        ))}
+
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default List_Service_Customer
+export default List_Service_Customer;
