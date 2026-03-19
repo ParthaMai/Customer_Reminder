@@ -1,119 +1,151 @@
+/* Container */
 .cash {
     width: 90%;
     max-width: 600px;
     margin: 40px auto;
     background-color: #f9f9f9;
-     /* light grey background */
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    font-family: Arial, sans-serif;
+    padding: 25px 20px 40px 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    font-family: 'Arial', sans-serif;
     color: #333;
-    font-size: max(1vw,15px);
-    padding-bottom: 40px;
+    font-size: 14px;
 }
 
-
-.cash form{
+/* Form layout */
+.cash form {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 18px;
 }
+
+/* Labels */
 .cash p {
     margin-bottom: 5px;
     font-weight: 600;
     font-size: 14px;
 }
+
+/* Inputs, textarea, select */
 .cash input[type="text"],
 .cash input[type="tel"],
 .cash input[type="number"],
 .cash input[type="date"],
 .cash textarea,
-.cash select{
+.cash select {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #ccc;
-    border-radius: 6px;
+    border-radius: 8px;
     font-size: 14px;
     background-color: #fff;
     box-sizing: border-box;
+    transition: 0.2s ease;
 }
+
 .cash input:focus,
 .cash textarea:focus,
 .cash select:focus {
-    border-color: #888;
+    border-color: #38bdf8;
     outline: none;
 }
-.cash-add-btn {
+
+/* Submit button */
+.add-btn {
     width: 100%;
-    padding: 12px;
-    background-color: #333;
+    padding: 14px;
+    background-color: #3b82f6;
     color: #fff;
     border: none;
     font-weight: bold;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    font-size: 16px;
+    transition: 0.3s ease;
+    text-align: center;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
 }
-.cash-add-btn:hover {
-    background-color: #555;
+
+.add-btn:hover {
+    background-color: #0ea5e9;
 }
+
+/* Loader inside submit button */
+.add-btn .loader {
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #fff;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 /* Service Details Container */
 .add-product-description {
     width: 100%;
     margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-/* Section Title */
-.add-product-description p {
-    font-weight: 600;
-    font-size: 16px;
-    margin-bottom: 5px;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 15px;
 }
 
 /* Each Service Row */
 .service-row {
-     background-color: #ffffff; 
+    background-color: #fff;
     padding: 12px;
     border-radius: 8px;
     border: 1px solid #e0e0e0;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    width: 100% !important;
+    box-sizing: border-box;
 }
 
-/* Label */
+/* Labels inside service */
 .service-row label {
-    font-size: 16px;
-    color: #1b1b1b;
+    font-size: 15px;
     font-weight: 500;
-    margin-bottom: 5px;
+    color: #1b1b1b;
     display: block;
 }
 
 /* Textarea */
 .service-row textarea {
-    width: 100%;
+    width: 100% !important;
     padding: 8px 10px;
     border-radius: 6px;
     border: 1px solid #ccc;
     font-size: 14px;
     resize: none;
     outline: none;
-    transition: 0.2s ease;
 }
 
-.service-row textarea:focus {
-    border-color: #000;
+/* Price Input */
+.service-row input.service-price {
+    width: 100% !important;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    box-sizing: border-box;
 }
 
 /* Remove Button */
 .remove-btn {
     margin-top: 8px;
-    padding: 5px 10px;
+    align-self: flex-start !important;
+    padding: 6px 12px;
     font-size: 13px;
-    border-radius: 5px;
-    border: 1px solid #000;
+    border-radius: 6px;
+    border: 1px solid #333;
     background-color: #333;
     color: #fff;
     cursor: pointer;
@@ -122,41 +154,48 @@
 
 .remove-btn:hover {
     background-color: #555;
-    color: #fff;
 }
 
-/* Add Button */
+/* Add Service Button */
 .add-btn-service {
-    width: fit-content;
-    padding: 7px 14px;
-    font-size: 14px;
-    border-radius: 6px;
-    border: 1px solid #000;
+    margin-top: 10px;
+    align-self: stretch !important;
+    width: 100% !important;
+    padding: 12px !important;
+    font-size: 14px !important;
+    border-radius: 8px;
+    border: none;
+    background-color: #38bdf8;
     color: #fff;
-    background-color: #333;
     cursor: pointer;
     transition: 0.2s ease;
+    text-align: center;
+    display: block !important;
 }
 
 .add-btn-service:hover {
-    background-color: #555;
-    color: #fff;
+    background-color: #0ea5e9;
 }
 
+/* Mobile fix */
+@media (max-width: 600px) {
+    .service-row,
+    .service-row textarea,
+    .service-row input.service-price {
+        flex-direction: column !important;
+        width: 100% !important;
+        display: flex !important;
+    }
 
-@media (max-width: 500px) {
-    .cash {
-        padding: 15px;
-          padding-bottom: 40px;
+    .remove-btn,
+    .add-btn-service {
+        width: 100% !important;
+        text-align: center !important;
+        display: block !important;
     }
-    .cash p {
-        font-size: 16px;
-    }
-    .cash input, .cash textarea, .cash select {
-        font-size: 13px;
-    }
-    .cash-add-btn {
-        padding: 10px;
-        font-size: 14px;
+
+    .add-btn {
+        font-size: 15px !important;
+        padding: 12px !important;
     }
 }

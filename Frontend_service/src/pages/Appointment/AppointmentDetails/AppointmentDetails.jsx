@@ -391,6 +391,7 @@ const onSubmitHandler = async (id) => {
                             try {
                                 const isSuccess = await onSubmitHandler(itemId); // your submit function
 
+                                // This is for calculate Earning per week
                                 if (isSuccess) {
                                     await axios.post(`${url}/api/service_Customer/booking-complete`, {
                                         id: itemId
@@ -398,6 +399,18 @@ const onSubmitHandler = async (id) => {
                                         headers: { token }
                                     });
                                 }
+
+                                //This is for Calculate total monthly earning
+                                if(isSuccess) {
+                                    await axios.post(`${url}/api/totalEarning/Total-Earning`, {
+                                    totalPrice: totalPrice,
+                                    serviceDate: data.serviceDate,
+                                    userId: item.userId
+                                    }, {
+                                    headers: { token }
+                                    });
+                                }
+                                
                                 if (isSuccess) {
                                     // optional delay (like your save button)
                                     await new Promise(resolve => setTimeout(resolve, 400));

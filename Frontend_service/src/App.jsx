@@ -21,6 +21,7 @@ import AppointmentDetails from './pages/Appointment/AppointmentDetails/Appointme
 import TodayEarn from './pages/TodayEarn/TodayEarn'
 import ServiceHistory from './pages/ServiceHistory/ServiceHistory'
 import ContactUs from './pages/ContactUs/ContactUs'
+import TotalEarning from './pages/TotalEarning/TotalEarning'
 
 const App = () => {
 
@@ -51,6 +52,7 @@ const App = () => {
           <Route path="/today-earn" element = {<TodayEarn/>} />
           <Route path="/service-history" element = {<ServiceHistory/>} />
           <Route path="/contact-us" element = {<ContactUs/>} />
+          <Route path="/total-earning" element = {<TotalEarning/>} />
 
           
           <Route path='/dob_reminder' element = {<Dob_reminder url={url} />} />
