@@ -177,6 +177,45 @@
     background-color: #0ea5e9;
 }
 
+/* For customer exits or not */
+.mobile-status {
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+.mobile-status .exists {
+  color: #ef4444; /* red */
+  font-weight: 500;
+}
+
+.mobile-status .new {
+  color: #22c55e; /* green */
+  font-weight: 500;
+}
+
+/* For service Catergory */
+.service-type-selector {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.service-type-selector button {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background: #f3f4f6;
+  cursor: pointer;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.service-type-selector button.active {
+  background: #38bdf8;
+  color: white;
+  border-color: #38bdf8;
+}
+
 /* Mobile fix */
 @media (max-width: 600px) {
     .service-row,

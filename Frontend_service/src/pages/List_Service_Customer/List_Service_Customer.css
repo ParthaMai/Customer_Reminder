@@ -11,10 +11,11 @@
   font-size: max(1vw, 14px);
 }
 
-.list > p {
-  font-size: 20px;
+.list-cash > p {
+    font-size: 22px;
   font-weight: 600;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  color: #1e3a8a;
 }
 
 .list-cash-table {
