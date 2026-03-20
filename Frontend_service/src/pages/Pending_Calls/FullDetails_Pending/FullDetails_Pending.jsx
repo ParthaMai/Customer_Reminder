@@ -135,6 +135,26 @@ const FullDetails_Pending = () => {
         window.location.href = `tel:${mobileNumber}`;
     };
 
+    // For whatsapp appointment
+    const handleAppointmentUpdatae = (mobileNumber) => {
+        if (!mobileNumber) {
+            alert("No number selected");
+            return;
+        }
+
+        const message = `Hello ${item.name}, 😊\nYour appointment is scheduled on ${bookingData.bookingDate}.\nWe look forward to serving you. Thank you!`;
+
+
+
+        const encodedMessage = encodeURIComponent(message);
+
+        // Open WhatsApp chat with pre-filled message
+        window.open(
+            `https://wa.me/${mobileNumber}?text=${encodedMessage}`,
+            "_blank"
+        );
+    };
+
     // For captcha
     const generateCaptcha = () => {
         const code = Math.random().toString(36).substring(2, 8).toUpperCase();
@@ -155,12 +175,12 @@ const FullDetails_Pending = () => {
         if (!confirmDelete) return;
 
         try {
-            const res = await axios.post( `${url}/api/service_Customer/remove`, { id: itemId }, { headers: { token } } );
+            const res = await axios.post(`${url}/api/service_Customer/remove`, { id: itemId }, { headers: { token } });
             if (res.data.success) {
                 toast.success("Permanently deleted");
                 const response = await axios.post(`${url}/api/pending-list/remove`, { id: itemId }, { headers: { token } });
                 await fetchFullList();
-                 if (response.data.success) {
+                if (response.data.success) {
                     toast.success(response.data.message);
                     // 🔥 clear cache
                     setPendingCache({});
@@ -168,7 +188,7 @@ const FullDetails_Pending = () => {
                 }
                 generateCaptcha();       // reset captcha
                 setUserInput("");        // clear input
-        
+
             } else {
                 toast.error(res.data.message || "Delete failed");
             }
@@ -399,6 +419,34 @@ const FullDetails_Pending = () => {
                     <div className="field">
                         <label>Booking Date: (Required)</label>
                         <input type="date" name="bookingDate" value={bookingData.bookingDate} onChange={onChangeBookingHandler} min={new Date().toISOString().split("T")[0]} />
+                    </div>
+                    <hr />
+                    <div className="field">
+                        <select
+                            onChange={(e) => setSelectedNumber(e.target.value)}
+                            defaultValue=""
+                        >
+                            <option value="" disabled>
+                                Select number
+                            </option>
+
+                            {item.mobile1 && (
+                                <option value={item.mobile1}>Mobile 1 - {item.mobile1}</option>
+                            )}
+                            {item.mobile2 && (
+                                <option value={item.mobile2}>Mobile 2 - {item.mobile2}</option>
+                            )}
+                        </select>
+
+                        <img src={assets.whatsapp_icon} alt="whatsapp" className="whatsapp-icon"
+                            onClick={() => {
+                                if (!selectedNumber) {
+                                    alert("Please select a number first");
+                                    return;
+                                }
+                                handleAppointmentUpdatae(selectedNumber);
+                            }}
+                        />
                     </div>
                     <hr />
                     <div className="field">

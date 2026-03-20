@@ -30,6 +30,14 @@ const StoreContextProvider = (props) => {
   const [reminderTotalPages, setReminderTotalPages] = useState(1);
   const [reminderCategory, setReminderCategory] = useState("RO");
 
+
+  // ✅ Booking State
+  const [bookingCache, setBookingCache] = useState({});
+  const [bookingList, setBookingList] = useState([]);
+  const [bookingPage, setBookingPage] = useState(1);
+  const [bookingTotalPages, setBookingTotalPages] = useState(1);
+  const [bookingCategory, setBookingCategory] = useState("RO");
+
   // ✅ Fetch with Cache
   const fetchCustomerList = async (pageNumber = 1, category = customerCategory) => {
     if (!token) return;   // ✅ FIX
@@ -166,6 +174,56 @@ const StoreContextProvider = (props) => {
   };
 
 
+  // Fetch bookinglist
+  const fetchBookingList = async (pageNumber = 1, category = bookingCategory) => {
+
+    if (!token) return;
+
+    const cacheKey = `${category}_booking_page_${pageNumber}`;
+
+    // ✅ Cache check
+    if (bookingCache[cacheKey]) {
+      const cached = bookingCache[cacheKey];
+      setBookingList(cached.data);
+      setBookingPage(cached.page);
+      setBookingTotalPages(cached.totalPages);
+      return;
+    }
+
+    try {
+      const response = await axios.get(`${url}/api/booking/Booking-list`, {
+        params: {
+          page: pageNumber,
+          limit: 20,
+          serviceCategory: category   // ✅ ADD THIS
+        },
+        headers: { token }
+      });
+
+      if (response.data.success) {
+        const { data, pagination } = response.data;
+
+        setBookingList(data);
+        setBookingPage(pagination.currentPage);
+        setBookingTotalPages(pagination.totalPages);
+
+        // ✅ Save cache
+        setBookingCache(prev => ({
+          ...prev,
+          [cacheKey]: {
+            data,
+            page: pagination.currentPage,
+            totalPages: pagination.totalPages
+          }
+        }));
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
   useEffect(() => {
     async function loadData() {
       if (localStorage.getItem("token")) {
@@ -200,7 +258,7 @@ const StoreContextProvider = (props) => {
     pendingCategory,
     setPendingCategory,
 
-    // ✅ Reminder (NEW)
+    // ✅ Reminder 
     reminderList,
     reminderPage,
     reminderTotalPages,
@@ -210,6 +268,17 @@ const StoreContextProvider = (props) => {
     fetchReminderList,
     reminderCache,
     setReminderCache,
+
+    // ✅ Booking
+    bookingList,
+    bookingPage,
+    bookingTotalPages,
+    bookingCategory,
+    setBookingCategory,
+    setBookingPage,
+    fetchBookingList,
+    bookingCache,
+    setBookingCache,
 
   }
 
