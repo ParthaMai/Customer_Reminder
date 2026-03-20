@@ -3,122 +3,63 @@ import "./Reminder.css"
 import { assets } from '../../assets/assets';
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { useNavigate } from 'react-router-dom'; 
-import * as XLSX from "xlsx";
+import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { StoreContext } from '../../context/StoreContext';
 
 const Reminder = () => {
 
-  const { url, token, reminder_list, page, totalPages, fetchReminderList } = useContext(StoreContext);
-  const [list, setList] = useState([]);
-  // const [page, setPage] = useState(1);
-  // const [totalPages, setTotalPages] = useState(1);
+  const { url, token, reminderList, reminderPage, reminderTotalPages, reminderCategory, setReminderCategory, fetchReminderList } = useContext(StoreContext);
+
   const navigate = useNavigate();
 
   const handleUpdate = (id) => {
     navigate(`/reminder/Fullist/${id}`);
   };
 
- 
-
-  const handleDownloadExcel = () => {
-    if (!reminder_list || reminder_list.length === 0) {
-      alert("No data to export");
-      return;
-    }
-
-    // Prepare data (only name & mobile)
-    const excelData = list.map((item, index) => ({
-      SL: index + 1,
-      Name: item.name,
-      Mobile: item.mobile1
-    }));
-
-    // Create worksheet
-    const worksheet = XLSX.utils.json_to_sheet(excelData);
-
-    // Create workbook
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Customers");
-
-    // Download file
-    XLSX.writeFile(workbook, "Reminder_Customers.xlsx");
-  };
 
 
 
   // fix it in schedule way
   useEffect(() => {
+    if (!token) return;
     const cleanupAndFetch = async () => {
-      try{
-      //Delete old reminders
-      await axios.post(`${url}/api/service-remind-list/cleanup-old`, {}, {headers: { token }});
+      try {
+        //Delete old reminders
+        await axios.post(`${url}/api/service-remind-list/cleanup-old`, {}, { headers: { token } });
 
-      // await fetchList(1);
+        // await fetchList(1);
 
-      }catch(error){
+      } catch (error) {
         console.log(error);
         toast.error("server Error")
       }
     };
 
     cleanupAndFetch();
-  }, []);
-
-
-
-  // const fetchList = async (pageNumber = 1) => {
-  //   try {
-  //     const response = await axios.get(`${url}/api/reminder-list/remind-list`, {
-  //       params: {
-  //         page: pageNumber,
-  //         limit: 10,
-  //       }
-  //     });
-
-  //     if (response.data.success) {
-  //       setList(response.data.data);
-  //       setPage(response.data.pagination.currentPage);
-  //       setTotalPages(response.data.pagination.totalPages);
-  //     } else {
-  //       toast.error("Error");
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //     toast.error("Server error");
-  //   }
-  // };
-
-
-  // useEffect(() => {
-  //   fetchList(1)
-  // }, [])
+  }, [token]);
 
   useEffect(() => {
     if (!token) return;
-
-    async function loadData() {
-
-      if (!reminder_list || reminder_list.length === 0) {
-        await fetchReminderList(1)
-      }
-
-    }
-
-    loadData()
-
-  }, [token])
-
+    fetchReminderList(1, reminderCategory);
+  }, [token, reminderCategory]);
 
   return (
     <div className='reminder-list add flex-col'>
       <div className="header-row">
         <p>Reminder Customers</p>
-        <div className="download-box" onClick={handleDownloadExcel}>
-          <b>Download Excel</b>
-          <img src={assets.download_icon} alt="download" className="download_icon" />
-        </div>
+      </div>
+      {/* ✅ CATEGORY FILTER */}
+      <div className="service-type-selector">
+        {["RO", "Chimney", "AC"].map(type => (
+          <button
+            key={type}
+            className={reminderCategory === type ? "active" : ""}
+            onClick={() => setReminderCategory(type)}
+          >
+            {type}
+          </button>
+        ))}
       </div>
       <div className="reminder-list-table">
         <div className="reminder-list-table-format title">
@@ -130,37 +71,60 @@ const Reminder = () => {
           <b>Mobile No.</b>
           <b>Service Cost</b>
         </div>
+        {/* ✅ PAGINATION */}
         <div className="reminder-pagination">
           <button
-            disabled={page === 1}
-            onClick={() => fetchReminderList(page - 1)}
+            disabled={reminderPage === 1}
+            onClick={() => fetchReminderList(reminderPage - 1)}
           >
             Prev
           </button>
 
-          <span>{page} / {totalPages}</span>
+          <span>{reminderPage} / {reminderTotalPages}</span>
 
           <button
-            disabled={page === totalPages}
-            onClick={() => fetchReminderList(page + 1)}
+            disabled={reminderPage === reminderTotalPages}
+            onClick={() => fetchReminderList(reminderPage + 1)}
           >
             Next
           </button>
         </div>
+        {reminderList.length === 0 ? (
+          <p className="no-data">
+            No reminders for {reminderCategory}
+          </p>
+        ) : reminderList.map((item) => (
+          <div key={item._id} className="reminder-list-table-format">
 
-        {reminder_list.map((item, index) => {
-          return (
-            <div key={index} className="reminder-list-table-format">
-              <p>{new Date(item.create).toISOString().split("T")[0]}</p>
-              <img src={assets.user_icon} alt="" />
-              <p>{item.name}</p>
-              <img src={assets.user_details} alt="edit" className="user_details" onClick={() => handleUpdate(item._id)} />
-              <p>{new Date(item.serviceDate).toISOString().split("T")[0]}</p>
-              <p>{item.mobile1}</p>
-              <p>₹{item.totalPrice}</p>
-            </div>
-          )
-        })}
+            <p>
+              {item.create
+                ? new Date(item.create).toISOString().split("T")[0]
+                : "-"}
+            </p>
+
+            <img src={assets.user_icon} alt="customer" />
+
+            <p>{item.name}</p>
+
+            <img
+              src={assets.user_details}
+              alt="details"
+              className="user_details"
+              onClick={() => handleUpdate(item._id)}
+            />
+
+            <p>
+              {item.serviceDate
+                ? new Date(item.serviceDate).toISOString().split("T")[0]
+                : "-"}
+            </p>
+
+            <p>{item.mobile1}</p>
+
+            <p>₹{item.totalPrice}</p>
+
+          </div>
+        ))}
       </div>
     </div>
   )

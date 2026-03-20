@@ -16,19 +16,23 @@ const StoreContextProvider = (props) => {
   const [customerTotalPages, setCustomerTotalPages] = useState(1);
   const [customerCategory, setCustomerCategory] = useState("RO");
 
-    // ✅ Pending Calls State
+  // ✅ Pending Calls State
   const [pendingCache, setPendingCache] = useState({});
   const [pendingList, setPendingList] = useState([]);
   const [pendingPage, setPendingPage] = useState(1);
   const [pendingTotalPages, setPendingTotalPages] = useState(1);
   const [pendingCategory, setPendingCategory] = useState("RO");
 
-  const [reminder_list, setReminderList] = useState([]);
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  // ✅ Reminder State
+  const [reminderCache, setReminderCache] = useState({});
+  const [reminderList, setReminderList] = useState([]);
+  const [reminderPage, setReminderPage] = useState(1);
+  const [reminderTotalPages, setReminderTotalPages] = useState(1);
+  const [reminderCategory, setReminderCategory] = useState("RO");
 
   // ✅ Fetch with Cache
   const fetchCustomerList = async (pageNumber = 1, category = customerCategory) => {
+    if (!token) return;   // ✅ FIX
     const cacheKey = `${category}_page_${pageNumber}`;
 
     // 🔥 1. Check cache first for Customer list
@@ -75,8 +79,9 @@ const StoreContextProvider = (props) => {
     }
   };
 
-   // ✅ Fetch Pending List with Cache
+  // ✅ Fetch Pending List with Cache
   const fetchPendingList = async (pageNumber = 1, category = pendingCategory) => {
+    if (!token) return;   // ✅ FIX
     const cacheKey = `${category}_page_${pageNumber}`;
 
     if (pendingCache[cacheKey]) {
@@ -84,12 +89,10 @@ const StoreContextProvider = (props) => {
       setPendingList(cachedData.data);
       setPendingPage(cachedData.page);
       setPendingTotalPages(cachedData.totalPages);
-      console.log("⚡ Loaded Pending Calls from cache");
       return;
     }
 
     try {
-      console.log("🌐 API called for Pending Calls");
       const response = await axios.get(`${url}/api/pending-list/pending-list`, {
         params: { page: pageNumber, limit: 15, serviceCategory: category },
         headers: { token }
@@ -111,23 +114,50 @@ const StoreContextProvider = (props) => {
     }
   };
 
+  const fetchReminderList = async (pageNumber = 1, category = reminderCategory) => {
+    if (!token) return;   // ✅ FIX
 
-  const fetchReminderList = async (pageNumber = 1) => {
+    const cacheKey = `${category}_page_${pageNumber}`;
+
+    // 🔥 1. Check cache first
+    if (reminderCache[cacheKey]) {
+      const cachedData = reminderCache[cacheKey];
+
+      setReminderList(cachedData.data);
+      setReminderPage(cachedData.page);
+      setReminderTotalPages(cachedData.totalPages);
+      return;
+    }
+
     try {
-      const response = await axios.get(`${url}/api/service-remind-list/remind-list`, {
-        params: {
-          page: pageNumber,
-          limit: 10
-        },
-        headers: {
-          token: token
+      const response = await axios.get(
+        `${url}/api/service-remind-list/remind-list`,
+        {
+          params: {
+            page: pageNumber,
+            limit: 10,
+            serviceCategory: category   // ✅ IMPORTANT
+          },
+          headers: { token }
         }
-      });
+      );
 
       if (response.data.success) {
-        setReminderList(response.data.data);
-        setPage(response.data.pagination.currentPage);
-        setTotalPages(response.data.pagination.totalPages);
+        const { data, pagination } = response.data;
+
+        setReminderList(data);
+        setReminderPage(pagination.currentPage);
+        setReminderTotalPages(pagination.totalPages);
+
+        // 🔥 2. Save to cache
+        setReminderCache(prev => ({
+          ...prev,
+          [cacheKey]: {
+            data,
+            page: pagination.currentPage,
+            totalPages: pagination.totalPages
+          }
+        }));
       }
 
     } catch (error) {
@@ -135,14 +165,14 @@ const StoreContextProvider = (props) => {
     }
   };
 
+
   useEffect(() => {
-    async function laodData() {
-      await fetchReminderList();
+    async function loadData() {
       if (localStorage.getItem("token")) {
         setToken(localStorage.getItem("token"));
       }
     }
-    laodData();
+    loadData();
   }, [])
 
   const contextValue = {
@@ -170,11 +200,17 @@ const StoreContextProvider = (props) => {
     pendingCategory,
     setPendingCategory,
 
+    // ✅ Reminder (NEW)
+    reminderList,
+    reminderPage,
+    reminderTotalPages,
+    reminderCategory,
+    setReminderCategory,
+    setReminderPage,
+    fetchReminderList,
+    reminderCache,
+    setReminderCache,
 
-    reminder_list,
-    page,
-    totalPages,
-    fetchReminderList
   }
 
   return (

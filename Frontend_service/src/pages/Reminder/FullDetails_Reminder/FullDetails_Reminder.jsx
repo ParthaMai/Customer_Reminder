@@ -193,6 +193,11 @@ const FullDetails_Reminder = () => {
                         <img src={assets.user_icon} alt="Customer" />
                     </div>
                     <hr />
+                    <div className="field service-category">
+                        <label>Service Category:</label>
+                        <p className="highlight">{item.serviceCategory}</p>
+                    </div>
+                    <hr />
                     <div className="field">
                         <label>Name:</label>
                         <p>{item.name}</p>
