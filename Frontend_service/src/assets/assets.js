@@ -36,6 +36,7 @@ import subscription_icon from './subscription_icon.png'
 import about_icon from './about_icon.png'
 import appointment_icon from './appointment_icon.png'
 import done_icon from './done_icon.png'
+import reload_icon from './reload_icon.png'
 
 export const assets = {
     cross_icon,
@@ -72,5 +73,6 @@ export const assets = {
     subscription_icon,
     about_icon,
     appointment_icon,
-    done_icon
+    done_icon,
+    reload_icon
 }

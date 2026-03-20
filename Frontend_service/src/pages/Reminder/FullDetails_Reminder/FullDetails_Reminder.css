@@ -123,6 +123,14 @@
   resize: none;
   font-size: 14px;
 }
+.field textarea {
+  width: 100%;
+}
+
+.field:has(textarea) {
+  flex-direction: column;   /* ✅ stack vertically */
+  align-items: stretch;
+}
 
 .field button {
   padding: 6px 12px;
@@ -171,6 +179,7 @@
 }
 /* Book appointment button */
 .field .save-service {
+  width: 100%;
   margin-top: 8px;
   padding: 8px 14px;
   background: #409945;

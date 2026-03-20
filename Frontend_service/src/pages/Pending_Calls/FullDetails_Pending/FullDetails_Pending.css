@@ -170,7 +170,70 @@
 .save-btn:hover {
   background-color: #555;
 }
+.field.service-category p.highlight {
+    background-color: #ff7f50; /* coral/orange highlight */
+    color: white;              /* text color */
+    padding: 3px 8px;          /* some spacing */
+    border-radius: 4px;        /* rounded corners */
+    display: inline-block;     /* fits text nicely */
+    font-weight: 500;          /* optional */
+}
 
+/* For Captcha */
+/* Force column layout */
+.field.column {
+  display: flex;
+  flex-direction: column !important;
+  gap: 6px;
+}
+
+/* SMALL captcha */
+/* Slightly bigger captcha */
+.captcha-box {
+  font-size: 15px;
+  letter-spacing: 3px;
+  padding: 6px 10px;
+  background: #222;
+  color: #fff;
+  border-radius: 5px;
+}
+
+/* Slightly bigger delete button */
+.delete-permanent {
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 6px;
+}
+
+/* Row for input + reload */
+.captcha-row {
+  display: flex;
+  align-items: flex-start ;
+  gap: 6px;
+}
+
+/* Fix input size */
+.field.column input {
+  flex: 1;
+  min-width: 0 !important; /* 🔥 important fix */
+  padding: 6px 8px;
+  font-size: 13px;
+}
+
+/* Reload icon RIGHT SIDE */
+.reload-icon {
+  width: 30px !important;
+  height: 30px !important;
+  object-fit: contain;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+/* Optional: better hover */
+.reload-icon:hover {
+  opacity: 1;
+  transform: rotate(90deg) scale(1.1);
+}
 /* Responsive */
 @media (max-width: 360px) {
   .field {

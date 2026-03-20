@@ -13,14 +13,23 @@ import { StoreContext } from '../../../context/StoreContext';
 
 const FullDetails_Pending = () => {
 
-    const { token, url } = useContext(StoreContext);
+    const { token, url, setPendingCache } = useContext(StoreContext);
     const navigate = useNavigate();
 
+    // For captcha
+    const [captcha, setCaptcha] = useState("");
+    const [userInput, setUserInput] = useState("");
+
+    const [bookingData, setBookingData] = useState({
+        serviceType: "",
+        address: "",
+        bookingDate: ""
+    });
     const [data, setData] = useState({
         summary: "",
         extendReminder: ""
     })
-    const savingRef = useRef(false);  
+    const savingRef = useRef(false);
     const [saving, setSaving] = useState(false);
     const { id: itemId } = useParams();// previous state item id like props
 
@@ -49,22 +58,68 @@ const FullDetails_Pending = () => {
             payload._id = id;
 
             let response;
-            response = await axios.post( `${url}/api/pending-list/extend-date`,payload,{ params: { id: itemId }, headers: {token} });
-                
+            response = await axios.post(`${url}/api/pending-list/extend-date`, payload, { params: { id: itemId }, headers: { token } });
+
             if (response.data.success) {
                 setData({
                     summary: "",
                     extendReminder: ""
                 });
                 toast.success(response.data.message);
-                 return true; 
+                return true;
             } else {
                 toast.error(response.data.message);
                 return false;
             }
         } catch (error) {
             toast.error("Something went wrong");
-            return false;   
+            return false;
+        }
+    };
+    const onChangeBookingHandler = (event) => {
+        const name = event.target.name;
+        const value = event.target.value;
+
+        setBookingData(data => ({ ...data, [name]: value }));
+    };
+    const onSubmitBookingHandler = async (id) => {
+        try {
+
+            if (!bookingData.bookingDate) {
+                toast.error("Please fill the booking date");
+                return false;
+            }
+
+            const payload = {
+                _id: id,
+                serviceType: bookingData.serviceType,
+                address: bookingData.address,
+                bookingDate: bookingData.bookingDate,
+                serviceCategory: item.serviceCategory
+            };
+
+            const response = await axios.post(`${url}/api/service_Customer/booking-update`, payload, { params: { id: itemId }, headers: { token } });
+
+            if (response.data.success) {
+
+                setBookingData({
+                    serviceType: "",
+                    address: "",
+                    bookingDate: "",
+                });
+
+                toast.success(response.data.message);
+                return true;
+
+            } else {
+                toast.error(response.data.message);
+                return false;
+            }
+
+        } catch (error) {
+            console.log(error);
+            toast.error("Something went wrong");
+            return false;
         }
     };
 
@@ -80,10 +135,51 @@ const FullDetails_Pending = () => {
         window.location.href = `tel:${mobileNumber}`;
     };
 
+    // For captcha
+    const generateCaptcha = () => {
+        const code = Math.random().toString(36).substring(2, 8).toUpperCase();
+        setCaptcha(code);
+    };
+
+    //For permanent delete
+    const permanentRemove = async (id) => {
+        // CAPTCHA validation
+        if (userInput !== captcha) {
+            toast.error("Invalid CAPTCHA");
+            generateCaptcha();
+            return;
+        }
+
+        // Confirmation
+        const confirmDelete = window.confirm("This action is permanent. Are you sure?");
+        if (!confirmDelete) return;
+
+        try {
+            const res = await axios.post( `${url}/api/service_Customer/remove`, { id: itemId }, { headers: { token } } );
+            if (res.data.success) {
+                toast.success("Permanently deleted");
+                const response = await axios.post(`${url}/api/pending-list/remove`, { id: itemId }, { headers: { token } });
+                await fetchFullList();
+                 if (response.data.success) {
+                    toast.success(response.data.message);
+                    // 🔥 clear cache
+                    setPendingCache({});
+                    navigate("/list_Pending_Calls", { replace: true });
+                }
+                generateCaptcha();       // reset captcha
+                setUserInput("");        // clear input
+        
+            } else {
+                toast.error(res.data.message || "Delete failed");
+            }
+        } catch (err) {
+            toast.error("Server error");
+        }
+    };
 
 
     const fetchFullList = async () => {
-        const response = await axios.get(`${url}/api/pending-list/pending-fulllist`, { params: { id: itemId }, headers: {token} });
+        const response = await axios.get(`${url}/api/pending-list/pending-fulllist`, { params: { id: itemId }, headers: { token } });
         if (response.data.success) {
             setItem(response.data.data);
         }
@@ -94,17 +190,19 @@ const FullDetails_Pending = () => {
 
     useEffect(() => {
         if (!token) return;
-        fetchFullList()
+        fetchFullList();
+        generateCaptcha();
     }, [token])
 
     const removeCustomer = async (itemId) => {
         const isConfirmed = window.confirm("Are you sure Complete your Pending call task?");
         if (!isConfirmed) return;
         try {
-             const response = await axios.post(`${url}/api/pending-list/remove`, { id: itemId }, { headers: { token } });
+            const response = await axios.post(`${url}/api/pending-list/remove`, { id: itemId }, { headers: { token } });
             await fetchFullList();
             if (response.data.success) {
                 toast.success(response.data.message);
+                setPendingCache({});
                 navigate("/list_Pending_Calls", { replace: true });
             }
             else {
@@ -140,6 +238,11 @@ const FullDetails_Pending = () => {
                     <div className="field">
                         <label>Image:</label>
                         <img src={assets.user_icon} alt="Customer" />
+                    </div>
+                    <hr />
+                    <div className="field service-category">
+                        <label>Service Category:</label>
+                        <p className="highlight">{item.serviceCategory}</p>
                     </div>
                     <hr />
                     <div className="field">
@@ -186,7 +289,7 @@ const FullDetails_Pending = () => {
                             <hr /></>
                     )}
 
-                   <div className="field">
+                    <div className="field">
                         <label>Services:</label>
                         <p>
                             {item.services
@@ -289,8 +392,73 @@ const FullDetails_Pending = () => {
                     </button>
                     <hr />
                     <div className="field">
-                        <p onClick={() => removeCustomer(item._id)} className="cursor"> Remove Reminder </p>
+                        <label>Service Type</label>
+                        <textarea rows="2" name="serviceType" value={bookingData.serviceType} onChange={onChangeBookingHandler} placeholder="Enter the type of service..."></textarea>
                     </div>
+                    <hr />
+                    <div className="field">
+                        <label>Booking Date: (Required)</label>
+                        <input type="date" name="bookingDate" value={bookingData.bookingDate} onChange={onChangeBookingHandler} min={new Date().toISOString().split("T")[0]} />
+                    </div>
+                    <hr />
+                    <div className="field">
+                        <label>Customer Address</label>
+                        <textarea rows="3" name="address" value={bookingData.address} onChange={onChangeBookingHandler} placeholder="Enter customer address..."></textarea>
+
+                        <button className="save-service"
+                            disabled={saving}
+                            onClick={async () => {
+                                if (savingRef.current) return;
+
+                                savingRef.current = true;
+                                setSaving(true);
+
+                                try {
+                                    await onSubmitBookingHandler(item._id);
+                                } finally {
+                                    savingRef.current = false;
+                                    setSaving(false);
+                                }
+                            }}
+                        >
+                            {saving ? "Booking..." : "Book Appointment"}
+                        </button>
+                    </div>
+                    <hr />
+                    <div className="field">
+                        <p onClick={() => removeCustomer(item._id)} className="cursor"> Remove Pending Data </p>
+                    </div>
+                    <hr />
+                    <div className="field column">
+                        <label>Enter CAPTCHA to Delete</label>
+
+                        <p className="captcha-box">{captcha}</p>
+
+                        {/* Input + reload SAME ROW */}
+                        <div className="captcha-row">
+                            <input
+                                type="text"
+                                placeholder="Enter CAPTCHA"
+                                value={userInput}
+                                onChange={(e) => setUserInput(e.target.value.toUpperCase())}
+                            />
+
+                            <img
+                                src={assets.reload_icon}
+                                alt="reload"
+                                className="reload-icon"
+                                onClick={generateCaptcha}
+                            />
+                        </div>
+
+                        <button
+                            className="delete-permanent"
+                            onClick={() => permanentRemove(item._id)}
+                        >
+                            Delete Permanently
+                        </button>
+                    </div>
+
                 </div>
             </div>
         </div>

@@ -16,6 +16,13 @@ const StoreContextProvider = (props) => {
   const [customerTotalPages, setCustomerTotalPages] = useState(1);
   const [customerCategory, setCustomerCategory] = useState("RO");
 
+    // ✅ Pending Calls State
+  const [pendingCache, setPendingCache] = useState({});
+  const [pendingList, setPendingList] = useState([]);
+  const [pendingPage, setPendingPage] = useState(1);
+  const [pendingTotalPages, setPendingTotalPages] = useState(1);
+  const [pendingCategory, setPendingCategory] = useState("RO");
+
   const [reminder_list, setReminderList] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -31,13 +38,10 @@ const StoreContextProvider = (props) => {
       setCustomerList(cachedData.data);
       setCustomerPage(cachedData.page);
       setCustomerTotalPages(cachedData.totalPages);
-
-      console.log("⚡ Loaded from cache");
       return;
     }
 
     try {
-      console.log("🌐 API called");
 
       const response = await axios.get(`${url}/api/service_Customer/list`, {
         params: {
@@ -71,10 +75,45 @@ const StoreContextProvider = (props) => {
     }
   };
 
+   // ✅ Fetch Pending List with Cache
+  const fetchPendingList = async (pageNumber = 1, category = pendingCategory) => {
+    const cacheKey = `${category}_page_${pageNumber}`;
+
+    if (pendingCache[cacheKey]) {
+      const cachedData = pendingCache[cacheKey];
+      setPendingList(cachedData.data);
+      setPendingPage(cachedData.page);
+      setPendingTotalPages(cachedData.totalPages);
+      console.log("⚡ Loaded Pending Calls from cache");
+      return;
+    }
+
+    try {
+      console.log("🌐 API called for Pending Calls");
+      const response = await axios.get(`${url}/api/pending-list/pending-list`, {
+        params: { page: pageNumber, limit: 15, serviceCategory: category },
+        headers: { token }
+      });
+
+      if (response.data.success) {
+        const { data, pagination } = response.data;
+        setPendingList(data);
+        setPendingPage(pagination.currentPage);
+        setPendingTotalPages(pagination.totalPages);
+
+        setPendingCache(prev => ({
+          ...prev,
+          [cacheKey]: { data, page: pagination.currentPage, totalPages: pagination.totalPages }
+        }));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
 
   const fetchReminderList = async (pageNumber = 1) => {
     try {
-      console.log("hello hi")
       const response = await axios.get(`${url}/api/service-remind-list/remind-list`, {
         params: {
           page: pageNumber,
@@ -117,10 +156,19 @@ const StoreContextProvider = (props) => {
     customerPage,
     customerTotalPages,
     customerCategory,
-
     setCustomerCategory,
     setCustomerPage,
     fetchCustomerList,
+
+    // Pending
+    pendingList,
+    pendingPage,
+    pendingTotalPages,
+    fetchPendingList,
+    pendingCache,
+    setPendingCache,
+    pendingCategory,
+    setPendingCategory,
 
 
     reminder_list,
