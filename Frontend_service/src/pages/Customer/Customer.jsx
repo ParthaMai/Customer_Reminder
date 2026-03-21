@@ -78,7 +78,7 @@ const Customer = () => {
             formData.append("services", JSON.stringify(data.services));
             formData.append("reminderPeriod", Number(data.reminderPeriod));
 
-                // ✅ This is add Service Category
+            // ✅ This is add Service Category
             formData.append("serviceCategory", serviceCategory);
 
             // (append only if they present) 
@@ -92,13 +92,13 @@ const Customer = () => {
             const response = await axios.post(`${url}/api/service_Customer/add`, formData, { headers: { token } });
             if (response.data.success) {
                 // 🔥 1. CLEAR CACHE
-            setCustomerCache({});
+                setCustomerCache({});
 
-            // 🔥 2. REFRESH FIRST PAGE
-            await fetchCustomerList(1, serviceCategory);
+                // 🔥 2. REFRESH FIRST PAGE
+                await fetchCustomerList(1, serviceCategory);
 
-            // 🔥 SCROLL TO TOP (ADD HERE)
-    window.scrollTo({ top: 0, behavior: "smooth" });
+                // 🔥 SCROLL TO TOP (ADD HERE)
+                window.scrollTo({ top: 0, behavior: "smooth" });
 
                 setData({
                     name: "",
@@ -142,7 +142,7 @@ const Customer = () => {
 
             try {
                 const res = await axios.get(
-                     `${url}/api/service_Customer/check-mobile?mobile=${data.mobile1}&serviceCategory=${serviceCategory}`,
+                    `${url}/api/service_Customer/check-mobile?mobile=${data.mobile1}&serviceCategory=${serviceCategory}`,
                     { headers: { token } }
                 );
 

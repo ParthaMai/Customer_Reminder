@@ -8,8 +8,8 @@ import { StoreContext } from '../../context/StoreContext';
 
 const Pending_Calls = () => {
 
-        const { token, url,   
-            pendingList, pendingPage, pendingTotalPages, pendingCategory, setPendingCategory, fetchPendingList } = useContext(StoreContext);
+    const { token, url,
+        pendingList, pendingPage, setPendingPage, pendingTotalPages, pendingCategory, setPendingCategory, fetchPendingList } = useContext(StoreContext);
     const navigate = useNavigate();
     const handleUpdate = (id) => {
         navigate(`/list_Pending/FullList_Pending/${id}`);
@@ -23,11 +23,16 @@ const Pending_Calls = () => {
             searchCustomer(val);
         }, 700);
     };
+    // 🔝 Scroll to top when page loads
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }, []);
 
-    useEffect(() => { 
+
+    useEffect(() => {
         if (!token) return;
-        fetchPendingList(1, pendingCategory);
-    }, [token, pendingCategory]);
+        fetchPendingList(pendingPage, pendingCategory);
+    }, [token, pendingCategory, pendingPage]);
 
     return (
         <div className='list-cash add flex-col'>
@@ -37,7 +42,10 @@ const Pending_Calls = () => {
                     <button
                         key={type}
                         className={pendingCategory === type ? "active" : ""}
-                        onClick={() => setPendingCategory(type)}
+                        onClick={() => {
+                            setPendingCategory(type);
+                            setPendingPage(1);
+                        }}
                     >
                         {type}
                     </button>
@@ -60,7 +68,10 @@ const Pending_Calls = () => {
                     <div className="pagination">
                         <button
                             disabled={pendingPage === 1}
-                            onClick={() => fetchPendingList(pendingPage - 1, pendingCategory)}
+                            onClick={() => {
+                                const newPage = pendingPage - 1;
+                                setPendingPage(newPage); // 🔥 FIX
+                            }}
                         >
                             Prev
                         </button>
@@ -69,7 +80,10 @@ const Pending_Calls = () => {
 
                         <button
                             disabled={pendingPage === pendingTotalPages}
-                            onClick={() => fetchPendingList(pendingPage + 1, pendingCategory)}
+                            onClick={() => {
+                                const newPage = pendingPage + 1;
+                                setPendingPage(newPage); // 🔥 FIX
+                            }}
                         >
                             Next
                         </button>
@@ -78,7 +92,7 @@ const Pending_Calls = () => {
 
 
 
-                 {/* Data */}
+                {/* Data */}
                 {pendingList.length === 0 ? (
                     <p className="no-data">No pending calls for {pendingCategory}</p>
                 ) : pendingList.map((item, index) => (

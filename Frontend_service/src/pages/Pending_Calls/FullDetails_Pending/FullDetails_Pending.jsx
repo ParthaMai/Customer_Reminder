@@ -179,9 +179,9 @@ const FullDetails_Pending = () => {
             if (res.data.success) {
                 toast.success("Permanently deleted");
                 const response = await axios.post(`${url}/api/pending-list/remove`, { id: itemId }, { headers: { token } });
-                await fetchFullList();
                 if (response.data.success) {
                     toast.success(response.data.message);
+
                     // 🔥 clear cache
                     setPendingCache({});
                     navigate("/list_Pending_Calls", { replace: true });
@@ -207,7 +207,6 @@ const FullDetails_Pending = () => {
             toast.error("Error");
         }
     }
-
     useEffect(() => {
         if (!token) return;
         fetchFullList();
@@ -239,6 +238,7 @@ const FullDetails_Pending = () => {
             await fetchFullList();
             if (response.data.success) {
                 toast.success("Removed Customer From Pending Calls");
+                setPendingCache({});
                 navigate("/list_Pending_Calls", { replace: true });
             }
             else {
@@ -321,7 +321,11 @@ const FullDetails_Pending = () => {
 
                     <div className="field">
                         <label>Reminder Period:</label>
-                        <p>{item.reminderPeriod}</p>
+                        <p>
+                            {item.serviceCategory === "AC" && item.reminderPeriod === 3
+                                ? "Yearly"
+                                : `${item.reminderPeriod} Months`}
+                        </p>
                     </div>
                     <hr />
                     {item.nextReminderDate && (
@@ -399,7 +403,7 @@ const FullDetails_Pending = () => {
                             try {
                                 const isSuccess = await onSubmitHandler(item._id);
                                 if (isSuccess) {
-                                    await new Promise(resolve => setTimeout(resolve, 500));
+                                    await new Promise(resolve => setTimeout(resolve, 400));
                                     await removeReminder(item._id);
                                 }
                             } finally {
@@ -462,7 +466,11 @@ const FullDetails_Pending = () => {
                                 setSaving(true);
 
                                 try {
-                                    await onSubmitBookingHandler(item._id);
+                                    const isBooking = await onSubmitBookingHandler(item._id);
+                                    if (isBooking) {
+                                        await new Promise(resolve => setTimeout(resolve, 400));
+                                        await removeReminder(item._id);
+                                    }
                                 } finally {
                                     savingRef.current = false;
                                     setSaving(false);
@@ -478,7 +486,7 @@ const FullDetails_Pending = () => {
                     </div>
                     <hr />
                     <div className="field column">
-                        <label>Enter CAPTCHA to Delete</label>
+                        <label>Enter CAPTCHA to Delete Permanently</label>
 
                         <p className="captcha-box">{captcha}</p>
 

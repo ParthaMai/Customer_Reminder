@@ -218,7 +218,11 @@ const FullList_Customer = () => {
                                 onChange={e => setEditData({ ...editData, reminderPeriod: e.target.value })}
                             />
                         ) : (
-                            <p>{item.reminderPeriod}</p>
+                                <p>
+                                {item.serviceCategory === "AC" && item.reminderPeriod === 3
+                                    ? "Yearly"
+                                    : `${item.reminderPeriod} Months`}
+                                </p>
                         )}
                     </div>
                     <hr />

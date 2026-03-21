@@ -38,6 +38,12 @@ const Reminder = () => {
 
     cleanupAndFetch();
   }, [token]);
+  
+          // 🔝 Scroll to top when page loads
+          useEffect(() => {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+          }, []);
+      
 
   useEffect(() => {
     if (!token) return;

@@ -243,6 +243,7 @@ const fetchCustomerList = async (pageNumber = 1, category = customerCategory, fo
     // Pending
     pendingList,
     pendingPage,
+    setPendingPage,
     pendingTotalPages,
     fetchPendingList,
     pendingCache,
