@@ -21,6 +21,7 @@
 .list-cash-table {
   width: 100%;
   overflow-x: auto;
+  padding-bottom: 60px;
 }
 
 /* Row layout */

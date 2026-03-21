@@ -9,7 +9,7 @@ import { StoreContext } from '../../context/StoreContext'
 
 const Customer = () => {
 
-    const { token, url } = useContext(StoreContext);
+    const { token, url, fetchCustomerList, setCustomerCache } = useContext(StoreContext);
     const [serviceCategory, setServiceCategory] = useState("RO");
     const [mobileStatus, setMobileStatus] = useState(null);
     const [totalPrice, setTotalPrice] = useState(0);
@@ -91,6 +91,15 @@ const Customer = () => {
 
             const response = await axios.post(`${url}/api/service_Customer/add`, formData, { headers: { token } });
             if (response.data.success) {
+                // 🔥 1. CLEAR CACHE
+            setCustomerCache({});
+
+            // 🔥 2. REFRESH FIRST PAGE
+            await fetchCustomerList(1, serviceCategory);
+
+            // 🔥 SCROLL TO TOP (ADD HERE)
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
                 setData({
                     name: "",
                     serviceDate: "",
@@ -255,7 +264,10 @@ const Customer = () => {
                     {serviceCategory === "RO" && (
                         <>
                             <option value="6">6 Months</option>
-                            <option value="12">1 Year</option>
+                            <option value="9">9 Months</option>
+                            <option value="12">12 Months</option>
+                            <option value="15">15 Months</option>
+                            <option value="18">18 Months</option>
                         </>
                     )}
 
@@ -263,11 +275,17 @@ const Customer = () => {
                         <>
                             <option value="3">3 Months</option>
                             <option value="6">6 Months</option>
+                            <option value="9">9 Months</option>
+                            <option value="12">12 Months</option>
+                            <option value="15">15 Months</option>
+                            <option value="18">18 Months</option>
                         </>
                     )}
 
                     {serviceCategory === "AC" && (
                         <>
+                            <option value="2">New Installation AC</option>
+                            <option value="3">Regular AC</option>
                             <option value="4">4 Months</option>
                             <option value="6">6 Months</option>
                             <option value="12">1 Year</option>

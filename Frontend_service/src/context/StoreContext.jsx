@@ -39,53 +39,43 @@ const StoreContextProvider = (props) => {
   const [bookingCategory, setBookingCategory] = useState("RO");
 
   // ✅ Fetch with Cache
-  const fetchCustomerList = async (pageNumber = 1, category = customerCategory) => {
-    if (!token) return;   // ✅ FIX
-    const cacheKey = `${category}_page_${pageNumber}`;
+const fetchCustomerList = async (pageNumber = 1, category = customerCategory, forceRefresh = false) => {
+  if (!token) return;
+  const cacheKey = `${category}_page_${pageNumber}`;
 
-    // 🔥 1. Check cache first for Customer list
-    if (customerCache[cacheKey]) {
-      const cachedData = customerCache[cacheKey];
+  // 🔥 Use cache only if forceRefresh is false
+  if (!forceRefresh && customerCache[cacheKey]) {
+    const cachedData = customerCache[cacheKey];
+    setCustomerList(cachedData.data);
+    setCustomerPage(cachedData.page);
+    setCustomerTotalPages(cachedData.totalPages);
+    return;
+  }
 
-      setCustomerList(cachedData.data);
-      setCustomerPage(cachedData.page);
-      setCustomerTotalPages(cachedData.totalPages);
-      return;
+  try {
+     console.log("work")
+    const response = await axios.get(`${url}/api/service_Customer/list`, {
+      params: { page: pageNumber, limit: 10, serviceCategory: category },
+      headers: { token }
+    });
+
+    if (response.data.success) {
+      const { data, pagination } = response.data;
+
+      setCustomerList(data);
+      setCustomerPage(pagination.currentPage);
+      setCustomerTotalPages(pagination.totalPages);
+
+      // Save to cache
+      setCustomerCache(prev => ({
+        ...prev,
+        [cacheKey]: { data, page: pagination.currentPage, totalPages: pagination.totalPages }
+      }));
     }
-
-    try {
-
-      const response = await axios.get(`${url}/api/service_Customer/list`, {
-        params: {
-          page: pageNumber,
-          limit: 10,
-          serviceCategory: category
-        },
-        headers: { token }
-      });
-
-      if (response.data.success) {
-        const { data, pagination } = response.data;
-
-        setCustomerList(data);
-        setCustomerPage(pagination.currentPage);
-        setCustomerTotalPages(pagination.totalPages);
-
-        // 🔥 2. Save to cache
-        setCustomerCache(prev => ({
-          ...prev,
-          [cacheKey]: {
-            data,
-            page: pagination.currentPage,
-            totalPages: pagination.totalPages
-          }
-        }));
-      }
-
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  } catch (error) {
+    console.log(error);
+  }
+};
 
   // ✅ Fetch Pending List with Cache
   const fetchPendingList = async (pageNumber = 1, category = pendingCategory) => {
@@ -241,12 +231,14 @@ const StoreContextProvider = (props) => {
 
     // Customer
     customerList,
+    setCustomerList,
     customerPage,
     customerTotalPages,
     customerCategory,
     setCustomerCategory,
     setCustomerPage,
     fetchCustomerList,
+    setCustomerCache,
 
     // Pending
     pendingList,

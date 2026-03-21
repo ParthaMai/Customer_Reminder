@@ -15,7 +15,7 @@ const List_Service_Customer = () => {
   const {
     token, url,
     // ✅ Context states
-    customerList, customerPage, customerTotalPages, customerCategory, setCustomerCategory, setCustomerPage, fetchCustomerList, setCustomerCache } = useContext(StoreContext);
+    customerList, setCustomerList, customerPage, customerTotalPages, customerCategory, setCustomerCategory, setCustomerPage, fetchCustomerList, setCustomerCache } = useContext(StoreContext);
 
 
   const navigate = useNavigate();
@@ -24,6 +24,7 @@ const List_Service_Customer = () => {
   };
 
   const [searchResults, setSearchResults] = useState(null);
+  const [searchTotalPages, setSearchTotalPages] = useState(1);
 
   const [searchField, setSearchField] = useState("name");
   const [searchValue, setSearchValue] = useState("");
@@ -56,6 +57,7 @@ const List_Service_Customer = () => {
       if (response.data.success) {
         setSearchResults(response.data.data); // ✅ IMPORTANT
         setCustomerPage(response.data.pagination.currentPage);
+        setSearchTotalPages(response.data.pagination.totalPages); 
       } else {
         toast.error("Search error");
       }
@@ -66,12 +68,12 @@ const List_Service_Customer = () => {
     }
   }, [searchField, token, customerCategory]);
 
-const handleSearch = (val) => {
-  clearTimeout(debounceRef.current);
-  debounceRef.current = setTimeout(() => {
-    searchCustomer(val);
-  }, 700);
-};
+  const handleSearch = (val) => {
+    clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      searchCustomer(val);
+    }, 700);
+  };
 
   useEffect(() => {
     if (!token) return;
@@ -81,7 +83,7 @@ const handleSearch = (val) => {
 
     fetchCustomerList(customerPage, customerCategory);
 
-  }, [token, customerCategory, customerPage]);
+  }, [token, customerCategory, customerPage, fetchCustomerList]);
 
 
   const removeCustomer = async (itemId) => {
@@ -98,29 +100,43 @@ const handleSearch = (val) => {
       if (response.data.success) {
         toast.success(response.data.message);
 
+        // ✅ create updated list FIRST
+        const updatedList = customerList.filter(item => item._id !== itemId);
+
+        // ✅ update UI instantly
+        setCustomerList(updatedList);
+
+        // ✅ update search also
+        setSearchResults(prev =>
+          prev ? prev.filter(item => item._id !== itemId) : null
+        );
+
         // 🔥 clear cache
         setCustomerCache({});
 
         const isSearching = searchValue.trim();
 
         if (isSearching) {
+          const updatedSearch =
+            searchResults?.filter(item => item._id !== itemId) || [];
           // ✅ Stay in search mode
           const newPage =
-            (searchResults?.length || 0) === 1 && customerPage > 1
+            updatedSearch.length === 0 && customerPage > 1
               ? customerPage - 1
               : customerPage;
 
           setCustomerPage(newPage);
-          searchCustomer(searchValue, newPage); // ✅ IMPORTANT
+          // 🔥 force fresh search
+          await searchCustomer(searchValue, newPage); // ✅ IMPORTANT
         } else {
           // ✅ Normal list mode
           const newPage =
-            customerList.length === 1 && customerPage > 1
+            updatedList.length === 0 && customerPage > 1
               ? customerPage - 1
               : customerPage;
 
           setCustomerPage(newPage);
-          fetchCustomerList(newPage, customerCategory);
+          await fetchCustomerList(newPage, customerCategory, true);
         }
 
       } else {
@@ -132,7 +148,8 @@ const handleSearch = (val) => {
       console.error(error);
     }
   };
-  const displayList = searchResults || customerList;
+  const displayList = searchValue.trim() ? searchResults || [] : customerList;
+  const totalPages = searchValue.trim() ? searchTotalPages : customerTotalPages;
   return (
     <div className='list-cash add flex-col'>
 
@@ -213,21 +230,21 @@ const handleSearch = (val) => {
               Prev
             </button>
 
-            <span>{customerPage} / {customerTotalPages}</span>
+            <span>{customerPage} / {totalPages}</span>
 
             <button
-              disabled={customerPage === customerTotalPages}
-              onClick={() => {
-                const newPage = customerPage + 1;
-                setCustomerPage(newPage);
+  disabled={customerPage === totalPages}
+  onClick={() => {
+    const newPage = customerPage + 1;
+    setCustomerPage(newPage);
 
-                if (searchValue.trim()) {
-                  searchCustomer(searchValue, newPage);
-                } else {
-                  fetchCustomerList(newPage);
-                }
-              }}
-            >
+    if (searchValue.trim()) {
+      searchCustomer(searchValue, newPage);
+    } else {
+      fetchCustomerList(newPage);
+    }
+  }}
+>
               Next
             </button>
           </div>
@@ -243,7 +260,7 @@ const handleSearch = (val) => {
         )}
         {/* 📄 Data */}
         {displayList.map((item, index) => (
-          <div key={index} className="list-cash-table-format">
+          <div key={item._id} className="list-cash-table-format">
             <img src={assets.user_icon} alt="customer" />
             <p>{item.name}</p>
 

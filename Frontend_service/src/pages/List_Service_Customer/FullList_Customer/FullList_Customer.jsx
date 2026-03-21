@@ -9,7 +9,7 @@ import React from 'react'
 import { StoreContext } from '../../../context/StoreContext';
 
 const FullList_Customer = () => {
-    const { token, url } = useContext(StoreContext);
+    const { token, url , setCustomerCache, setCustomerList } = useContext(StoreContext);
     const navigate = useNavigate();
 
     const { id: itemId } = useParams(); // previous state item id like props
@@ -63,10 +63,12 @@ const FullList_Customer = () => {
         const isConfirmed = window.confirm("Are you sure you want to delete this customer?");
         if (!isConfirmed) return;
         try {
-            const response = await axios.post(`${url}/api/service_Customer/remove`, { id: itemId },{ headers: { token }});
-            await fetchFullList();
+            const response = await axios.post(`${url}/api/service_Customer/remove`, { id: itemId }, { headers: { token } });
             if (response.data.success) {
                 toast.success(response.data.message);
+                // If using context:
+                setCustomerList(prev => prev.filter(c => c._id !== itemId));
+                setCustomerCache({}); // clear cache
                 navigate("/list_Service_Customer", { replace: true });
             }
             else {
