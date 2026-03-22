@@ -53,7 +53,7 @@ const ServiceHistory = () => {
             <div key={index} className="history-card">
 
               <div className="top">
-                <h3>{item.name}</h3>
+                <h3>{item.name}- {item.serviceCategory}</h3>
                 <span>{item.mobile1}</span>
                 <span>₹{item.totalPrice}</span>
               </div>
