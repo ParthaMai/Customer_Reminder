@@ -103,7 +103,8 @@ const Reminder = () => {
             No reminders for {reminderCategory}
           </p>
         ) : reminderList.map((item) => (
-          <div key={item._id} className="reminder-list-table-format">
+          <div key={item._id} className="reminder-list-table-format" onClick={() => handleUpdate(item._id)} // ✅ HERE
+            style={{ cursor: "pointer" }}>
 
             <p>
               {item.create

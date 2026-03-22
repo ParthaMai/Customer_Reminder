@@ -96,7 +96,8 @@ const Pending_Calls = () => {
                 {pendingList.length === 0 ? (
                     <p className="no-data">No pending calls for {pendingCategory}</p>
                 ) : pendingList.map((item, index) => (
-                    <div key={index} className="list-cash-table-format">
+                    <div key={index} className="list-cash-table-format" onClick={() => handleUpdate(item._id)} // ✅ HERE
+                        style={{ cursor: "pointer" }}>
                         <img src={assets.user_icon} alt="customer" />
                         <p>{item.name}</p>
                         <img

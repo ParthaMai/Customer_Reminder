@@ -9,18 +9,17 @@ import { useMemo, useCallback } from "react";
 
 const Appointment = () => {
 
-    const { token, bookingList, bookingPage, bookingTotalPages, bookingCategory, setBookingCategory, fetchBookingList } = useContext(StoreContext);
+    const { token, bookingList, bookingPage, setBookingPage, bookingTotalPages, bookingCategory, setBookingCategory, fetchBookingList } = useContext(StoreContext);
     const navigate = useNavigate();
     const handleUpdate = (id) => {
-        navigate(`/list_Pending/FullList_Pending/${id}`);
+        navigate(`/appointment/FullList/${id}`);
     };
 
     useEffect(() => {
         if (!token) return;
+        fetchBookingList(bookingPage, bookingCategory);
 
-        fetchBookingList(1, bookingCategory);
-
-    }, [token, bookingCategory]);
+    }, [token, bookingCategory, bookingPage]);
     return (
         <div className='booking-list add flex-col'>
             <div className="header-row">
@@ -33,7 +32,11 @@ const Appointment = () => {
                     <button
                         key={type}
                         className={bookingCategory === type ? "active" : ""}
-                        onClick={() => setBookingCategory(type)}
+                        onClick={() => {
+                            setBookingCategory(type);
+                            setBookingPage(1);
+
+                            }}
                     >
                         {type}
                     </button>
@@ -77,7 +80,8 @@ const Appointment = () => {
                     </p>
                 ) : bookingList.map((item) => (
 
-                    <div key={item._id} className="booking-list-table-format">
+                    <div key={item._id} className="booking-list-table-format" onClick={() => handleUpdate(item._id)} // ✅ HERE
+                        style={{ cursor: "pointer" }}>
 
                         <p>
                             {item.create
@@ -98,7 +102,7 @@ const Appointment = () => {
                                 src={assets.done_icon}
                                 alt="complete"
                                 className="done-icon approve"
-                                onClick={() => navigate(`/appointment/FullList/${item._id}`)}
+                                onClick={() => handleUpdate(item._id)}
                             />
                         </div>
 

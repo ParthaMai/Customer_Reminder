@@ -203,7 +203,7 @@ const fetchCustomerList = async (pageNumber = 1, category = customerCategory, fo
       const response = await axios.get(`${url}/api/booking/Booking-list`, {
         params: {
           page: pageNumber,
-          limit: 20,
+          limit: 10,
           serviceCategory: category   // ✅ ADD THIS
         },
         headers: { token }

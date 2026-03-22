@@ -442,8 +442,62 @@
         transform: rotate(360deg);
     }
 }
+.field.invoice {
+  border-left: 4px solid #007bff;
+  padding: 10px 12px;
+  background: #f8f9fa;
+  border-radius: 6px;
+}
 
+.field.invoice label {
+  background: linear-gradient(90deg, #2563eb, #3b82f6);
+  color: #ffffff;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 14px;
+}
+.share-field {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* space between button and icon */
+}
+.share-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px; /* space between icon and text */
+  width: 200px;        /* wider button */
+  height: 32px;        /* smaller height */
+  padding: 0 16px;
+  background: linear-gradient(135deg, #6a11cb, #2575fc) !important; /* fresh purple-blue gradient */
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+  border-radius: 8px; /* slightly rounded for modern look */
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
 
+.share-button:hover {
+  background: linear-gradient(135deg, #5b0eb8, #1f61e0); /* slightly darker gradient on hover */
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+}
+
+.share-icon-outside {
+  width: 32px !important;   /* force size */
+  height: 32px !important;
+  display: block;            /* prevents inline-image stretching issues */
+  object-fit: contain;       /* scales properly without distortion */
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.share-icon-outside:hover {
+  transform: scale(1.1); /* small hover effect for feedback */
+}
 .appointment-fulldetails-table input[type="date"],
 .appointment-fulldetails-table textarea,
 .appointment-fulldetails-table select{

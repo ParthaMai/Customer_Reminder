@@ -1,0 +1,173 @@
+/* Base Container for the PDF */
+.invoice-container {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: #333;
+  background: #fff;
+  padding: 20px; /* Added inner spacing so text doesn't touch the border */
+  border: 1px solid #e0e0e0; /* Light grey, almost invisible border */
+  width: 100%;
+  max-width: 190mm; /* A4 width (210mm) minus the 20mm total padding from your JSX */
+  margin: 0 !important; /* Removes any extra left space pushing it off-center */
+  box-sizing: border-box;
+  overflow: hidden; 
+}
+
+/* Force border-box on all child elements to completely prevent width expansion */
+.invoice-container * {
+  box-sizing: border-box;
+}
+
+/* Header Styles */
+.invoice-header {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.invoice-header h1 {
+  font-size: 26px;
+  font-weight: 700;
+  margin: 0 0 5px 0;
+  color: #111;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.invoice-subtitle {
+  font-size: 14px;
+  color: #555;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.divider {
+  border: 0;
+  border-top: 2px solid #333;
+  margin: 20px 0;
+}
+
+/* Info Section (Bill To & Details) */
+.invoice-details-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  gap: 15px; 
+}
+
+.info-box {
+  width: 48%;
+  word-wrap: break-word; 
+  overflow-wrap: break-word;
+}
+
+.info-box h3 {
+  font-size: 16px;
+  color: #111;
+  margin-top: 0;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.info-box p {
+  margin: 5px 0;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.right-box {
+  text-align: right;
+}
+
+/* Table Styles */
+.invoice-table-wrapper {
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+.invoice-items-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #ddd;
+  table-layout: fixed; 
+  word-wrap: break-word;
+}
+
+.invoice-items-table th,
+.invoice-items-table td {
+  padding: 12px;
+  border: 1px solid #ddd;
+}
+
+.invoice-items-table thead {
+  background-color: #f8f9fa;
+}
+
+.invoice-items-table th {
+  font-weight: bold;
+  font-size: 14px;
+  color: #111;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+/* Column specific widths & alignments */
+.col-sno {
+  width: 10%;
+  text-align: center !important;
+}
+
+.col-desc {
+  width: 65%;
+  text-align: left;
+}
+
+.col-price {
+  width: 25%;
+  text-align: right !important;
+}
+
+.invoice-items-table td.col-price {
+  font-family: monospace;
+  font-size: 15px;
+}
+
+/* Table Footer / Total */
+.invoice-items-table tfoot {
+  background-color: #f8f9fa;
+}
+
+.total-label {
+  text-align: right;
+  font-weight: bold;
+  font-size: 16px;
+  color: #111;
+  text-transform: uppercase;
+}
+
+.total-amount {
+  text-align: right;
+  font-weight: bold;
+  font-size: 16px;
+  color: #111;
+}
+
+/* Footer Styles */
+.invoice-footer {
+  text-align: center;
+  margin-top: 40px;
+  border-top: 1px dashed #ccc;
+  padding-top: 20px;
+}
+
+.invoice-footer p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.invoice-footer .small-text {
+  font-size: 11px;
+  color: #777;
+  margin-top: 10px;
+}
