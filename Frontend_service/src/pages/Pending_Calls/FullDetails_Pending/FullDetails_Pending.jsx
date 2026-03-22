@@ -51,7 +51,7 @@ const FullDetails_Pending = () => {
 
             // If nothing is filled
             if (Object.keys(payload).length === 0) {
-                toast.error("Please fill at least one field");
+                toast.warning("Please select an extend reminder date.");
                 return false;
             }
 
@@ -86,7 +86,7 @@ const FullDetails_Pending = () => {
         try {
 
             if (!bookingData.bookingDate) {
-                toast.error("Please fill the booking date");
+                toast.warning("Please Select the booking date");
                 return false;
             }
 

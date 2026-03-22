@@ -7,7 +7,7 @@ import { StoreContext } from '../../context/StoreContext'
 
 const navbar = ({setShowLogin}) => {
 
-  const { token,setToken} = useContext(StoreContext);
+  const { token,setToken, reminderCount } = useContext(StoreContext);
   const navigate = useNavigate();
 
     //For logout
@@ -22,7 +22,13 @@ const navbar = ({setShowLogin}) => {
       <Link to='/'><img src={assets.logo} alt="" className='logo' /></Link>
       <ul className="navbar-menu">
         <Link to='/'>Home</Link>
-        <NavLink to='/reminder'>Reminder</NavLink>
+          {/* 🔥 Reminder with badge */}
+        <NavLink to='/reminder' className="reminder-link">
+          Reminder
+          {reminderCount > 0 && (
+            <span className="badge">{reminderCount}</span>
+          )}
+        </NavLink>
         {!token?<button className='signin-btn' onClick={()=>setShowLogin(true)}>Login</button>
         :<div className='navbar-profile'>
           <img src={assets.profile_icon} alt="" />

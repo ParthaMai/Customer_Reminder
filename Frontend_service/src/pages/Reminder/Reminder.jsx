@@ -9,7 +9,7 @@ import { StoreContext } from '../../context/StoreContext';
 
 const Reminder = () => {
 
-  const { url, token, reminderList, reminderPage, reminderTotalPages, reminderCategory, setReminderCategory, fetchReminderList } = useContext(StoreContext);
+  const { url, token, reminderList, reminderPage, setReminderPage, reminderTotalPages, reminderCategory, setReminderCategory, fetchReminderList } = useContext(StoreContext);
 
   const navigate = useNavigate();
 
@@ -38,17 +38,17 @@ const Reminder = () => {
 
     cleanupAndFetch();
   }, [token]);
+
+      // 🔝 Scroll to top when page loads
+      useEffect(() => {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+      }, []);
   
-          // 🔝 Scroll to top when page loads
-          useEffect(() => {
-              window.scrollTo({ top: 0, behavior: "smooth" });
-          }, []);
-      
 
   useEffect(() => {
     if (!token) return;
-    fetchReminderList(1, reminderCategory);
-  }, [token, reminderCategory]);
+    fetchReminderList(reminderPage, reminderCategory);
+  }, [token, reminderCategory, reminderPage]);
 
   return (
     <div className='reminder-list add flex-col'>
@@ -61,7 +61,10 @@ const Reminder = () => {
           <button
             key={type}
             className={reminderCategory === type ? "active" : ""}
-            onClick={() => setReminderCategory(type)}
+            onClick={() =>{
+               setReminderCategory(type)
+               setReminderPage(1);
+              }}
           >
             {type}
           </button>

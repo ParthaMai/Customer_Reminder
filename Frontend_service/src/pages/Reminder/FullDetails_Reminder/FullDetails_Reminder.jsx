@@ -12,7 +12,7 @@ import { StoreContext } from '../../../context/StoreContext';
 
 const FullDetails_Reminder = () => {
 
-    const { token, url, fetchReminderList } = useContext(StoreContext);
+    const { token, url, fetchReminderList, setReminderCache } = useContext(StoreContext);
     const navigate = useNavigate();
 
     const [data, setData] = useState({
@@ -46,7 +46,7 @@ const FullDetails_Reminder = () => {
 
             // If nothing is filled
             if (Object.keys(payload).length === 0) {
-                toast.error("Please fill at least one field");
+                toast.warning("Please select an extend reminder date.");
                 return false;
             }
 
@@ -83,7 +83,7 @@ const FullDetails_Reminder = () => {
         try {
 
             if (!bookingData.bookingDate) {
-                toast.error("Please fill the booking date");
+                toast.warning("Please Select the booking date");
                 return false;
             }
 
@@ -91,7 +91,8 @@ const FullDetails_Reminder = () => {
                 _id: id,
                 serviceType: bookingData.serviceType,
                 address: bookingData.address,
-                bookingDate: bookingData.bookingDate
+                bookingDate: bookingData.bookingDate,
+                serviceCategory: item.serviceCategory
             };
 
             const response = await axios.post(`${url}/api/service_Customer/booking-update`, payload, { params: { id: itemId }, headers: { token } });
@@ -130,6 +131,31 @@ const FullDetails_Reminder = () => {
         window.location.href = `tel:${mobileNumber}`;
     };
 
+    // For whatsapp appointment
+    const handleAppointmentUpdatae = (mobileNumber) => {
+        if (!mobileNumber) {
+            alert("No number selected");
+            return;
+        }
+
+        const message = `Hello ${item.name}, 😊\nYour appointment is scheduled on ${bookingData.bookingDate}.\nWe look forward to serving you. Thank you!`;
+
+
+
+        const encodedMessage = encodeURIComponent(message);
+
+        // Open WhatsApp chat with pre-filled message
+        window.open(
+            `https://wa.me/${mobileNumber}?text=${encodedMessage}`,
+            "_blank"
+        );
+    };
+
+    // Submit Denied
+    const handleDeniedClick = () => {
+        toast.info("This feature is available in the premium plan. Please upgrade to continue.");
+    };
+
 
 
     const fetchFullList = async () => {
@@ -152,10 +178,10 @@ const FullDetails_Reminder = () => {
         const isConfirmed = window.confirm("Are you sure Complete your Reminder task?");
         if (!isConfirmed) return;
         try {
-            const response = await axios.post(`${url}/api/service-remind-list/remove-remind`, { id: itemId }, { headers: { token } });
-            await fetchReminderList(1);
+            const response = await axios.post(`${url}/api/service-remind-list/remove-remind`, { id: itemId }, { headers: { token } })
             if (response.data.success) {
                 toast.success(response.data.message);
+                setReminderCache({});
                 navigate("/reminder", { replace: true });
             }
             else {
@@ -169,9 +195,9 @@ const FullDetails_Reminder = () => {
     const removeReminder = async (itemId) => {
         try {
             const response = await axios.post(`${url}/api/service-remind-list/remove-remind`, { id: itemId }, { headers: { token } });
-            await fetchReminderList(1);
             if (response.data.success) {
                 toast.success("Removed Customer From Reminder");
+                setReminderCache({});
                 navigate("/reminder", { replace: true });
             }
             else {
@@ -332,7 +358,7 @@ const FullDetails_Reminder = () => {
                             try {
                                 const isSuccess = await onSubmitHandler(item._id);
                                 if (isSuccess) {
-                                    await new Promise(resolve => setTimeout(resolve, 500));
+                                    await new Promise(resolve => setTimeout(resolve, 400));
                                     await removeReminder(item._id);
                                 }
                             } finally {
@@ -354,6 +380,34 @@ const FullDetails_Reminder = () => {
                         <label>Booking Date: (Required)</label>
                         <input type="date" name="bookingDate" value={bookingData.bookingDate} onChange={onChangeBookingHandler} min={new Date().toISOString().split("T")[0]} />
                     </div>
+                    <hr />
+                    <div className="field">
+                        <select
+                            onChange={(e) => setSelectedNumber(e.target.value)}
+                            defaultValue=""
+                        >
+                            <option value="" disabled>
+                                Select number
+                            </option>
+
+                            {item.mobile1 && (
+                                <option value={item.mobile1}>Mobile 1 - {item.mobile1}</option>
+                            )}
+                            {item.mobile2 && (
+                                <option value={item.mobile2}>Mobile 2 - {item.mobile2}</option>
+                            )}
+                        </select>
+
+                        <img src={assets.whatsapp_icon} alt="whatsapp" className="whatsapp-icon"
+                            onClick={() => {
+                                if (!selectedNumber) {
+                                    alert("Please select a number first");
+                                    return;
+                                }
+                                handleAppointmentUpdatae(selectedNumber);
+                            }}
+                        />
+                    </div>
 
                     <hr />
                     <div className="field">
@@ -369,7 +423,11 @@ const FullDetails_Reminder = () => {
                                 setSaving(true);
 
                                 try {
-                                    await onSubmitBookingHandler(item._id);
+                                    const isBooking = await onSubmitBookingHandler(item._id);
+                                    if (isBooking) {
+                                        await new Promise(resolve => setTimeout(resolve, 400));
+                                        await removeReminder(item._id);
+                                    }
                                 } finally {
                                     savingRef.current = false;
                                     setSaving(false);
@@ -386,7 +444,7 @@ const FullDetails_Reminder = () => {
                         <label>Reason for Service Denial</label>
                         <textarea rows="3" placeholder="Enter reason..."></textarea>
 
-                        <button className="service-denied">
+                        <button className="service-denied" onClick={handleDeniedClick}>
                             Submit Denial
                         </button>
                     </div>

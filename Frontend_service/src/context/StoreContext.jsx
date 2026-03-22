@@ -9,6 +9,9 @@ const StoreContextProvider = (props) => {
 
   const [token, setToken] = useState("");
 
+  // For Count Reminder 
+  const [reminderCount, setReminderCount] = useState(0);
+
   // ✅ Customer List State
   const [customerCache, setCustomerCache] = useState({});
   const [customerList, setCustomerList] = useState([]);
@@ -112,6 +115,7 @@ const fetchCustomerList = async (pageNumber = 1, category = customerCategory, fo
     }
   };
 
+  // ✅ Fetch Reminder List with Cache
   const fetchReminderList = async (pageNumber = 1, category = reminderCategory) => {
     if (!token) return;   // ✅ FIX
 
@@ -163,6 +167,21 @@ const fetchCustomerList = async (pageNumber = 1, category = customerCategory, fo
     }
   };
 
+  // ✅ Fetch Reminder Count
+  const fetchReminderCount = async () => {
+  try {
+    const res = await axios.get(`${url}/api/service-remind-list/reminder-count`, {
+      headers: { token }
+    });
+
+    if (res.data.success) {
+      setReminderCount(res.data.total);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 
   // Fetch bookinglist
   const fetchBookingList = async (pageNumber = 1, category = bookingCategory) => {
@@ -213,7 +232,6 @@ const fetchCustomerList = async (pageNumber = 1, category = customerCategory, fo
     }
   };
 
-
   useEffect(() => {
     async function loadData() {
       if (localStorage.getItem("token")) {
@@ -223,6 +241,13 @@ const fetchCustomerList = async (pageNumber = 1, category = customerCategory, fo
     loadData();
   }, [])
 
+    // This is for Reminder Count
+  useEffect(() => {
+  if (!token) return;
+
+  fetchReminderCount(); // ✅ global call
+
+}, [token]);
   const contextValue = {
 
     url,
@@ -273,6 +298,9 @@ const fetchCustomerList = async (pageNumber = 1, category = customerCategory, fo
     bookingCache,
     setBookingCache,
 
+    // ✅ Reminder Count
+    fetchReminderCount,
+    reminderCount
   }
 
   return (
