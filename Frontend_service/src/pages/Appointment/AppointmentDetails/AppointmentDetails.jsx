@@ -10,14 +10,14 @@ import html2pdf from "html2pdf.js";
 import Invoice from "./Invoice";
 
 const AppointmentDetails = () => {
-    const { token, url } = useContext(StoreContext);
+    const { token, url , setBookingCache} = useContext(StoreContext);
     const [totalPrice, setTotalPrice] = useState(0);
     const loadingRef = useRef(false);
     const [loading, setLoading] = useState(false);
     const [selectedNumber, setSelectedNumber] = useState("");
+    const navigate = useNavigate();
 
 
-    const [saving, setSaving] = useState(false);
     const { id: itemId } = useParams();// previous state item id like props
     const [item, setItem] = useState({});
 
@@ -29,118 +29,122 @@ const AppointmentDetails = () => {
 
 
     const generatePdfBlob = async () => {
-  const element = invoiceRef.current;
+        const element = invoiceRef.current;
 
-  await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise(resolve => setTimeout(resolve, 100));
 
-  const opt = {
-    margin: [10, 10, 10, 10],
-    filename: `invoice-${item.name}.pdf`,
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true, logging: false },
-    jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-  };
+        const opt = {
+            margin: [10, 10, 10, 10],
+            filename: `invoice-${item.name}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true, logging: false },
+            jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+        };
 
-  // Generate PDF as Blob
-  const pdfBlob = await html2pdf().set(opt).from(element).outputPdf("blob");
-  const file = new File([pdfBlob], `invoice-${item.name}.pdf`, {
-    type: "application/pdf",
-  });
+        // Generate PDF as Blob
+        const pdfBlob = await html2pdf().set(opt).from(element).outputPdf("blob");
+        const file = new File([pdfBlob], `invoice-${item.name}.pdf`, {
+            type: "application/pdf",
+        });
 
-  return file;
-};
+        return file;
+    };
 
-// Share via navigator.share
-const shareInvoice = async () => {
-  try {
-    const file = await generatePdfBlob();
+    // Share via navigator.share
+    const shareInvoice = async () => {
+        try {
+            const file = await generatePdfBlob();
 
-    if (navigator.share) {
-      await navigator.share({
-        title: `Invoice - ${item.name}`,
-        text: "Here is your service invoice",
-        files: [file],
-      });
-    } else {
-      toast.info("Sharing not supported on this device");
-    }
-  } catch (error) {
-    console.error("Sharing failed:", error);
-    toast.error("Failed to share invoice");
-  }
-};
+            if (navigator.share) {
+                await navigator.share({
+                    title: `Invoice - ${item.name}`,
+                    text: "Here is your service invoice",
+                    files: [file],
+                });
+            } else {
+                toast.info("Sharing not supported on this device");
+            }
+        } catch (error) {
+            console.error("Sharing failed:", error);
+            toast.error("Failed to share invoice");
+        }
+    };
 
-// Download PDF
-const downloadInvoice = async () => {
-  try {
-    const file = await generatePdfBlob();
-    const url = URL.createObjectURL(file);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `invoice-${item.name}.pdf`;
-    a.click();
-    URL.revokeObjectURL(url);
-  } catch (error) {
-    console.error("Download failed:", error);
-    toast.error("Failed to download invoice");
-  }
-};
+    // Download PDF
+    const downloadInvoice = async () => {
+        try {
+            const file = await generatePdfBlob();
+            const url = URL.createObjectURL(file);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `invoice-${item.name}.pdf`;
+            a.click();
+            URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error("Download failed:", error);
+            toast.error("Failed to download invoice");
+        }
+    };
 
-// const sendInvoice = async () => {
-//   const element = invoiceRef.current;
+    // const sendInvoice = async () => {
+    //   const element = invoiceRef.current;
 
-//   // Wait a tick to ensure React renders
-//   await new Promise(resolve => setTimeout(resolve, 100));
+    //   // Wait a tick to ensure React renders
+    //   await new Promise(resolve => setTimeout(resolve, 100));
 
-//  try {
-//     const opt = {
-//       margin: [10, 10, 10, 10], // Use array for Top, Left, Bottom, Right margins
-//       filename: `invoice-${item.name}.pdf`,
-//       image: { type: 'jpeg', quality: 0.98 },
-//       html2canvas: {
-//         scale: 2, // Scale 2 is standard for sharp A4, scale 3 makes file sizes very large
-//         useCORS: true,
-//         logging: false, // Turn off logging in production
-//       },
-//       jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-//     };
+    //  try {
+    //     const opt = {
+    //       margin: [10, 10, 10, 10], // Use array for Top, Left, Bottom, Right margins
+    //       filename: `invoice-${item.name}.pdf`,
+    //       image: { type: 'jpeg', quality: 0.98 },
+    //       html2canvas: {
+    //         scale: 2, // Scale 2 is standard for sharp A4, scale 3 makes file sizes very large
+    //         useCORS: true,
+    //         logging: false, // Turn off logging in production
+    //       },
+    //       jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+    //     };
 
-//         // Generate PDF as Blob
-//     const pdfBlob = await html2pdf().set(opt).from(element).outputPdf("blob");
+    //         // Generate PDF as Blob
+    //     const pdfBlob = await html2pdf().set(opt).from(element).outputPdf("blob");
 
-//     const customerInfo = {
-//       name: item.name,
-//     };
+    //     const customerInfo = {
+    //       name: item.name,
+    //     };
 
-//     const file = new File([pdfBlob], `invoice-${customerInfo.name}.pdf`, {
-//       type: "application/pdf",
-//     });
+    //     const file = new File([pdfBlob], `invoice-${customerInfo.name}.pdf`, {
+    //       type: "application/pdf",
+    //     });
 
-//     if (navigator.share) {
-//       // Mobile devices supporting Web Share API
-//       await navigator.share({
-//         title: `Invoice - ${customerInfo.name}`,
-//         text: "Here is your service invoice",
-//         files: [file],
-//       });
-//     } else {
-//       // Fallback for desktop or unsupported browsers: download
-//       const url = URL.createObjectURL(file);
-//       const a = document.createElement("a");
-//       a.href = url;
-//       a.download = `invoice-${customerInfo.name}.pdf`;
-//       a.click();
-//       URL.revokeObjectURL(url);
-//     }
-//   } catch (error) {
-//     console.error("PDF generation failed:", error);
-//   }
-// };
-
-
+    //     if (navigator.share) {
+    //       // Mobile devices supporting Web Share API
+    //       await navigator.share({
+    //         title: `Invoice - ${customerInfo.name}`,
+    //         text: "Here is your service invoice",
+    //         files: [file],
+    //       });
+    //     } else {
+    //       // Fallback for desktop or unsupported browsers: download
+    //       const url = URL.createObjectURL(file);
+    //       const a = document.createElement("a");
+    //       a.href = url;
+    //       a.download = `invoice-${customerInfo.name}.pdf`;
+    //       a.click();
+    //       URL.revokeObjectURL(url);
+    //     }
+    //   } catch (error) {
+    //     console.error("PDF generation failed:", error);
+    //   }
+    // };
 
 
 
+
+
+    // Submit Denied
+    const handleDeniedClick = () => {
+        toast.info("This feature is available in the premium plan. Please upgrade to continue.");
+    };
 
 
 
@@ -201,7 +205,7 @@ const downloadInvoice = async () => {
                 totalPrice: totalPrice
             };
             if (!data.serviceDate) {
-                toast.error("Service date is required");
+                toast.warning("Service date is required");
                 return false;
             }
             // ✅ Only send if filled
@@ -216,8 +220,11 @@ const downloadInvoice = async () => {
             if (validServices.length > 0) {
                 payload.services = validServices;
             }
+            else{
+                toast.warning("Enter service Details");
+                return false;
+            }
 
-            console.log("PAYLOAD:", payload);
 
             const response = await axios.put(
                 `${url}/api/booking/Booking-update`,
@@ -252,6 +259,7 @@ const downloadInvoice = async () => {
             await fetchFullList();
             if (response.data.success) {
                 toast.success("Complete Appointment");
+                setBookingCache({})
                 navigate("/appointment", { replace: true });
             }
             else {
@@ -307,27 +315,13 @@ const downloadInvoice = async () => {
 
     // Block to start
     useEffect(() => {
-  if (scrollRef.current) {
-    scrollRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-}, []);
+        if (scrollRef.current) {
+            scrollRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    }, []);
 
     return (
         <div className="appointment-fulldetails-list-container">
-
-            {/* Hidden Invoice for PDF */}
-<div style={{ width: "190mm", padding: "10mm", background: "white" }} ref={invoiceRef}>
-  <Invoice
-    customerInfo={{
-      name: item.name,
-      address: item.address,
-      contact: item.mobile1,
-      serviceDate: data.serviceDate,
-      shopContact: "+91 9123456780",
-    }}
-    items={data.services.map(s => ({ name: s.description, price: Number(s.price) }))}
-  />
-</div>
             <div className="appointment-fulldetails-table">
 
                 <div className="appointment-fulldetails-format" ref={scrollRef}>
@@ -546,7 +540,7 @@ const downloadInvoice = async () => {
                                 if (isSuccess) {
                                     // optional delay (like your save button)
                                     await new Promise(resolve => setTimeout(resolve, 400));
-                                    // await removeBooking(itemId);
+                                    await removeBooking(itemId);
                                 }
 
                             } finally {
@@ -558,17 +552,28 @@ const downloadInvoice = async () => {
                         {loading ? <div className="loader"></div> : "Submit"}
                     </button>
 
-                    <div className="field">
-                        <label>If Customer Denied service</label>
-                    </div>
                     <hr />
                     <div className="field">
                         <label>Reason for Service Denial</label>
                         <textarea rows="3" placeholder="Enter reason..."></textarea>
 
-                        <button className="service-denied">
+                        <button className="service-denied" onClick={handleDeniedClick}>
                             Submit Denial
                         </button>
+                    </div>
+                    <hr />
+                    {/* Hidden Invoice for PDF */}
+                    <div style={{ width: "190mm", padding: "10mm", background: "white" }} ref={invoiceRef}>
+                        <Invoice
+                            customerInfo={{
+                                name: item.name,
+                                address: item.address,
+                                contact: item.mobile1,
+                                serviceDate: data.serviceDate,
+                                shopContact: "+91 9123456780",
+                            }}
+                            items={data.services.map(s => ({ name: s.description, price: Number(s.price) }))}
+                        />
                     </div>
 
 
