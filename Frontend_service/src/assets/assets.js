@@ -38,6 +38,8 @@ import appointment_icon from './appointment_icon.png'
 import done_icon from './done_icon.png'
 import reload_icon from './reload_icon.png'
 import share_icon from './share_icon.png'
+import visible_icon from './visible_icon.png'
+import visible_off from './visible_off.png'
 
 export const assets = {
     cross_icon,
@@ -76,5 +78,7 @@ export const assets = {
     appointment_icon,
     done_icon,
     reload_icon,
-    share_icon
+    share_icon,
+    visible_icon,
+    visible_off
 }

@@ -67,7 +67,25 @@
   border-color: #2563eb;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
+.password-wrapper {
+  position: relative; /* ✅ REQUIRED */
+}
 
+.password-input {
+  width: 100%;
+    padding: 12px 40px 12px 14px; /* 👈 right padding for icon */
+  padding-right: 40px;
+}
+
+.password-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+}
 /* Button */
 .login-popup-container button {
   padding: 12px;

@@ -8,6 +8,7 @@ import { StoreContext } from '../../context/StoreContext';
 const LoginPopup = ({setShowLogin}) => {
 
     const {url,setToken} = useContext(StoreContext);
+    const [showPassword, setShowPassword] = useState(false);
 
     const [currState, setCurrState] = useState("Login");
 
@@ -60,7 +61,24 @@ const LoginPopup = ({setShowLogin}) => {
         <div className="login-popup-input">
             {currState==="Login"?<></>:<input name="name" onChange={onChangeHandler} value={data.name} type="text" placeholder='Your name' required />}
             <input name="email" onChange={onChangeHandler} value={data.email} type="email" placeholder='Your email' required />
-            <input name="password" onChange={onChangeHandler} value={data.password}  type="password" placeholder='Password' required />
+<div className="password-wrapper">
+  <input
+    className="password-input"
+    name="password"
+    onChange={onChangeHandler}
+    value={data.password}
+    type={showPassword ? "text" : "password"}
+    placeholder="Password"
+    required
+  />
+
+  <img
+    src={showPassword ? assets.visible_off : assets.visible_icon}
+    alt=""
+    className="password-icon"
+    onClick={() => setShowPassword(!showPassword)}
+  />
+</div>
         </div>
         <button type='submit'>{currState==="Sign Up"?"Create account":"Login"} </button>
         <div className="login-popup-condition">

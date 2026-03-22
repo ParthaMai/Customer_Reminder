@@ -202,7 +202,7 @@ const getReminderTotalCount = async (req, res) => {
     const userId = req.userId;
 
     const now = new Date();
-
+console.log("USER ID:", req.userId);
     // Convert current time to IST
     const istNow = new Date(
       now.toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
@@ -223,7 +223,7 @@ const getReminderTotalCount = async (req, res) => {
         $lte: endOfToday
       }
     });
-
+console.log("COUNT:", total);
     res.json({ success: true, total });
 
   } catch (error) {
