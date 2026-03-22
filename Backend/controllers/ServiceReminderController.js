@@ -201,20 +201,19 @@ const getReminderTotalCount = async (req, res) => {
   try {
     const userId = req.userId;
 
+    console.log("USER ID:", userId);
+
+    // ✅ Use UTC (MongoDB stores in UTC)
     const now = new Date();
-console.log("USER ID:", req.userId);
-    // Convert current time to IST
-    const istNow = new Date(
-      now.toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
-    );
 
-    // Start of today (IST)
-    const startOfToday = new Date(istNow);
-    startOfToday.setHours(0, 0, 0, 0);
+    const startOfToday = new Date(now);
+    startOfToday.setUTCHours(0, 0, 0, 0);
 
-    // End of today (IST)
-    const endOfToday = new Date(istNow);
-    endOfToday.setHours(23, 59, 59, 999);
+    const endOfToday = new Date(now);
+    endOfToday.setUTCHours(23, 59, 59, 999);
+
+    console.log("START UTC:", startOfToday);
+    console.log("END UTC:", endOfToday);
 
     const total = await ServiceReminderModel.countDocuments({
       userId,
@@ -223,12 +222,14 @@ console.log("USER ID:", req.userId);
         $lte: endOfToday
       }
     });
-console.log("COUNT:", total);
+
+    console.log("COUNT:", total);
+
     res.json({ success: true, total });
 
   } catch (error) {
     console.log(error);
-    res.status(500).json({ success: false, message: "Server error"});
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };
 
