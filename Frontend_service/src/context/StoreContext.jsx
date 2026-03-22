@@ -232,21 +232,37 @@ const fetchCustomerList = async (pageNumber = 1, category = customerCategory, fo
     }
   };
 
-  useEffect(() => {
-    async function loadData() {
-      if (localStorage.getItem("token")) {
-        setToken(localStorage.getItem("token"));
-      }
-    }
-    loadData();
-  }, [])
+//   useEffect(() => {
+//     async function loadData() {
+//       if (localStorage.getItem("token")) {
+//         setToken(localStorage.getItem("token"));
+//       }
+//     }
+//     loadData();
+//   }, [])
 
-    // This is for Reminder Count
-  useEffect(() => {
-  if (!token) return;
+//     // This is for Reminder Count
+// useEffect(() => {
+//   const storedToken = localStorage.getItem("token");
 
-  fetchReminderCount(); // ✅ global call
+//   if (storedToken) {
+//     setToken(storedToken);
+//     fetchReminderCount(storedToken); // 🔥 call directly
+//   }
+// }, []);
 
+
+useEffect(() => {
+  const storedToken = localStorage.getItem("token");
+  if (storedToken) {
+    setToken(storedToken);
+  }
+}, []);
+
+useEffect(() => {
+  if (token) {
+    fetchReminderCount();
+  }
 }, [token]);
   const contextValue = {
 
