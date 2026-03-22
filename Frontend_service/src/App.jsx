@@ -23,6 +23,7 @@ import ServiceHistory from './pages/ServiceHistory/ServiceHistory'
 import ContactUs from './pages/ContactUs/ContactUs'
 import TotalEarning from './pages/TotalEarning/TotalEarning'
 import MonthlyStats from './pages/CompleteService/CompleteService'
+import SubsCription from './pages/Subscription/SubsCription'
 
 const App = () => {
 
@@ -55,6 +56,7 @@ const App = () => {
           <Route path="/contact-us" element = {<ContactUs/>} />
           <Route path="/total-earning" element = {<TotalEarning/>} />
           <Route path="/complete-service" element = {<MonthlyStats/>} />
+          <Route path="/subscription" element = {<SubsCription/>} />
 
           
           <Route path='/dob_reminder' element = {<Dob_reminder url={url} />} />

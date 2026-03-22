@@ -26,7 +26,7 @@ const navbar = ({setShowLogin}) => {
         <NavLink to='/reminder' className="reminder-link">
           Reminder
           {reminderCount > 0 && (
-            <span className="badge">{reminderCount}</span>
+            <span className="badge-reminder">{reminderCount}</span>
           )}
         </NavLink>
         {!token?<button className='signin-btn' onClick={()=>setShowLogin(true)}>Login</button>

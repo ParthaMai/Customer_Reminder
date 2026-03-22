@@ -20,24 +20,22 @@ const Reminder = () => {
 
 
 
-  // fix it in schedule way
-  useEffect(() => {
-    if (!token) return;
-    const cleanupAndFetch = async () => {
-      try {
-        //Delete old reminders
-        await axios.post(`${url}/api/service-remind-list/cleanup-old`, {}, { headers: { token } });
+  // // fix it in schedule way
+  // useEffect(() => {
+  //   if (!token) return;
+  //   const cleanupAndFetch = async () => {
+  //     try {
+  //       //Delete old reminders
+  //       await axios.post(`${url}/api/service-remind-list/cleanup-old`, {}, { headers: { token } });
 
-        // await fetchList(1);
+  //     } catch (error) {
+  //       console.log(error);
+  //       toast.error("server Error")
+  //     }
+  //   };
 
-      } catch (error) {
-        console.log(error);
-        toast.error("server Error")
-      }
-    };
-
-    cleanupAndFetch();
-  }, [token]);
+  //   cleanupAndFetch();
+  // }, [token]);
 
       // 🔝 Scroll to top when page loads
       useEffect(() => {
