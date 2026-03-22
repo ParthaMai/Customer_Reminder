@@ -59,8 +59,8 @@ const App = () => {
           <Route path="/subscription" element = {<SubsCription/>} />
 
           
-          <Route path='/dob_reminder' element = {<Dob_reminder url={url} />} />
-          <Route path='/dob/dob_wish/:id' element = {<Dob_wish url={url} />} />
+          {/* <Route path='/dob_reminder' element = {<Dob_reminder url={url} />} />
+          <Route path='/dob/dob_wish/:id' element = {<Dob_wish url={url} />} /> */}
         </Routes>
 
         <Footer />
