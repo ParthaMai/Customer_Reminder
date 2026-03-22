@@ -10,7 +10,7 @@ const migrateExcelData = async () => {
     console.log("Connected to MongoDB");
 
     // Read Excel file
-    const workbook = XLSX.readFile("./jun21_aug21.csv"); // change file name
+    const workbook = XLSX.readFile("./janu22_march22.csv"); // change file name
     const sheetName = workbook.SheetNames[0];
     const sheet = workbook.Sheets[sheetName];
 
