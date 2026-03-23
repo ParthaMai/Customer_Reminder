@@ -229,10 +229,21 @@ const FullList_Customer = () => {
                     {item.nextReminderDate && (
                         <>
                             <div className="field">
-                                <label>NextRemider Date : </label>
+                            <label>Next Reminder Date:</label>
+                            {isEditing ? (
+                                <input
+                                type="date"
+                                value={editData.nextReminderDate ? new Date(editData.nextReminderDate).toISOString().split("T")[0] : ""}
+                                onChange={e => setEditData({ ...editData, nextReminderDate: e.target.value })}
+                                />
+                            ) : (
+                                item.nextReminderDate && (
                                 <p>{new Date(item.nextReminderDate).toISOString().split("T")[0]}</p>
+                                )
+                            )}
                             </div>
                             <hr /></>
+                            
                     )}
                     {item.extendReminder && (
                         <>
