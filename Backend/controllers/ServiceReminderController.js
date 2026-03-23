@@ -201,8 +201,6 @@ const getReminderTotalCount = async (req, res) => {
   try {
     const userId = req.userId;
 
-    console.log("USER ID:", userId);
-
     // ✅ Use UTC (MongoDB stores in UTC)
     const now = new Date();
 
@@ -212,9 +210,6 @@ const getReminderTotalCount = async (req, res) => {
     const endOfToday = new Date(now);
     endOfToday.setUTCHours(23, 59, 59, 999);
 
-    console.log("START UTC:", startOfToday);
-    console.log("END UTC:", endOfToday);
-
     const total = await ServiceReminderModel.countDocuments({
       userId,
       create: {
@@ -222,8 +217,6 @@ const getReminderTotalCount = async (req, res) => {
         $lte: endOfToday
       }
     });
-
-    console.log("COUNT:", total);
 
     res.json({ success: true, total });
 

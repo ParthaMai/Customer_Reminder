@@ -30,12 +30,12 @@ const loginUser = async (req,res) => {
 
 
 const createToken = (id) => {
-    return jwt.sign({id},process.env.JWT_SECRET);
+    return jwt.sign({id},process.env.JWT_SECRET, { expiresIn: "7d" });
 }
 
 //register user
 const registerUser = async(req,res)=> {
-    const {name,password,email} = req.body;
+     const { name, email, password, mobile, storeName, billPasscode, totalCustomer, image } = req.body;
     try{
         // checking is user already exists
         const exists = await userModel.findOne({email});
@@ -48,14 +48,19 @@ const registerUser = async(req,res)=> {
             return res.json({success:false, message:"Please enter a valid email"});
         }
         if(password.length<8) {
-            return res.json({success:false,message:"Please enter a strong password"});
+            return res.json({success:false,message:"Please enter a strong password (min 8 chars)"});
         }
 
-        const newUser = new userModel({
-            name:name, 
-            email:email,
-            password:password
-        })
+            const newUser = new userModel({
+                name:name,
+                email:email,
+                password: password,
+                mobile: mobile,
+                storeName: storeName,
+                billPasscode: billPasscode,
+                totalCustomer: totalCustomer,
+                image: image || ""                  // default empty string
+                });
 
         // this is save data on mongodb
         const user = await newUser.save();

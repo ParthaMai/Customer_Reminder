@@ -1,31 +1,45 @@
 import mongoose from "mongoose"
 
 const userSchema = new mongoose.Schema({
-    name:{
+    name: {
         type: String,
         required: true
     },
-    email:{
+    image: {
+      type: String 
+    },
+    email: {
         type: String,
         required: true,
         unique: true
     },
-    password:{
-        type:String,
+    password: {
+        type: String,
         required: true
     },
-    CustomerData:{
-        type: Object,
-        default:{}
+    mobile: {
+        type: String,
+        required: true,
+        index: true
     },
-    ReminderData:{
-        type: Object,
-        default:{}
+    storeName: {
+        type: String,
+        default: ""
+    },
+    billPasscode: {
+        type: String,
+        default: ""
+    },
+    totalCustomer: {
+        type: Number,
+        default: 0
     }
+},
+    { timestamps: true },
+);
 
-},{minimize:false})
+userSchema.index({ _id: 1, mobile: 1 });
 
-
-const userModel = mongoose.models.user || mongoose.model("user",userSchema);
+const userModel = mongoose.models.user || mongoose.model("user", userSchema);
 
 export default userModel;

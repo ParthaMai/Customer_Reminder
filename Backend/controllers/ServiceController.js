@@ -196,7 +196,7 @@ const updateField = async (req, res) => {
 const updateBooking = async (req, res) => {
   try {
     const userId = req.userId;
-    const { _id, serviceType, address, bookingDate, serviceCategory } = req.body;
+    const { _id, serviceType, address, bookingDate, serviceCategory, nextReminderDate } = req.body;
 
     let payload = {};
 
@@ -204,6 +204,7 @@ const updateBooking = async (req, res) => {
     if ("address" in req.body) payload.address = address;
     if ("bookingDate" in req.body) payload.bookingDate = new Date(bookingDate);
     if("serviceCategory" in req.body) payload.serviceCategory = serviceCategory;
+    if ("nextReminderDate" in req.body) payload.nextReminderDate = new Date(nextReminderDate);
 
     if (Object.keys(payload).length === 0) {
       return res.json({ success: false, message: "Please provide at least one field to update" });
