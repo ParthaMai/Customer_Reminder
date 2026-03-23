@@ -12,13 +12,13 @@ const plans = [
     },
     {
         title: "Starter",
-        price: "₹999",
+        price: "₹1499",
         duration: "per year",
         features: ["500 Customers", "Full CRM", "Email Support"],
     },
     {
         title: "Growth",
-        price: "₹1999",
+        price: "₹2999",
         duration: "per year",
         features: ["1000 Customers", "Priority Support", "Advanced Tools"],
         badge: "Most Popular",
@@ -26,7 +26,7 @@ const plans = [
     },
     {
         title: "Pro",
-        price: "₹2499",
+        price: "₹3999",
         duration: "per year",
         features: ["1500 Customers", "All Features", "Premium Support"],
     },
