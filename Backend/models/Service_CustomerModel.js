@@ -54,7 +54,7 @@ const Service_CustomerSchema = new mongoose.Schema(
       default: null
     },
 
-    services: [serviceSchema],
+    services: { type: [serviceSchema], default: [] },
 
     reminderPeriod: {
       type: Number,

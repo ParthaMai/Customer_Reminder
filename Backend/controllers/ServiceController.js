@@ -41,6 +41,43 @@ const addService_Customer = async (req,res) => {
     }
 }
 
+
+const createCustomerWithBooking = async (req, res) => {
+  try {
+    const {  name, mobile1,  mobile2, description,serviceCategory, dob, serviceType, address, bookingDate} = req.body;
+
+    // ❌ Validation
+    if (!name || !mobile1 || !bookingDate) {
+      return res.json({ success: false, message: "Name, Mobile & Booking Date required" });
+    }
+
+    // ✅ Create new customer
+    const newCustomer = new Service_CustomerModel({
+      userId: req.userId,
+      name,
+      mobile1,
+      mobile2,
+      description,
+      dob,
+      serviceCategory: serviceCategory, // mapping
+      serviceType: serviceType,
+      address:  address,
+      bookingDate: bookingDate,
+      serviceDate: new Date(),
+      reminderPeriod: 11,
+      totalPrice: 0
+    });
+
+    const savedCustomer = await newCustomer.save();
+
+    return res.json({ success: true,  message: "Customer and booking created", customer: savedCustomer });
+
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false,  message: "Server error" });
+  }
+};
+
 // Enable paginatin concept
 const Service_Customer_List = async (req, res) => {
   try {
@@ -291,4 +328,31 @@ const checkMobileExists = async (req, res) => {
   }
 };
 
-export {addService_Customer, Service_Customer_List, SearchServiceCustomer,removeCustomer,FullServiceList, updateField, updateBooking, completeAppointment, checkMobileExists}
+//Check The number is already exist or not without category
+const checkMobileNumber = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const { mobile} = req.query;
+
+    if (!mobile) {
+      return res.status(400).json({ success: false, message: "Mobile number are required" });
+    }
+
+    const existingCustomer = await Service_CustomerModel.findOne({
+      userId,
+      mobile1: mobile,
+    });
+
+    if (existingCustomer) {
+      return res.json({ exists: true, customer: existingCustomer  });
+    } else {
+      return res.json({ exists: false });
+    }
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({success: false, message: "Error checking mobile" });
+  }
+};
+
+export {addService_Customer,createCustomerWithBooking, Service_Customer_List, SearchServiceCustomer,removeCustomer,FullServiceList, updateField, updateBooking, completeAppointment, checkMobileExists, checkMobileNumber}
