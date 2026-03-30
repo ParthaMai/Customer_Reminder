@@ -9,7 +9,7 @@ const Invoice = ({ customerInfo, items }) => {
       {/* --- HEADER --- */}
       <div className="invoice-header">
         <h1>Sonar Bangla Shopping Complex</h1>
-        <p className="invoice-subtitle">Tax Invoice / Bill of Supply</p>
+        <p className="invoice-subtitle">Invoice / Bill of Supply</p>
       </div>
 
       <hr className="divider" />
@@ -27,7 +27,7 @@ const Invoice = ({ customerInfo, items }) => {
         {/* Right Side: Invoice Details */}
         <div className="info-box right-box">
           <h3>Invoice Details:</h3>
-          <p><strong>Service Date:</strong> {customerInfo.serviceDate || "N/A"}</p>
+          <p><strong>Date:</strong> {customerInfo.serviceDate || "N/A"}</p>
           <p><strong>Shop Contact No:</strong> {customerInfo.shopContact}</p>
         </div>
       </div>

@@ -1,5 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
+import axiosInstance from "../axiosInstance";
+
 
 export const StoreContext = createContext(null)
 
@@ -56,8 +58,7 @@ const fetchCustomerList = async (pageNumber = 1, category = customerCategory, fo
   }
 
   try {
-     console.log("work")
-    const response = await axios.get(`${url}/api/service_Customer/list`, {
+    const response = await axiosInstance.get(`${url}/api/service_Customer/list`, {
       params: { page: pageNumber, limit: 10, serviceCategory: category },
       headers: { token }
     });
@@ -94,7 +95,7 @@ const fetchCustomerList = async (pageNumber = 1, category = customerCategory, fo
     }
 
     try {
-      const response = await axios.get(`${url}/api/pending-list/pending-list`, {
+      const response = await axiosInstance.get(`${url}/api/pending-list/pending-list`, {
         params: { page: pageNumber, limit: 15, serviceCategory: category },
         headers: { token }
       });
@@ -132,7 +133,7 @@ const fetchCustomerList = async (pageNumber = 1, category = customerCategory, fo
     }
 
     try {
-      const response = await axios.get(
+      const response = await axiosInstance.get(
         `${url}/api/service-remind-list/remind-list`,
         {
           params: {
@@ -170,11 +171,9 @@ const fetchCustomerList = async (pageNumber = 1, category = customerCategory, fo
   // ✅ Fetch Reminder Count
   const fetchReminderCount = async () => {
   try {
-    console.log("TOKEN:-", token);
-    const res = await axios.get(`${url}/api/service-remind-list/reminder-count`, {
+    const res = await axiosInstance.get(`${url}/api/service-remind-list/reminder-count`, {
       headers: { token }
     });
-    console.log("RESPONSE:", res.data);
 
     if (res.data.success) {
       setReminderCount(res.data.total);
@@ -202,7 +201,7 @@ const fetchCustomerList = async (pageNumber = 1, category = customerCategory, fo
     }
 
     try {
-      const response = await axios.get(`${url}/api/booking/Booking-list`, {
+      const response = await axiosInstance.get(`${url}/api/booking/Booking-list`, {
         params: {
           page: pageNumber,
           limit: 10,

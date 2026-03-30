@@ -1,0 +1,154 @@
+/* Container */
+.ba-container {
+  width: 90%;
+  max-width: 720px;
+  margin: 40px auto;
+  background: #f9fafb;
+  padding: 25px 20px 30px;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+  font-family: Arial, sans-serif;
+}
+
+/* Form */
+.ba-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Headings */
+.ba-container p,
+.ba-container label {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 4px;
+  color: #333;
+}
+
+/* Inputs */
+.ba-container input,
+.ba-container textarea,
+.ba-container select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  outline: none;
+  transition: 0.2s;
+}
+
+.ba-container input:focus,
+.ba-container textarea:focus,
+.ba-container select:focus {
+  border-color: #2563eb;
+}
+
+/* Sections */
+.ba-mobile,
+.ba-name,
+.ba-dob,
+.ba-description {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Divider */
+.ba-container hr {
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  margin: 8px 0;
+}
+
+/* Field block */
+.ba-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Mobile status */
+.ba-mobile-status {
+  font-size: 13px;
+}
+
+.ba-mobile-status .exists {
+  color: #dc2626;
+}
+
+.ba-mobile-status .new {
+  color: #16a34a;
+}
+
+/* Dropdown spacing */
+.ba-field select {
+  margin-bottom: 6px;
+}
+
+/* WhatsApp icon */
+.ba-whatsapp {
+  width: 34px;
+  height: 34px;
+  cursor: pointer;
+  align-self: flex-end;
+  opacity: 0.9;
+  transition: all 0.25s ease;
+
+  /* Background styling */
+  background-color: #25D366; /* WhatsApp green */
+  padding: 6px;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.ba-whatsapp:hover {
+  opacity: 1;
+  transform: scale(1.1);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+/* Button */
+.ba-book-btn {
+  margin-top: 8px;
+  padding: 12px;
+  background: #22c55e;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.ba-book-btn:hover {
+  background: #15803d;
+}
+
+.ba-book-btn:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* Textarea */
+.ba-container textarea {
+  resize: none;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .ba-container {
+    padding: 18px 12px;
+  }
+
+  .ba-book-btn {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .ba-whatsapp {
+    width: 32px;
+    height: 32px;
+  }
+}

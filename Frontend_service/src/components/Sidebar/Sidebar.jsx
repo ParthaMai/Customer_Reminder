@@ -80,8 +80,10 @@ const Sidebar = () => {
           <img src={assets.reject_customer} alt="" />
           Outstanding Customers
         </div>
-
-        <div className="box empty"></div>
+        <div className="box action-box">
+          <img src={assets.invoice_icon} alt="" />
+          Get Invoice
+        </div>
       </div>
 
       {/* Actions Row 2 */}
@@ -116,7 +118,7 @@ const Sidebar = () => {
           Discounted Customers
         </div>
 
-        <div className="box" onClick={() => go("/appointment")}>
+        <div className="box" onClick={() => go("/booking-appointment")}>
           <img src={assets.appointment_icon} alt="" />
           Book Appointment
         </div>

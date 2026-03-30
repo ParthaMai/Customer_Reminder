@@ -46,7 +46,7 @@ const Home = () => {
     try {
       const response = await axios.get(`${url}/api/booking/Booking`, { headers: { token } });
       if (!response.data.success) {
-        toast.error("No Internet");
+        toast.error("Something went wrong");
       }
     } catch (error) {
       toast.error("Server error");

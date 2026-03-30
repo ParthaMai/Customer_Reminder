@@ -57,7 +57,7 @@ const List_Service_Customer = () => {
       if (response.data.success) {
         setSearchResults(response.data.data); // ✅ IMPORTANT
         setCustomerPage(response.data.pagination.currentPage);
-        setSearchTotalPages(response.data.pagination.totalPages); 
+        setSearchTotalPages(response.data.pagination.totalPages);
       } else {
         toast.error("Search error");
       }
@@ -233,18 +233,18 @@ const List_Service_Customer = () => {
             <span>{customerPage} / {totalPages}</span>
 
             <button
-  disabled={customerPage === totalPages}
-  onClick={() => {
-    const newPage = customerPage + 1;
-    setCustomerPage(newPage);
+              disabled={customerPage === totalPages}
+              onClick={() => {
+                const newPage = customerPage + 1;
+                setCustomerPage(newPage);
 
-    if (searchValue.trim()) {
-      searchCustomer(searchValue, newPage);
-    } else {
-      fetchCustomerList(newPage);
-    }
-  }}
->
+                if (searchValue.trim()) {
+                  searchCustomer(searchValue, newPage);
+                } else {
+                  fetchCustomerList(newPage);
+                }
+              }}
+            >
               Next
             </button>
           </div>

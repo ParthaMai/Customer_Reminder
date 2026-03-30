@@ -40,6 +40,7 @@ import reload_icon from './reload_icon.png'
 import share_icon from './share_icon.png'
 import visible_icon from './visible_icon.png'
 import visible_off from './visible_off.png'
+import invoice_icon from './invoice_icon.png'
 
 export const assets = {
     cross_icon,
@@ -80,5 +81,6 @@ export const assets = {
     reload_icon,
     share_icon,
     visible_icon,
-    visible_off
+    visible_off,
+    invoice_icon
 }
