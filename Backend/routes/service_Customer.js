@@ -1,6 +1,6 @@
 import express from "express"
 import multer from "multer";
-import { addService_Customer, checkMobileExists, checkMobileNumber, completeAppointment, createCustomerWithBooking, FullServiceList, removeCustomer, SearchServiceCustomer, Service_Customer_List, updateBooking, updateField } from "../controllers/ServiceController.js";
+import { addNewCustomer, addService_Customer, checkMobileExists, checkMobileNumber, completeAppointment, createCustomerWithBooking, FullServiceList, removeCustomer, SearchServiceCustomer, Service_Customer_List, updateBooking, updateField } from "../controllers/ServiceController.js";
 import authMiddleware from "../middleware/auth.js";
 
 
@@ -9,6 +9,7 @@ const upload = multer();
 
 Service_CustomerRouter.post("/add", upload.none(),authMiddleware,addService_Customer);
 Service_CustomerRouter.post("/create-customer", upload.none(),authMiddleware,createCustomerWithBooking);
+Service_CustomerRouter.post("/add-NewCustomer", authMiddleware, addNewCustomer);
 Service_CustomerRouter.get("/list",authMiddleware,Service_Customer_List);
 Service_CustomerRouter.get("/searchCustomer",authMiddleware,SearchServiceCustomer);
 Service_CustomerRouter.post("/remove",authMiddleware,removeCustomer);

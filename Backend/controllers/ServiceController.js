@@ -41,7 +41,64 @@ const addService_Customer = async (req,res) => {
     }
 }
 
+// Add Customer in Get invoice section
+const addNewCustomer = async (req, res) => {
+  try {
+    const { name, mobile1, mobile2,  description, dob,  serviceCategory, serviceDate, services, reminderPeriod } = req.body;
 
+    // ❌ Validation
+    if (!name || !mobile1 || !serviceDate) {
+      return res.json({  success: false,  message: "Name, Mobile & Service Date required"});
+    }
+
+    // ❌ Validate services
+    const validServices = services?.filter(
+      (s) => s.description && s.price
+    );
+
+    if (!validServices || validServices.length === 0) {
+      return res.json({ success: false, message: "At least one valid service required" });
+    }
+
+    // ✅ Calculate total price
+    const totalPrice = validServices.reduce(
+      (sum, s) => sum + Number(s.price),
+      0
+    );
+
+    // ✅ Create new customer with booking + invoice
+    const newCustomer = new Service_CustomerModel({
+      userId: req.userId,
+
+      // Customer Info
+      name,
+      mobile1,
+      mobile2,
+      description,
+      dob,
+
+      // Service / Booking Info
+      serviceCategory,
+      serviceDate,
+      services: validServices,
+      reminderPeriod,
+
+      // Auto fields
+      totalPrice
+    });
+
+    const savedCustomer = await newCustomer.save();
+
+    return res.json({ success: true, message: "Customer + Invoice created successfully", customer: savedCustomer });
+
+  } catch (error) {
+    console.log(error);
+    res.json({success: false,  message: "Server error" });
+  }
+};
+
+
+// Create Customer in booking page
 const createCustomerWithBooking = async (req, res) => {
   try {
     const {  name, mobile1,  mobile2, description,serviceCategory, dob, serviceType, address, bookingDate} = req.body;
@@ -355,4 +412,4 @@ const checkMobileNumber = async (req, res) => {
   }
 };
 
-export {addService_Customer,createCustomerWithBooking, Service_Customer_List, SearchServiceCustomer,removeCustomer,FullServiceList, updateField, updateBooking, completeAppointment, checkMobileExists, checkMobileNumber}
+export {addService_Customer,createCustomerWithBooking, Service_Customer_List, SearchServiceCustomer,removeCustomer,FullServiceList, updateField, updateBooking, completeAppointment, checkMobileExists, checkMobileNumber, addNewCustomer}
