@@ -6,8 +6,8 @@ import axiosInstance from "../axiosInstance";
 export const StoreContext = createContext(null)
 
 const StoreContextProvider = (props) => {
-  const url = "http://192.168.1.8:4000"
-  // const url = "https://customer-reminder-backend.onrender.com"
+  // const url = "http://192.168.1.8:4000"
+  const url = "https://customer-reminder-backend.onrender.com"
 
   const [token, setToken] = useState("");
 

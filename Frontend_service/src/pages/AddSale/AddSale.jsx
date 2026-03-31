@@ -445,11 +445,11 @@ const AddSale = () => {
                             Select number
                         </option>
 
-                        {item?.mobile1 && (
-                            <option value={item.mobile1}>Mobile 1 - {item.mobile1}</option>
+                        {customerData.mobile1 && (
+                            <option value={customerData.mobile1}>Mobile 1 - {customerData.mobile1}</option>
                         )}
-                        {item?.mobile2 && (
-                            <option value={item.mobile2}>Mobile 2 - {item.mobile2}</option>
+                        {customerData.mobile2 && (
+                            <option value={customerData.mobile2}>Mobile 2 - {customerData.mobile2}</option>
                         )}
                     </select>
 
@@ -466,6 +466,7 @@ const AddSale = () => {
                 <hr />
                 <div className="field share-field">
                     <button
+                        type="button" 
                         className="share-button"
                         onClick={() => shareInvoice()}
                         title="Share Invoice via WhatsApp"
