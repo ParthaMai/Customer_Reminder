@@ -46,7 +46,7 @@ const AddSale = () => {
 
         const opt = {
             margin: [10, 10, 10, 10],
-            filename: `invoice-${item.name}.pdf`,
+            filename: `invoice-${customerData.name || "customer"}.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2, useCORS: true, logging: false },
             jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
@@ -54,7 +54,7 @@ const AddSale = () => {
 
         // Generate PDF as Blob
         const pdfBlob = await html2pdf().set(opt).from(element).outputPdf("blob");
-        const file = new File([pdfBlob], `invoice-${item.name}.pdf`, {
+        const file = new File([pdfBlob], `invoice-${customerData.name}.pdf`, {
             type: "application/pdf",
         });
 
@@ -108,7 +108,7 @@ const AddSale = () => {
 
             if (navigator.share) {
                 await navigator.share({
-                    title: `Invoice - ${item.name}`,
+                    title: `Invoice - ${customerData.name || "Customer"}`,
                     text: "Here is your service invoice",
                     files: [file],
                 });
@@ -142,7 +142,7 @@ const AddSale = () => {
             return;
         }
 
-        const message = `Hello ${item.name}, 😊\nHere is your invoice – you can check and download it anytime⬇️. \nThank you for choosing our service!`;
+        const message = `Hello ${customerData.name || "Customer"}, 😊\nHere is your invoice – you can check and download it anytime⬇️. \nThank you for choosing our service!`;
 
 
 
@@ -315,6 +315,7 @@ const AddSale = () => {
         setTotalPrice(total);
     }, [data.services]);
 
+    const customerData = item || data;
     return (
         <div className='ba-container'>
             <form className='ba-form' onSubmit={handleSubmit}>
@@ -501,9 +502,9 @@ const AddSale = () => {
                 <div style={{ width: "190mm", padding: "10mm", background: "white" }} ref={invoiceRef}>
                     <Invoice
                         customerInfo={{
-                            name: item?.name || "",
-                            address: item?.address || "",
-                            contact: item?.mobile1 || "",
+                            name: customerData.name || "",
+                            address: customerData.address || "",
+                            contact: customerData.mobile1 || "",
                             serviceDate: data.serviceDate,
                             shopContact: "+91 9123456780",
                         }}
