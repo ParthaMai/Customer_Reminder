@@ -55,7 +55,7 @@ const Sidebar = () => {
       <div className="row">
         <div className="box" onClick={() => go("/today-earn")}>
           <img src={assets.Today_Earn} alt="" />
-          Today Earn
+          Today Sale
         </div>
 
         <div className="box" onClick={() => go("/service-history")}>
@@ -80,9 +80,9 @@ const Sidebar = () => {
           <img src={assets.reject_customer} alt="" />
           Outstanding Customers
         </div>
-        <div className="box action-box">
+        <div className="box action-box"  onClick={() => go("/add-sale")}>
           <img src={assets.invoice_icon} alt="" />
-          Get Invoice
+          Add Sale
         </div>
       </div>
 
@@ -95,7 +95,7 @@ const Sidebar = () => {
 
         <div className="box action-box" onClick={() => go("/total-earning")}>
           <img src={assets.wallet_icon} alt="" />
-          Total Earning
+          Total Sales
         </div>
 
         <div className="box action-box" onClick={() => go("/contact-us")}>

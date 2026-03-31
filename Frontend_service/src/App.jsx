@@ -25,6 +25,7 @@ import TotalEarning from './pages/TotalEarning/TotalEarning'
 import MonthlyStats from './pages/CompleteService/CompleteService'
 import SubsCription from './pages/Subscription/SubsCription'
 import BookingAppointment from './pages/BookingAppointment/BookingAppointment'
+import AddSale from './pages/AddSale/AddSale'
 
 const App = () => {
 
@@ -59,6 +60,7 @@ const App = () => {
           <Route path="/complete-service" element = {<MonthlyStats/>} />
           <Route path="/subscription" element = {<SubsCription/>} />
           <Route path="/booking-appointment" element = {<BookingAppointment/>} />
+          <Route path="/add-sale" element = {<AddSale/>} />
 
           
           {/* <Route path='/dob_reminder' element = {<Dob_reminder url={url} />} />

@@ -4,6 +4,8 @@ import { StoreContext } from '../../context/StoreContext';
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { assets } from '../../assets/assets';
+import html2pdf from "html2pdf.js";
+import Invoice from '../Appointment/AppointmentDetails/Invoice';
 
 
 const AddSale = () => {
@@ -31,21 +33,34 @@ const AddSale = () => {
     const [mobileStatus, setMobileStatus] = useState(null);
     const [item, setItem] = useState(null);
     const [selectedNumber, setSelectedNumber] = useState("");
-    const savingRef = useRef(false);
-
     const [loading, setLoading] = useState(false);
-    const [invoicedata, setInvoiceData] = useState({
-        serviceCategory: "",
-        serviceDate: "",
-        services: [
-            {
-                description: "",
-                price: ""
-            }
-        ],
-        totalPrice: "",
-        reminderPeriod: ""
-    });
+
+    const invoiceRef = useRef();
+    const scrollRef = useRef(null);
+
+
+    const generatePdfBlob = async () => {
+        const element = invoiceRef.current;
+
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        const opt = {
+            margin: [10, 10, 10, 10],
+            filename: `invoice-${item.name}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true, logging: false },
+            jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+        };
+
+        // Generate PDF as Blob
+        const pdfBlob = await html2pdf().set(opt).from(element).outputPdf("blob");
+        const file = new File([pdfBlob], `invoice-${item.name}.pdf`, {
+            type: "application/pdf",
+        });
+
+        return file;
+    };
+
 
     //  For mobile
     useEffect(() => {
@@ -83,7 +98,7 @@ const AddSale = () => {
         const updatedServices = [...data.services];
         updatedServices[index][field] = value;
 
-        setData(prev => ({   ...prev,  services: updatedServices  }));
+        setData(prev => ({ ...prev, services: updatedServices }));
     };
 
     // Share via navigator.share
@@ -155,11 +170,11 @@ const AddSale = () => {
             services: updatedServices
         }));
     };;
-   const onChangeHandler = (event) => {
-    const name = event.target.name;
+    const onChangeHandler = (event) => {
+        const name = event.target.name;
         const value = event.target.value;
-        setData(prev => ({  ...prev,  [name]: value }));
-};
+        setData(prev => ({ ...prev, [name]: value }));
+    };
 
     const handleSubmit = async (e) => {
 
@@ -175,68 +190,68 @@ const AddSale = () => {
             const validServices = data.services.filter(s => s.description && s.price);
 
             if (!validServices.length) {
-            toast.warning("Enter service details");
-            return;
-        }
+                toast.warning("Enter service details");
+                return;
+            }
             // ✅ EXISTING CUSTOMER → UPDATE BOOKING
             if (mobileStatus === "exists" && item) {
 
-                 // 🔥 SAME CATEGORY → UPDATE BOOKING
-            if (item.serviceCategory === data.serviceCategory) {
-             // ✅ EXISTING CUSTOMER
-                const payload = {
-                    _id: data._id,
-                    totalPrice,
-                    serviceDate: data.serviceDate,
-                    reminderPeriod: data.reminderPeriod,
-                    services: validServices
-                };
-                if (!validServices.length) {
-                    toast.warning("Enter service Details");
-                    return;
+                // 🔥 SAME CATEGORY → UPDATE BOOKING
+                if (item.serviceCategory === data.serviceCategory) {
+                    // ✅ EXISTING CUSTOMER
+                    const payload = {
+                        _id: data._id,
+                        totalPrice,
+                        serviceDate: data.serviceDate,
+                        reminderPeriod: data.reminderPeriod,
+                        services: validServices
+                    };
+                    if (!validServices.length) {
+                        toast.warning("Enter service Details");
+                        return;
+                    }
+
+                    const res = await axios.put(`${url}/api/booking/Booking-update`, payload, { headers: { token } });
+
+                    if (res.data.success) {
+                        // reset services only
+                        setData(prev => ({
+                            ...prev,
+                            services: [{ description: "", price: "" }],
+                            serviceDate: "",
+                            reminderPeriod: ""
+                        }));
+
+
+                        toast.success(res.data.message);
+                    } else {
+                        toast.error(res.data.message);
+                        return false;
+                    }
                 }
+                else {
 
-                const res = await axios.put(`${url}/api/booking/Booking-update`, payload,  { headers: { token } } );
+                    // 🔥 DIFFERENT CATEGORY → CREATE NEW CUSTOMER + INVOICE
+                    const payload = {
+                        ...data,
+                        services: validServices
+                    };
 
-                if (res.data.success) {
-                // reset services only
-                    setData(prev => ({
-                        ...prev,
-                        services: [{ description: "", price: "" }],
-                        serviceDate: "",
-                        reminderPeriod: ""
-                    }));
+                    const res = await axios.post(`${url}/api/service_Customer/add-NewCustomer`, payload, { headers: { token } });
 
-
-                    toast.success(res.data.message);
-                } else {
-                    toast.error(res.data.message);
-                    return false;
+                    if (res.data.success) {
+                        toast.success("Customer + Invoice created");
+                    } else {
+                        toast.error(res.data.message);
+                    }
                 }
-            }
-            else {
-
-                // 🔥 DIFFERENT CATEGORY → CREATE NEW CUSTOMER + INVOICE
-                const payload = {
-                    ...data,
-                    services: validServices
-                };
-
-                const res = await axios.post(   `${url}/api/service_Customer/add-NewCustomer`,  payload,  { headers: { token } }  );
-
-                if (res.data.success) {
-                    toast.success("Customer + Invoice created");
-                } else {
-                    toast.error(res.data.message);
-                }
-            }
 
             }
 
             // ✅ NEW CUSTOMER → CREATE + BOOKING
             else {
 
-                 const payload = {
+                const payload = {
                     ...data,
                     services: validServices
                 };
@@ -252,7 +267,7 @@ const AddSale = () => {
                 }
             }
 
-             setData({
+            setData({
                 name: "",
                 mobile1: "",
                 mobile2: "",
@@ -481,6 +496,24 @@ const AddSale = () => {
                 <button type="submit" className="ba-book-btn" disabled={loading}>
                     {loading ? <div className="loader"></div> : "Submit"}
                 </button>
+                <hr />
+                {/* Hidden Invoice for PDF */}
+                <div style={{ width: "190mm", padding: "10mm", background: "white" }} ref={invoiceRef}>
+                    <Invoice
+                        customerInfo={{
+                            name: item?.name || "",
+                            address: item?.address || "",
+                            contact: item?.mobile1 || "",
+                            serviceDate: data.serviceDate,
+                            shopContact: "+91 9123456780",
+                        }}
+                        items={data.services.map(s => ({
+                            name: s.description,
+                            price: Number(s.price)
+                        }))}
+                    />
+                </div>
+
 
             </form>
         </div>
