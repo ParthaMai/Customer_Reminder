@@ -86,57 +86,6 @@ const AppointmentDetails = () => {
         }
     };
 
-    // const sendInvoice = async () => {
-    //   const element = invoiceRef.current;
-
-    //   // Wait a tick to ensure React renders
-    //   await new Promise(resolve => setTimeout(resolve, 100));
-
-    //  try {
-    //     const opt = {
-    //       margin: [10, 10, 10, 10], // Use array for Top, Left, Bottom, Right margins
-    //       filename: `invoice-${item.name}.pdf`,
-    //       image: { type: 'jpeg', quality: 0.98 },
-    //       html2canvas: {
-    //         scale: 2, // Scale 2 is standard for sharp A4, scale 3 makes file sizes very large
-    //         useCORS: true,
-    //         logging: false, // Turn off logging in production
-    //       },
-    //       jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-    //     };
-
-    //         // Generate PDF as Blob
-    //     const pdfBlob = await html2pdf().set(opt).from(element).outputPdf("blob");
-
-    //     const customerInfo = {
-    //       name: item.name,
-    //     };
-
-    //     const file = new File([pdfBlob], `invoice-${customerInfo.name}.pdf`, {
-    //       type: "application/pdf",
-    //     });
-
-    //     if (navigator.share) {
-    //       // Mobile devices supporting Web Share API
-    //       await navigator.share({
-    //         title: `Invoice - ${customerInfo.name}`,
-    //         text: "Here is your service invoice",
-    //         files: [file],
-    //       });
-    //     } else {
-    //       // Fallback for desktop or unsupported browsers: download
-    //       const url = URL.createObjectURL(file);
-    //       const a = document.createElement("a");
-    //       a.href = url;
-    //       a.download = `invoice-${customerInfo.name}.pdf`;
-    //       a.click();
-    //       URL.revokeObjectURL(url);
-    //     }
-    //   } catch (error) {
-    //     console.error("PDF generation failed:", error);
-    //   }
-    // };
-
 
 
 
