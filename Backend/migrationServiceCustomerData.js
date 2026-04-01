@@ -10,13 +10,6 @@ const migrateExcelData = async () => {
     await mongoose.connect(MONGO_URI);
     console.log("✅ Connected to MongoDB");
 
-    // 🔥 DROP COLLECTION (IMPORTANT)
-    await Service_CustomerModel.collection.drop().catch(() => {
-      console.log("⚠️ Collection already empty or not exists");
-    });
-
-    console.log("🗑️ Old collection dropped");
-
     // 📂 Read Excel/CSV
     const workbook = XLSX.readFile("./sep21_nov21.csv");
     const sheetName = workbook.SheetNames[0];

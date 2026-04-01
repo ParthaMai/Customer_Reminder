@@ -19,7 +19,7 @@ const setTodayExtendReminderForFirst80 = async () => {
     today.setHours(0, 0, 0, 0);
 
     // 1️⃣ Fetch first 80 records
-    const customers = await ServiceReminderModel.find({})
+    const customers = await Service_CustomerModel.find({})
       .sort({ createdAt: 1 }) // optional
       .limit(80);
 
@@ -31,15 +31,14 @@ const setTodayExtendReminderForFirst80 = async () => {
         filter: { _id: customer._id },
         update: {
           $set: {
-            
-          create: today
+            nextReminderDate: today
           }
         }
       }
     }));
 
     if (bulkOps.length > 0) {
-      await ServiceReminderModel.bulkWrite(bulkOps);
+      await Service_CustomerModel.bulkWrite(bulkOps);
     }
 
     console.log("✅ Migration completed: extendReminder set to today");
