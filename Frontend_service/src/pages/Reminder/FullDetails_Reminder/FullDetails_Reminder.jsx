@@ -283,6 +283,14 @@ const FullDetails_Reminder = () => {
                         <p>{item.reminderPeriod}</p>
                     </div>
                     <hr />
+                    {item.callingDate && (
+                        <>
+                            <div className="field">
+                                <label>Last Call Date : </label>
+                                <p>{new Date(item.callingDate).toISOString().split("T")[0]}</p>
+                            </div>
+                            <hr /></>
+                    )}
                     {item.nextReminderDate && (
                         <>
                             <div className="field">

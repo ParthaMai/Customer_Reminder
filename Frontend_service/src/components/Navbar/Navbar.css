@@ -15,7 +15,7 @@
 
 /* Logo */
 .navbar .logo {
-    width: 50px;
+    width: 35px;
     cursor: pointer;
     transition: width 0.3s ease;
 }
@@ -122,6 +122,6 @@
         font-size: 16px;
     }
     .navbar .logo {
-        width: 50px;
+        width: 35px;
     }
 }
