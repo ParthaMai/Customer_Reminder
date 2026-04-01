@@ -48,8 +48,7 @@ const List_Service_Customer = () => {
           field: searchField,
           value,
           page: pageNumber,
-          limit: 10,
-          serviceCategory: customerCategory
+          limit: 10
         },
         headers: { token }
       });

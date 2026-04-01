@@ -10,6 +10,7 @@ import { StoreContext } from '../../context/StoreContext'
 const Customer = () => {
 
     const { token, url, fetchCustomerList, setCustomerCache } = useContext(StoreContext);
+    const [item, setItem] = useState(null);
     const [serviceCategory, setServiceCategory] = useState("RO");
     const [mobileStatus, setMobileStatus] = useState(null);
     const [totalPrice, setTotalPrice] = useState(0);
@@ -71,11 +72,17 @@ const Customer = () => {
         try {
             const formData = new FormData();
 
+              // ✅ Convert services price to number
+            const formattedServices = data.services.map((item) => ({
+                description: item.description,
+                price: Number(item.price)
+            }));
+
             formData.append("name", data.name);
             formData.append("serviceDate", data.serviceDate);
             formData.append("mobile1", data.mobile1);
 
-            formData.append("services", JSON.stringify(data.services));
+            formData.append("services", JSON.stringify(formattedServices));
             formData.append("reminderPeriod", Number(data.reminderPeriod));
 
             // ✅ This is add Service Category
@@ -86,7 +93,7 @@ const Customer = () => {
             if (data.mobile2) formData.append("mobile2", data.mobile2);
             if (data.description) formData.append("description", data.description);
             if (data.dob) formData.append("dob", data.dob);
-            formData.append("totalPrice", totalPrice);
+            formData.append("totalPrice", Number(totalPrice));
 
 
             const response = await axios.post(`${url}/api/service_Customer/add`, formData, { headers: { token } });
@@ -148,8 +155,10 @@ const Customer = () => {
 
                 if (res.data.exists) {
                     setMobileStatus("exists");
+                    setItem(res.data.customer)
                 } else {
                     setMobileStatus("new");
+                    setItem(null)
                 }
 
             } catch (error) {
