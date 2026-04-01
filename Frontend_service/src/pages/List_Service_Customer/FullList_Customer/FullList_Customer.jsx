@@ -9,7 +9,7 @@ import React from 'react'
 import { StoreContext } from '../../../context/StoreContext';
 
 const FullList_Customer = () => {
-    const { token, url , setCustomerCache, setCustomerList } = useContext(StoreContext);
+    const { token, url, setCustomerCache, setCustomerList } = useContext(StoreContext);
     const [historyIndex, setHistoryIndex] = useState(0);
     const navigate = useNavigate();
 
@@ -28,17 +28,17 @@ const FullList_Customer = () => {
     };
     // For services
     const sortedHistory = item.serviceHistory
-  ? [...item.serviceHistory].sort(
-      (a, b) => new Date(b.serviceDate) - new Date(a.serviceDate)
-    )
-  : [];
+        ? [...item.serviceHistory].sort(
+            (a, b) => new Date(b.serviceDate) - new Date(a.serviceDate)
+        )
+        : [];
 
-const currentHistory = sortedHistory[historyIndex];
+    const currentHistory = sortedHistory[historyIndex];
 
     const submitUpdate = async () => {
         try {
             console.log(editData);
-            const response = await axios.put(`${url}/api/service_Customer/updateCustomer`, editData, {headers: { token }});
+            const response = await axios.put(`${url}/api/service_Customer/updateCustomer`, editData, { headers: { token } });
             if (response.data.success) {
                 toast.success("Updated successfully");
                 setIsEditing(false);
@@ -54,7 +54,7 @@ const currentHistory = sortedHistory[historyIndex];
 
 
     const fetchFullList = async () => {
-        const response = await axios.get(`${url}/api/service_Customer/fullList`, { params: { id: itemId }, headers: {token} });
+        const response = await axios.get(`${url}/api/service_Customer/fullList`, { params: { id: itemId }, headers: { token } });
         if (response.data.success) {
             setItem(response.data.data);
         }
@@ -176,54 +176,54 @@ const currentHistory = sortedHistory[historyIndex];
                             <hr /></>
                     )}
                     <div className="service-history-block">
-                    <label className="service-history-label">Services:</label>
+                        <label className="service-history-label">Services:</label>
 
-                    {currentHistory ? (
-                        <div className="service-history-card">
+                        {currentHistory ? (
+                            <div className="service-history-card">
 
-                        {/* Date */}
-                        <p className="service-history-date">
-                            {new Date(currentHistory.serviceDate).toISOString().split("T")[0]}
-                        </p>
+                                {/* Date */}
+                                <p className="service-history-date">
+                                    {new Date(currentHistory.serviceDate).toISOString().split("T")[0]}
+                                </p>
 
-                        {/* Services */}
-                        <div className="service-history-list">
-                            {currentHistory.services.map((service, index) => (
-                            <div key={index} className="service-history-item">
-                                <span className="service-index">{index + 1}.</span>
-                                <span className="service-desc">{service.description}</span>
-                                <span className="service-price">₹{service.price}</span>
+                                {/* Services */}
+                                <div className="service-history-list">
+                                    {currentHistory.services.map((service, index) => (
+                                        <div key={index} className="service-history-item">
+                                            <span className="service-index">{index + 1}.</span>
+                                            <span className="service-desc">{service.description}</span>
+                                            <span className="service-price">₹{service.price}</span>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                {/* Navigation */}
+                                <div className="service-history-nav">
+                                    <button
+                                        className="nav-btn"
+                                        disabled={historyIndex === 0}
+                                        onClick={() => setHistoryIndex(prev => prev - 1)}
+                                    >
+                                        ⬅ Prev
+                                    </button>
+
+                                    <span className="history-count">
+                                        {historyIndex + 1} / {sortedHistory.length}
+                                    </span>
+
+                                    <button
+                                        className="nav-btn"
+                                        disabled={historyIndex === sortedHistory.length - 1}
+                                        onClick={() => setHistoryIndex(prev => prev + 1)}
+                                    >
+                                        Next ➡
+                                    </button>
+                                </div>
+
                             </div>
-                            ))}
-                        </div>
-
-                        {/* Navigation */}
-                        <div className="service-history-nav">
-                            <button
-                            className="nav-btn"
-                            disabled={historyIndex === 0}
-                            onClick={() => setHistoryIndex(prev => prev - 1)}
-                            >
-                            ⬅ Prev
-                            </button>
-
-                            <span className="history-count">
-                            {historyIndex + 1} / {sortedHistory.length}
-                            </span>
-
-                            <button
-                            className="nav-btn"
-                            disabled={historyIndex === sortedHistory.length - 1}
-                            onClick={() => setHistoryIndex(prev => prev + 1)}
-                            >
-                            Next ➡
-                            </button>
-                        </div>
-
-                        </div>
-                    ) : (
-                        <p className="no-history">No service history</p>
-                    )}
+                        ) : (
+                            <p className="no-history">No service history</p>
+                        )}
                     </div>
                     <hr />
                     <div className="field">
@@ -235,32 +235,32 @@ const currentHistory = sortedHistory[historyIndex];
                                 onChange={e => setEditData({ ...editData, reminderPeriod: e.target.value })}
                             />
                         ) : (
-                                <p>
+                            <p>
                                 {item.serviceCategory === "AC" && item.reminderPeriod === 3
                                     ? "Yearly"
                                     : `${item.reminderPeriod} Months`}
-                                </p>
+                            </p>
                         )}
                     </div>
                     <hr />
                     {item.nextReminderDate && (
                         <>
                             <div className="field">
-                            <label>Next Reminder Date:</label>
-                            {isEditing ? (
-                                <input
-                                type="date"
-                                value={editData.nextReminderDate ? new Date(editData.nextReminderDate).toISOString().split("T")[0] : ""}
-                                onChange={e => setEditData({ ...editData, nextReminderDate: e.target.value })}
-                                />
-                            ) : (
-                                item.nextReminderDate && (
-                                <p>{new Date(item.nextReminderDate).toISOString().split("T")[0]}</p>
-                                )
-                            )}
+                                <label>Next Reminder Date:</label>
+                                {isEditing ? (
+                                    <input
+                                        type="date"
+                                        value={editData.nextReminderDate ? new Date(editData.nextReminderDate).toISOString().split("T")[0] : ""}
+                                        onChange={e => setEditData({ ...editData, nextReminderDate: e.target.value })}
+                                    />
+                                ) : (
+                                    item.nextReminderDate && (
+                                        <p>{new Date(item.nextReminderDate).toISOString().split("T")[0]}</p>
+                                    )
+                                )}
                             </div>
                             <hr /></>
-                            
+
                     )}
                     {item.extendReminder && (
                         <>

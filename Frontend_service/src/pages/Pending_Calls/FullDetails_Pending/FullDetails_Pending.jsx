@@ -14,6 +14,7 @@ import { StoreContext } from '../../../context/StoreContext';
 const FullDetails_Pending = () => {
 
     const { token, url, setPendingCache } = useContext(StoreContext);
+    const [historyIndex, setHistoryIndex] = useState(0);
     const navigate = useNavigate();
 
     // For captcha
@@ -36,6 +37,13 @@ const FullDetails_Pending = () => {
     const [selectedNumber, setSelectedNumber] = useState("");
     const [item, setItem] = useState([]);
 
+    // For services
+    const sortedHistory = item.serviceHistory
+        ? [...item.serviceHistory].sort(
+            (a, b) => new Date(b.serviceDate) - new Date(a.serviceDate)
+        )
+        : [];
+    const currentHistory = sortedHistory[historyIndex];
 
     const onChangeHandler = (event) => {
         const name = event.target.name;
@@ -309,13 +317,55 @@ const FullDetails_Pending = () => {
                             <hr /></>
                     )}
 
-                    <div className="field">
-                        <label>Services:</label>
-                        <p>
-                            {item.services
-                                ?.map(service => `${service.description} — ₹${service.price}`)
-                                .join(", ")}
-                        </p>
+                    <div className="service-history-block">
+                        <label className="service-history-label">Services:</label>
+
+                        {currentHistory ? (
+                            <div className="service-history-card">
+
+                                {/* Date */}
+                                <p className="service-history-date">
+                                    {new Date(currentHistory.serviceDate).toISOString().split("T")[0]}
+                                </p>
+
+                                {/* Services */}
+                                <div className="service-history-list">
+                                    {currentHistory.services.map((service, index) => (
+                                        <div key={index} className="service-history-item">
+                                            <span className="service-index">{index + 1}.</span>
+                                            <span className="service-desc">{service.description}</span>
+                                            <span className="service-price">₹{service.price}</span>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                {/* Navigation */}
+                                <div className="service-history-nav">
+                                    <button
+                                        className="nav-btn"
+                                        disabled={historyIndex === 0}
+                                        onClick={() => setHistoryIndex(prev => prev - 1)}
+                                    >
+                                        ⬅ Prev
+                                    </button>
+
+                                    <span className="history-count">
+                                        {historyIndex + 1} / {sortedHistory.length}
+                                    </span>
+
+                                    <button
+                                        className="nav-btn"
+                                        disabled={historyIndex === sortedHistory.length - 1}
+                                        onClick={() => setHistoryIndex(prev => prev + 1)}
+                                    >
+                                        Next ➡
+                                    </button>
+                                </div>
+
+                            </div>
+                        ) : (
+                            <p className="no-history">No service history</p>
+                        )}
                     </div>
                     <hr />
 
