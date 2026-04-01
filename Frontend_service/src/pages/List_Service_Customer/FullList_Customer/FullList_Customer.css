@@ -89,6 +89,112 @@
   margin-top: 10px;
   align-self: flex-start;
 }
+/* For dynamic service */
+/* 🔥 SERVICE HISTORY BLOCK */
+.service-history-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.service-history-label {
+  font-weight: 600;
+}
+
+/* Card */
+.service-history-card {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Date */
+.service-history-date {
+  font-weight: bold;
+  font-size: 14px;
+  color: #444;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 5px;
+}
+
+/* Service list */
+.service-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Each service row */
+.service-history-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f7f7f7;
+  padding: 6px 8px;
+  border-radius: 6px;
+}
+
+/* Index */
+.service-index {
+  font-weight: 600;
+  margin-right: 5px;
+}
+
+/* Description */
+.service-desc {
+  flex: 1;
+  margin-left: 5px;
+}
+
+/* Price */
+.service-price {
+  font-weight: 600;
+  color: #2e7d32;
+}
+
+/* Navigation */
+.service-history-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 5px;
+}
+
+/* Buttons */
+.nav-btn {
+  padding: 5px 10px;
+  border: none;
+  background: #1976d2;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.nav-btn:hover {
+  background: #1565c0;
+}
+
+.nav-btn:disabled {
+  background: #90caf9;
+  cursor: not-allowed;
+}
+/* Counter */
+.history-count {
+  font-size: 12px;
+  color: #555;
+}
+
+/* No data */
+.no-history {
+  color: #888;
+  font-style: italic;
+}
 
 /* Responsive */
 @media (max-width: 400px) {

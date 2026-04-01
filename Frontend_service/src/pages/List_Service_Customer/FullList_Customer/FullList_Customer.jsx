@@ -10,6 +10,7 @@ import { StoreContext } from '../../../context/StoreContext';
 
 const FullList_Customer = () => {
     const { token, url , setCustomerCache, setCustomerList } = useContext(StoreContext);
+    const [historyIndex, setHistoryIndex] = useState(0);
     const navigate = useNavigate();
 
     const { id: itemId } = useParams(); // previous state item id like props
@@ -25,6 +26,14 @@ const FullList_Customer = () => {
         setEditData(item);
         setIsEditing(true);
     };
+    // For services
+    const sortedHistory = item.serviceHistory
+  ? [...item.serviceHistory].sort(
+      (a, b) => new Date(b.serviceDate) - new Date(a.serviceDate)
+    )
+  : [];
+
+const currentHistory = sortedHistory[historyIndex];
 
     const submitUpdate = async () => {
         try {
@@ -166,47 +175,55 @@ const FullList_Customer = () => {
                             </div>
                             <hr /></>
                     )}
-                    <div className="field">
-                    <label>Services:</label>
+                    <div className="service-history-block">
+                    <label className="service-history-label">Services:</label>
 
-                    {isEditing ? (
-                        editData.services?.map((service, index) => (
-                        <div key={index} className="service-edit-row">
+                    {currentHistory ? (
+                        <div className="service-history-card">
 
-                            <input
-                            type="text"
-                            placeholder="Service description"
-                            value={service.description}
-                            onChange={(e) => {
-                                const updated = [...editData.services];
-                                updated[index].description = e.target.value;
-                                setEditData({ ...editData, services: updated });
-                            }}
-                            />
+                        {/* Date */}
+                        <p className="service-history-date">
+                            {new Date(currentHistory.serviceDate).toISOString().split("T")[0]}
+                        </p>
 
-                            <input
-                            type="number"
-                            placeholder="Price"
-                            value={service.price}
-                            onChange={(e) => {
-                                const updated = [...editData.services];
-                                updated[index].price = Number(e.target.value);
-                                setEditData({ ...editData, services: updated });
-                            }}
-                            />
+                        {/* Services */}
+                        <div className="service-history-list">
+                            {currentHistory.services.map((service, index) => (
+                            <div key={index} className="service-history-item">
+                                <span className="service-index">{index + 1}.</span>
+                                <span className="service-desc">{service.description}</span>
+                                <span className="service-price">₹{service.price}</span>
+                            </div>
+                            ))}
+                        </div>
+
+                        {/* Navigation */}
+                        <div className="service-history-nav">
+                            <button
+                            className="nav-btn"
+                            disabled={historyIndex === 0}
+                            onClick={() => setHistoryIndex(prev => prev - 1)}
+                            >
+                            ⬅ Prev
+                            </button>
+
+                            <span className="history-count">
+                            {historyIndex + 1} / {sortedHistory.length}
+                            </span>
+
+                            <button
+                            className="nav-btn"
+                            disabled={historyIndex === sortedHistory.length - 1}
+                            onClick={() => setHistoryIndex(prev => prev + 1)}
+                            >
+                            Next ➡
+                            </button>
+                        </div>
 
                         </div>
-                        ))
                     ) : (
-                        item.services?.map((service, index) => (
-                        <div key={index}>
-                            <p>
-                            {service.description} — ₹{service.price}
-                            </p>
-                        </div>
-                        ))
+                        <p className="no-history">No service history</p>
                     )}
-
                     </div>
                     <hr />
                     <div className="field">
