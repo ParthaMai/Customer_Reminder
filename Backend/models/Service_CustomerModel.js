@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const serviceSchema = new mongoose.Schema({
+const serviceItemSchema = new mongoose.Schema({
   description: {
     type: String,
     required: true,
@@ -10,6 +10,21 @@ const serviceSchema = new mongoose.Schema({
     type: Number,
     required: true,
     min: 0
+  }
+});
+
+const serviceHistorySchema = new mongoose.Schema({
+  serviceDate: {
+    type: Date,
+    required: true
+  },
+  services: {
+    type: [serviceItemSchema],
+    default: []
+  },
+  totalPrice: {
+    type: Number,
+    required: true
   }
 });
 
@@ -54,7 +69,10 @@ const Service_CustomerSchema = new mongoose.Schema(
       default: null
     },
 
-    services: { type: [serviceSchema], default: [] },
+    serviceHistory: {
+      type: [serviceHistorySchema],
+      default: []
+    },
 
     reminderPeriod: {
       type: Number,
@@ -110,6 +128,12 @@ const Service_CustomerSchema = new mongoose.Schema(
     serviceCategory: {
       type: String,
       enum: ["RO", "Chimney", "AC"]
+    },
+
+    // For store Calling Date
+    callingDate: {
+      type: Date,
+      default: null
     }
     
   },

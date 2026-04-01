@@ -103,6 +103,11 @@ const Booking_CustomerSchema = new mongoose.Schema(
     serviceCategory: {
       type: String,
       enum: ["RO", "Chimney", "AC"]
+    },
+    // For store Calling Date
+    callingDate: {
+      type: Date,
+      default: null
     }
   },
   { timestamps: true }

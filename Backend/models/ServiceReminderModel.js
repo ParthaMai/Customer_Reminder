@@ -103,6 +103,11 @@ const Service_ReminderSchema = new mongoose.Schema(
     serviceCategory: {
       type: String,
       enum: ["RO", "Chimney", "AC"]
+    },
+    // For store Calling Date
+    callingDate: {
+      type: Date,
+      default: null
     }
   },
   { timestamps: true }
@@ -112,7 +117,7 @@ Service_ReminderSchema.index({ userId: 1, mobile1: 1 });
 Service_ReminderSchema.index({ userId: 1, _id: 1 });
 Service_ReminderSchema.index({ userId: 1, create: -1 });
 Service_ReminderSchema.index({userId: 1,serviceCategory: 1});
-Service_ReminderSchema.index({ create: 1 },{ expireAfterSeconds: 864000 } ); // Delete 10 days
+// Service_ReminderSchema.index({ create: 1 },{ expireAfterSeconds: 864000 } ); // Delete 10 days
 
 const ServiceReminderModel =mongoose.models.Service_Reminder_data || mongoose.model("Service_Reminder_data",Service_ReminderSchema)
 

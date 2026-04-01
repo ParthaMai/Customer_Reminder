@@ -2,44 +2,158 @@ import Service_CustomerModel from "../models/Service_CustomerModel.js";
 
 
 
-const addService_Customer = async (req,res) => {
+// const addService_Customer = async (req,res) => {
 
-    let services = [];
+//     let services = [];
 
-    try {
-        services = JSON.parse(req.body.services);
-    } catch {
-        return res.json({ success: false, message: "Invalid services format" });
+//     try {
+//         services = JSON.parse(req.body.services);
+//     } catch {
+//         return res.json({ success: false, message: "Invalid services format" });
+//     }
+//     const serviceEntry = {
+//       serviceDate: req.body.serviceDate,
+//       services: services,
+//       totalPrice: req.body.totalPrice
+//     };
+
+//     const Service_Customer = new Service_CustomerModel({
+//         userId: req.userId,
+//         name: req.body.name,
+//         serviceDate: req.body.serviceDate,
+
+//         mobile1: req.body.mobile1,
+//         mobile2: req.body.mobile2,
+
+//         description: req.body.description,
+//         serviceCategory: req.body.serviceCategory,
+
+//         dob: req.body.dob,
+
+//         // ✅ Correct field
+//         serviceHistory: [serviceEntry],
+
+//         reminderPeriod: req.body.reminderPeriod,
+//         totalPrice: req.body.totalPrice
+
+//     })
+//     try{
+//         await Service_Customer.save(); // This is save data in mongodb
+//         res.json({success: true,message:"Customer Data Added"})
+//     }
+//     catch(error){
+//         console.log(error)
+//         res.json({success:false,message:"Detect Error"})
+//     }
+// }
+
+
+
+const addService_Customer = async (req, res) => {
+  try {
+    const { name, mobile1, mobile2,
+      serviceDate, services, totalPrice, reminderPeriod, serviceCategory, description, dob } = req.body;
+
+    const parsedServices = JSON.parse(services);
+    const serviceDateObj = new Date(serviceDate);
+    const nextReminder = new Date(serviceDateObj);
+    if (serviceCategory !== "AC") {
+
+      serviceDateObj.setHours(0, 0, 0, 0);
+
+      // 🔥 Calculate nextReminderDate
+      nextReminder.setMonth(nextReminder.getMonth() + Number(reminderPeriod));
+
+      const today = new Date();
+      while (nextReminder < today) {
+        nextReminder.setMonth(nextReminder.getMonth() + Number(reminderPeriod));
+      }
     }
-    
-    const Service_Customer = new Service_CustomerModel({
+
+    // 🔍 CHECK EXISTING CUSTOMER
+    const existingCustomer = await Service_CustomerModel.findOne({
+      mobile1,
+      serviceCategory
+    });
+
+    // =====================================================
+    // ✅ CASE 1: NEW CUSTOMER
+    // =====================================================
+    if (!existingCustomer) {
+      const newCustomerData = {
         userId: req.userId,
-        name: req.body.name,
-        serviceDate: req.body.serviceDate,
+        name,
+        mobile1,
+        mobile2,
+        description,
+        dob,
+        serviceDate: serviceDateObj,
+        totalPrice,
+        reminderPeriod,
+        serviceCategory,
 
-        mobile1: req.body.mobile1,
-        mobile2: req.body.mobile2,
+        serviceHistory: [
+          {
+            serviceDate: serviceDateObj,
+            services: parsedServices,
+            totalPrice
+          }
+        ]
+      };
 
-        description: req.body.description,
-        serviceCategory: req.body.serviceCategory,
+      // ✅ ONLY if NOT AC (optional: let pre-save handle it instead)
+      if (serviceCategory !== "AC") {
+        newCustomerData.nextReminderDate = nextReminder;
+      }
 
-        dob: req.body.dob,
+      const newCustomer = new Service_CustomerModel(newCustomerData);
+      await newCustomer.save();
 
-        services: services,
-
-        reminderPeriod: req.body.reminderPeriod,
-        totalPrice: req.body.totalPrice
-
-    })
-    try{
-        await Service_Customer.save(); // This is save data in mongodb
-        res.json({success: true,message:"Customer Data Added"})
+      return res.json({ success: true, message: "Customer added successfully" });
     }
-    catch(error){
-        console.log(error)
-        res.json({success:false,message:"Detect Error"})
+
+    // =====================================================
+    // 🔥 CASE 2: EXISTING CUSTOMER
+    // =====================================================
+
+    const updateQuery = {
+      $set: {
+        serviceDate: serviceDateObj,
+        totalPrice,
+        reminderPeriod,
+        name,
+        mobile2,
+        description,
+        dob
+      },
+      $push: {
+        serviceHistory: {
+          serviceDate: serviceDateObj,
+          services: parsedServices,
+          totalPrice
+        }
+      }
+    };
+
+    // ✅ ONLY for NON-AC → update reminder
+    if (serviceCategory !== "AC") {
+      updateQuery.$set.nextReminderDate = nextReminder;
     }
-}
+
+    await Service_CustomerModel.updateOne(
+      { _id: existingCustomer._id },
+      updateQuery
+    );
+
+    return res.json({ success: true, message: "Customer updated & service added" });
+
+  } catch (error) {
+    console.log(error); res.json({ success: false, message: "Error occurred" });
+  }
+};
+
+
+
 
 // Add Customer in Get invoice section
 const addNewCustomer = async (req, res) => {
@@ -174,7 +288,7 @@ const Service_Customer_List = async (req, res) => {
 const SearchServiceCustomer = async (req, res) => {
   try {
     const userId = req.userId;
-    const { field, value, page = 1, limit = 10, serviceCategory } = req.query;
+    const { field, value, page = 1, limit = 10} = req.query;
     const pageNum = Number(page);
     const limitNum = Number(limit);
     const skip = (pageNum - 1) * limitNum;
@@ -183,8 +297,7 @@ const SearchServiceCustomer = async (req, res) => {
     return res.json({ success: false, message: "Invalid search field" });
     }
     let query = {
-      userId,
-      ...(serviceCategory && { serviceCategory })
+      userId
     };
     query[field] = { $regex: value, $options: "i" };
 
@@ -374,7 +487,7 @@ const checkMobileExists = async (req, res) => {
     });
 
     if (existingCustomer) {
-      return res.json({ exists: true });
+      return res.json({ exists: true, customer: existingCustomer  });
     } else {
       return res.json({ exists: false });
     }

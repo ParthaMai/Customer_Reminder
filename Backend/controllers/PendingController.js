@@ -78,6 +78,9 @@ const updatePending = async (req, res) => {
     if ("summary" in req.body) payload.summary = summary;
     if ("extendReminder" in req.body) payload.extendReminder = extendReminder;
 
+    // ✅ Always set callingDate to today
+    payload.callingDate = new Date();
+
     // If nothing to update
     if (Object.keys(payload).length === 0) {
       return res.json({ success: false, message: "Please provide at least one field to update" });
