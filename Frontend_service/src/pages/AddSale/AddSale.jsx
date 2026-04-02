@@ -127,7 +127,7 @@ const AddSale = () => {
             const url = URL.createObjectURL(file);
             const a = document.createElement("a");
             a.href = url;
-            a.download = `invoice-${item.name}.pdf`;
+            a.download = `invoice-${customerData.name}.pdf`;
             a.click();
             URL.revokeObjectURL(url);
         } catch (error) {
@@ -204,12 +204,15 @@ const AddSale = () => {
                         totalPrice,
                         serviceDate: data.serviceDate,
                         reminderPeriod: data.reminderPeriod,
-                        services: validServices
+                        serviceCategory: data.serviceCategory,
+                        serviceHistory: [
+                            {
+                                serviceDate: data.serviceDate,
+                                services: validServices,
+                                totalPrice
+                            }
+                        ]
                     };
-                    if (!validServices.length) {
-                        toast.warning("Enter service Details");
-                        return;
-                    }
 
                     const res = await axios.put(`${url}/api/booking/Booking-update`, payload, { headers: { token } });
 
@@ -234,7 +237,13 @@ const AddSale = () => {
                     // 🔥 DIFFERENT CATEGORY → CREATE NEW CUSTOMER + INVOICE
                     const payload = {
                         ...data,
-                        services: validServices
+                        serviceHistory: [
+                            {
+                                serviceDate: data.serviceDate,
+                                services: validServices,
+                                totalPrice
+                            }
+                        ]
                     };
 
                     const res = await axios.post(`${url}/api/service_Customer/add-NewCustomer`, payload, { headers: { token } });
@@ -253,7 +262,13 @@ const AddSale = () => {
 
                 const payload = {
                     ...data,
-                    services: validServices
+                    serviceHistory: [
+                        {
+                            serviceDate: data.serviceDate,
+                            services: validServices,
+                            totalPrice
+                        }
+                    ]
                 };
 
                 const res = await axios.post(
@@ -466,7 +481,7 @@ const AddSale = () => {
                 <hr />
                 <div className="field share-field">
                     <button
-                        type="button" 
+                        type="button"
                         className="share-button"
                         onClick={() => shareInvoice()}
                         title="Share Invoice via WhatsApp"

@@ -11,6 +11,7 @@ import Invoice from "./Invoice";
 
 const AppointmentDetails = () => {
     const { token, url , setBookingCache} = useContext(StoreContext);
+    const [historyIndex, setHistoryIndex] = useState(0);
     const [totalPrice, setTotalPrice] = useState(0);
     const loadingRef = useRef(false);
     const [loading, setLoading] = useState(false);
@@ -25,6 +26,13 @@ const AppointmentDetails = () => {
     const invoiceRef = useRef();
     const scrollRef = useRef(null);
 
+     // For services
+    const sortedHistory = item.serviceHistory
+        ? [...item.serviceHistory].sort(
+            (a, b) => new Date(b.serviceDate) - new Date(a.serviceDate)
+        )
+        : [];
+    const currentHistory = sortedHistory[historyIndex];
 
 
 
@@ -149,37 +157,39 @@ const AppointmentDetails = () => {
                 (s) => s.description && s.price
             );
 
-            const payload = {
-                _id: id,
-                totalPrice: totalPrice
-            };
             if (!data.serviceDate) {
                 toast.warning("Service date is required");
                 return false;
             }
-            // ✅ Only send if filled
-            if (data.serviceDate) {
-                payload.serviceDate = data.serviceDate;
-            }
-
-            if (data.reminderPeriod) {
-                payload.reminderPeriod = data.reminderPeriod;
-            }
-
-            if (validServices.length > 0) {
-                payload.services = validServices;
-            }
-            else{
-                toast.warning("Enter service Details");
+            if(!data.reminderPeriod){
+                toast.warning("Please select the Reminder Period")
                 return false;
             }
 
+            if (validServices.length === 0) {
+            toast.warning("Enter service details");
+            return false;
+        }
 
-            const response = await axios.put(
-                `${url}/api/booking/Booking-update`,
-                payload,
-                { headers: { token } }
-            );
+        const payload = {
+            _id: id,
+            totalPrice: totalPrice,
+            serviceDate: data.serviceDate,
+            reminderPeriod: data.reminderPeriod,
+            serviceCategory: item.serviceCategory,
+
+            // ✅ FIX: send serviceHistory
+            serviceHistory: [
+                {
+                    serviceDate: data.serviceDate,
+                    services: validServices,
+                    totalPrice: totalPrice
+                }
+            ]
+        };
+
+
+            const response = await axios.put(  `${url}/api/booking/Booking-update`, payload, { headers: { token } });
 
             if (response.data.success) {
                 setData({
@@ -323,13 +333,55 @@ const AppointmentDetails = () => {
                             <hr />
                         </>
                     )}
-                    <div className="field">
-                        <label>Services:</label>
-                        <p>
-                            {item.services
-                                ?.map(service => `${service.description} — ₹${service.price}`)
-                                .join(", ")}
-                        </p>
+                                        <div className="service-history-block">
+                        <label className="service-history-label">Services:</label>
+
+                        {currentHistory ? (
+                            <div className="service-history-card">
+
+                                {/* Date */}
+                                <p className="service-history-date">
+                                    {new Date(currentHistory.serviceDate).toISOString().split("T")[0]}
+                                </p>
+
+                                {/* Services */}
+                                <div className="service-history-list">
+                                    {currentHistory.services.map((service, index) => (
+                                        <div key={index} className="service-history-item">
+                                            <span className="service-index">{index + 1}.</span>
+                                            <span className="service-desc">{service.description}</span>
+                                            <span className="service-price">₹{service.price}</span>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                {/* Navigation */}
+                                <div className="service-history-nav">
+                                    <button
+                                        className="nav-btn"
+                                        disabled={historyIndex === 0}
+                                        onClick={() => setHistoryIndex(prev => prev - 1)}
+                                    >
+                                        ⬅ Prev
+                                    </button>
+
+                                    <span className="history-count">
+                                        {historyIndex + 1} / {sortedHistory.length}
+                                    </span>
+
+                                    <button
+                                        className="nav-btn"
+                                        disabled={historyIndex === sortedHistory.length - 1}
+                                        onClick={() => setHistoryIndex(prev => prev + 1)}
+                                    >
+                                        Next ➡
+                                    </button>
+                                </div>
+
+                            </div>
+                        ) : (
+                            <p className="no-history">No service history</p>
+                        )}
                     </div>
                     <hr />
                     <div className="field invoice">
@@ -357,6 +409,7 @@ const AppointmentDetails = () => {
                                     rows="2"
                                     placeholder="Write service details..."
                                     className="appointment-fulldetails-service-description"
+                                    required
                                 />
 
                                 {/* Service Price */}
@@ -368,6 +421,7 @@ const AppointmentDetails = () => {
                                     }
                                     placeholder="Enter service price"
                                     className="appointment-fulldetails-service-price"
+                                    required
                                 />
 
                                 {data.services.length > 1 && (
@@ -444,11 +498,12 @@ const AppointmentDetails = () => {
                     <div className="appointment-fulldetails-reminder flex-col">
                         <p>Reminder Period</p>
                         <select name="reminderPeriod" value={data.reminderPeriod} onChange={onChangeHandler} required>
-                            <option value={item.reminderPeriod}>{item.reminderPeriod}</option>
+                            <option value="">Select Reminder</option>
                             <option value="6">6 Months</option>
                             <option value="9">9 Months</option>
                             <option value="11">11 Months</option>
-                            <option value="12">1 Year</option>
+                            <option value="12">12 Months</option>
+                            <option value="15">15 Months</option>
                             <option value="24">2 Years</option>
                         </select>
                     </div>

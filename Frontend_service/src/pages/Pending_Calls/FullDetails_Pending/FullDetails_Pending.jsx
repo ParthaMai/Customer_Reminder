@@ -13,7 +13,7 @@ import { StoreContext } from '../../../context/StoreContext';
 
 const FullDetails_Pending = () => {
 
-    const { token, url, setPendingCache } = useContext(StoreContext);
+    const { token, url, setPendingCache, setPendingList } = useContext(StoreContext);
     const [historyIndex, setHistoryIndex] = useState(0);
     const navigate = useNavigate();
 
@@ -35,10 +35,10 @@ const FullDetails_Pending = () => {
     const { id: itemId } = useParams();// previous state item id like props
 
     const [selectedNumber, setSelectedNumber] = useState("");
-    const [item, setItem] = useState([]);
+    const [item, setItem] = useState(null);
 
     // For services
-    const sortedHistory = item.serviceHistory
+    const sortedHistory = item?.serviceHistory
         ? [...item.serviceHistory].sort(
             (a, b) => new Date(b.serviceDate) - new Date(a.serviceDate)
         )
@@ -207,29 +207,43 @@ const FullDetails_Pending = () => {
 
 
     const fetchFullList = async () => {
-        const response = await axios.get(`${url}/api/pending-list/pending-fulllist`, { params: { id: itemId }, headers: { token } });
-        if (response.data.success) {
-            setItem(response.data.data);
-        }
-        else {
-            toast.error("Error");
+        try{
+            const response = await axios.get(`${url}/api/pending-list/pending-fulllist`, { params: { id: itemId }, headers: { token } });
+            if (response.data.success) {
+                setItem(response.data.data);
+            }
+            else {
+                toast.error("Error");
+            }
+        }catch (error) {
+            toast.error("Server error");
         }
     }
+
+    
+    // useEffect(() => {
+    //     if (!token) return;
+    //     fetchFullList();
+    //     generateCaptcha();
+    // }, [token])
+
     useEffect(() => {
-        if (!token) return;
-        fetchFullList();
-        generateCaptcha();
-    }, [token])
+    if (!token || !itemId) return;
+    fetchFullList();
+    generateCaptcha();
+}, [token, itemId]);
 
     const removeCustomer = async (itemId) => {
         const isConfirmed = window.confirm("Are you sure Complete your Pending call task?");
         if (!isConfirmed) return;
         try {
             const response = await axios.post(`${url}/api/pending-list/remove`, { id: itemId }, { headers: { token } });
-            await fetchFullList();
+            
             if (response.data.success) {
                 toast.success(response.data.message);
+                setPendingList(prev => prev.filter(p => p._id !== itemId));
                 setPendingCache({});
+                
                 navigate("/list_Pending_Calls", { replace: true });
             }
             else {
@@ -243,9 +257,10 @@ const FullDetails_Pending = () => {
     const removeReminder = async (itemId) => {
         try {
             const response = await axios.post(`${url}/api/pending-list/remove`, { id: itemId }, { headers: { token } });
-            await fetchFullList();
+            // await fetchFullList();
             if (response.data.success) {
                 toast.success("Removed Customer From Pending Calls");
+                setPendingList(prev => prev.filter(p => p._id !== itemId));
                 setPendingCache({});
                 navigate("/list_Pending_Calls", { replace: true });
             }
@@ -256,6 +271,10 @@ const FullDetails_Pending = () => {
             toast.error("Server error");
             console.error(error);
         }
+    }
+    if (!item) {
+        return <div>Loading...</div>;
+   
     }
     return (
         <div className="remind-full-list-container">
@@ -330,7 +349,7 @@ const FullDetails_Pending = () => {
 
                                 {/* Services */}
                                 <div className="service-history-list">
-                                    {currentHistory.services.map((service, index) => (
+                                    {currentHistory?.services?.map((service, index) => (
                                         <div key={index} className="service-history-item">
                                             <span className="service-index">{index + 1}.</span>
                                             <span className="service-desc">{service.description}</span>

@@ -82,12 +82,14 @@ const fetchCustomerList = async (pageNumber = 1, category = customerCategory, fo
 };
 
   // ✅ Fetch Pending List with Cache
-  const fetchPendingList = async (pageNumber = 1, category = pendingCategory) => {
+  const fetchPendingList = async (pageNumber = 1, category = pendingCategory, forceRefresh = false ) => {
     if (!token) return;   // ✅ FIX
     const cacheKey = `${category}_page_${pageNumber}`;
 
-    if (pendingCache[cacheKey]) {
+      // ✅ Use cache only if NOT force refresh
+    if (!forceRefresh && pendingCache[cacheKey]) {
       const cachedData = pendingCache[cacheKey];
+
       setPendingList(cachedData.data);
       setPendingPage(cachedData.page);
       setPendingTotalPages(cachedData.totalPages);
@@ -284,6 +286,7 @@ useEffect(() => {
 
     // Pending
     pendingList,
+    setPendingList,
     pendingPage,
     setPendingPage,
     pendingTotalPages,

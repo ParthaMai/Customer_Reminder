@@ -6,7 +6,7 @@ const plans = [
     {
         title: "Free Trial",
         price: "₹0",
-        duration: "30 Days",
+        duration: "45 Days",
         features: ["All basic features", "No payment required", "Limited access"],
         badge: "Start Here",
     },
