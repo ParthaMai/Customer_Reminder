@@ -1,54 +1,6 @@
 import Service_CustomerModel from "../models/Service_CustomerModel.js";
 
 
-
-// const addService_Customer = async (req,res) => {
-
-//     let services = [];
-
-//     try {
-//         services = JSON.parse(req.body.services);
-//     } catch {
-//         return res.json({ success: false, message: "Invalid services format" });
-//     }
-//     const serviceEntry = {
-//       serviceDate: req.body.serviceDate,
-//       services: services,
-//       totalPrice: req.body.totalPrice
-//     };
-
-//     const Service_Customer = new Service_CustomerModel({
-//         userId: req.userId,
-//         name: req.body.name,
-//         serviceDate: req.body.serviceDate,
-
-//         mobile1: req.body.mobile1,
-//         mobile2: req.body.mobile2,
-
-//         description: req.body.description,
-//         serviceCategory: req.body.serviceCategory,
-
-//         dob: req.body.dob,
-
-//         // ✅ Correct field
-//         serviceHistory: [serviceEntry],
-
-//         reminderPeriod: req.body.reminderPeriod,
-//         totalPrice: req.body.totalPrice
-
-//     })
-//     try{
-//         await Service_Customer.save(); // This is save data in mongodb
-//         res.json({success: true,message:"Customer Data Added"})
-//     }
-//     catch(error){
-//         console.log(error)
-//         res.json({success:false,message:"Detect Error"})
-//     }
-// }
-
-
-
 const addService_Customer = async (req, res) => {
   try {
     const { name, mobile1, mobile2,
@@ -72,6 +24,7 @@ const addService_Customer = async (req, res) => {
 
     // 🔍 CHECK EXISTING CUSTOMER
     const existingCustomer = await Service_CustomerModel.findOne({
+      userId: req.userId, 
       mobile1,
       serviceCategory
     });
@@ -141,7 +94,7 @@ const addService_Customer = async (req, res) => {
     }
 
     await Service_CustomerModel.updateOne(
-      { _id: existingCustomer._id },
+      { _id: existingCustomer._id, userId: req.userId },
       updateQuery
     );
 
@@ -158,27 +111,37 @@ const addService_Customer = async (req, res) => {
 // Add Customer in Get invoice section
 const addNewCustomer = async (req, res) => {
   try {
-    const { name, mobile1, mobile2,  description, dob,  serviceCategory, serviceDate, services, reminderPeriod } = req.body;
+    const { name, mobile1, mobile2,  description, dob,  serviceCategory, serviceDate, serviceHistory, reminderPeriod } = req.body;
 
     // ❌ Validation
-    if (!name || !mobile1 || !serviceDate) {
+    if (!name || !mobile1) {
       return res.json({  success: false,  message: "Name, Mobile & Service Date required"});
     }
 
-    // ❌ Validate services
-    const validServices = services?.filter(
-      (s) => s.description && s.price
-    );
+        // ✅ Validate serviceHistory
+    let validHistory = [];
 
-    if (!validServices || validServices.length === 0) {
+    if (serviceHistory && Array.isArray(serviceHistory)) {
+      validHistory = serviceHistory
+        .filter(
+          (entry) =>
+            entry.serviceDate &&
+            Array.isArray(entry.services) &&
+            entry.services.length > 0
+        )
+        .map((entry) => ({
+          serviceDate: new Date(entry.serviceDate),
+          services: entry.services,
+          totalPrice: entry.totalPrice || 0
+        }));
+    }
+
+    if (validHistory.length === 0) {
       return res.json({ success: false, message: "At least one valid service required" });
     }
 
-    // ✅ Calculate total price
-    const totalPrice = validServices.reduce(
-      (sum, s) => sum + Number(s.price),
-      0
-    );
+    // ✅ Get latest booking (last history item)
+    const latest = validHistory[validHistory.length - 1];
 
     // ✅ Create new customer with booking + invoice
     const newCustomer = new Service_CustomerModel({
@@ -193,12 +156,12 @@ const addNewCustomer = async (req, res) => {
 
       // Service / Booking Info
       serviceCategory,
-      serviceDate,
-      services: validServices,
+      serviceDate: latest.serviceDate,  
+      serviceHistory: validHistory,
       reminderPeriod,
 
       // Auto fields
-      totalPrice
+      totalPrice: latest.totalPrice
     });
 
     const savedCustomer = await newCustomer.save();
@@ -222,6 +185,9 @@ const createCustomerWithBooking = async (req, res) => {
       return res.json({ success: false, message: "Name, Mobile & Booking Date required" });
     }
 
+    const bookingDateObj = new Date(bookingDate);
+    
+
     // ✅ Create new customer
     const newCustomer = new Service_CustomerModel({
       userId: req.userId,
@@ -233,8 +199,8 @@ const createCustomerWithBooking = async (req, res) => {
       serviceCategory: serviceCategory, // mapping
       serviceType: serviceType,
       address:  address,
-      bookingDate: bookingDate,
-      serviceDate: new Date(),
+      bookingDate: bookingDateObj, 
+      serviceDate: bookingDateObj,
       reminderPeriod: 11,
       totalPrice: 0
     });

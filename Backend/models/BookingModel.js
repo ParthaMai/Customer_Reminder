@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const serviceSchema = new mongoose.Schema({
+const serviceItemSchema = new mongoose.Schema({
   description: {
     type: String,
     required: true,
@@ -13,6 +13,20 @@ const serviceSchema = new mongoose.Schema({
   }
 });
 
+const serviceHistorySchema = new mongoose.Schema({
+  serviceDate: {
+    type: Date,
+    required: true
+  },
+  services: {
+    type: [serviceItemSchema],
+    default: []
+  },
+  totalPrice: {
+    type: Number,
+    required: true
+  }
+});
 
 const Booking_CustomerSchema = new mongoose.Schema(
   {
@@ -54,7 +68,10 @@ const Booking_CustomerSchema = new mongoose.Schema(
       default: null
     },
 
-    services: [serviceSchema],
+    serviceHistory: {
+      type: [serviceHistorySchema],
+      default: []
+    },
 
     reminderPeriod: {
       type: Number,

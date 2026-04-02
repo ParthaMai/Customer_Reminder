@@ -142,65 +142,148 @@ const removeBooking = async (req,res) => {
 
 //update service for Booking Customer
 
+// const updateServiceReminder = async (req, res) => {
+//   try {
+//     const userId = req.userId;
+//     const { _id, serviceDate, services, totalPrice, reminderPeriod, serviceCategory} = req.body;
+
+//     let payload = {};
+
+//     // Dynamic field updates
+//     if ("serviceDate" in req.body) {
+//       payload.serviceDate = new Date(serviceDate);
+//     }
+
+//     if ("reminderPeriod" in req.body) {
+//       payload.reminderPeriod = reminderPeriod;
+//     }
+
+//     if ("totalPrice" in req.body) {
+//       payload.totalPrice = totalPrice;
+//     }
+
+//     if ("services" in req.body) {
+//       // Filter valid services
+//       const validServices = services.filter(
+//         (s) => s.description && s.price
+//       );
+
+//       if (validServices.length > 0) {
+//         payload.services = validServices;
+//       }
+//     }
+
+//     if("serviceCategory" in req.body) {
+//       payload.serviceCategory = serviceCategory;
+//     }
+
+//     if (Object.keys(payload).length === 0) {
+//       return res.json({ success: false, message: "Please provide at least one field to update" });
+//     }
+
+//     // Update DB
+//     const updated = await Service_CustomerModel.findOneAndUpdate(
+//       { _id: _id, userId: userId },
+//       { $set: payload },
+//       { returnDocument: "after" }
+//     );
+
+//     // ❌ Not found
+//     if (!updated) {
+//       return res.json({ success: false, message: "Customer not found" });
+//     }
+
+//     res.json({ success: true, message: "Service reminder updated successfully" });
+
+//   } catch (error) {
+//     console.error(error);
+//     res.json({ success: false, message: "Server error" });
+//   }
+// };
+
+
 const updateServiceReminder = async (req, res) => {
   try {
     const userId = req.userId;
-    const { _id, serviceDate, services, totalPrice, reminderPeriod, serviceCategory} = req.body;
+    const {  _id,  serviceDate, totalPrice,  reminderPeriod,  serviceCategory, serviceHistory   } = req.body;
 
-    let payload = {};
+    let updateQuery = {
+      $set: {}
+    };
 
-    // Dynamic field updates
-    if ("serviceDate" in req.body) {
-      payload.serviceDate = new Date(serviceDate);
+    const serviceDateObj = serviceDate ? new Date(serviceDate) : null;
+
+    // ✅ SET fields
+    if (serviceDateObj) {
+      updateQuery.$set.serviceDate = serviceDateObj;
     }
 
-    if ("reminderPeriod" in req.body) {
-      payload.reminderPeriod = reminderPeriod;
+    if (reminderPeriod) {
+      updateQuery.$set.reminderPeriod = reminderPeriod;
     }
 
-    if ("totalPrice" in req.body) {
-      payload.totalPrice = totalPrice;
+    if (totalPrice !== undefined) {
+      updateQuery.$set.totalPrice = totalPrice;
     }
 
-    if ("services" in req.body) {
-      // Filter valid services
-      const validServices = services.filter(
-        (s) => s.description && s.price
-      );
+    if (serviceCategory) {
+      updateQuery.$set.serviceCategory = serviceCategory;
+    }
 
-      if (validServices.length > 0) {
-        payload.services = validServices;
+    // ✅ HANDLE serviceHistory FROM FRONTEND
+    if (serviceHistory && Array.isArray(serviceHistory)) {
+      const validHistory = serviceHistory.filter(
+        (entry) =>
+          entry.serviceDate &&
+          entry.services &&
+          entry.services.length > 0
+      ).map(entry => ({
+        serviceDate: new Date(entry.serviceDate),
+        services: entry.services,
+        totalPrice: entry.totalPrice
+      }));
+
+      if (validHistory.length > 0) {
+        updateQuery.$push = {
+          serviceHistory: { $each: validHistory }
+        };
       }
     }
 
-    if("serviceCategory" in req.body) {
-      payload.serviceCategory = serviceCategory;
+    // ✅ CALCULATE NEXT REMINDER (ONLY NON-AC)
+    if ( serviceCategory && serviceCategory !== "AC" &&  serviceDateObj &&  reminderPeriod) {
+      const nextReminder = new Date(serviceDateObj);
+      nextReminder.setMonth(nextReminder.getMonth() + Number(reminderPeriod));
+
+      updateQuery.$set.nextReminderDate = nextReminder;
     }
 
-    if (Object.keys(payload).length === 0) {
-      return res.json({ success: false, message: "Please provide at least one field to update" });
+    // ❌ NOTHING TO UPDATE
+     if (
+      Object.keys(updateQuery.$set).length === 0 &&
+      !updateQuery.$push
+    )  {
+      return res.json({ success: false, message: "No valid data to update" });
     }
 
-    // Update DB
+    // ✅ DB UPDATE
     const updated = await Service_CustomerModel.findOneAndUpdate(
-      { _id: _id, userId: userId },
-      { $set: payload },
+      { _id, userId },
+      updateQuery,
       { returnDocument: "after" }
     );
 
-    // ❌ Not found
     if (!updated) {
-      return res.json({ success: false, message: "Customer not found" });
+      return res.json({ success: false, message: "Customer not found"});
     }
 
-    res.json({ success: true, message: "Service reminder updated successfully" });
+    res.json({ success: true, message: "Booking updated successfully" });
 
   } catch (error) {
     console.error(error);
-    res.json({ success: false, message: "Server error" });
+    res.json({success: false, message: "Server error" });
   }
 };
-
 
 
 
