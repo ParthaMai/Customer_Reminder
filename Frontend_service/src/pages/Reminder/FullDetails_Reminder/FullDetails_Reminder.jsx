@@ -9,11 +9,13 @@ import { useNavigate } from "react-router-dom";
 import { useRef } from 'react';
 import { useParams } from "react-router-dom";
 import { StoreContext } from '../../../context/StoreContext';
+import Loader from '../../../components/Loader/Loader';
 
 const FullDetails_Reminder = () => {
 
     const { token, url, fetchReminderList, setReminderCache } = useContext(StoreContext);
     const [historyIndex, setHistoryIndex] = useState(0);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     const [data, setData] = useState({
@@ -30,11 +32,11 @@ const FullDetails_Reminder = () => {
     const { id: itemId } = useParams();// previous state item id like props
 
     const [selectedNumber, setSelectedNumber] = useState("");
-    const [item, setItem] = useState({});
+    const [item, setItem] = useState(null);
 
 
     // For services
-    const sortedHistory = item.serviceHistory
+    const sortedHistory = item?.serviceHistory
         ? [...item.serviceHistory].sort(
             (a, b) => new Date(b.serviceDate) - new Date(a.serviceDate)
         )
@@ -170,12 +172,18 @@ const FullDetails_Reminder = () => {
 
 
     const fetchFullList = async () => {
-        const response = await axios.get(`${url}/api/service-remind-list/Full-Details`, { params: { id: itemId }, headers: { token } });
-        if (response.data.success) {
-            setItem(response.data.data);
-        }
-        else {
-            toast.error("Error");
+        try {
+            const response = await axios.get(`${url}/api/service-remind-list/Full-Details`, { params: { id: itemId }, headers: { token } });
+            if (response.data.success) {
+                setItem(response.data.data);
+            }
+            else {
+                toast.error("Error");
+            }
+        } catch (error) {
+            toast.error("Server error - Please try Again Later");
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -190,6 +198,7 @@ const FullDetails_Reminder = () => {
         if (!isConfirmed) return;
         try {
             const response = await axios.post(`${url}/api/service-remind-list/remove-remind`, { id: itemId }, { headers: { token } })
+            await fetchFullList();
             if (response.data.success) {
                 toast.success(response.data.message);
                 setReminderCache({});
@@ -218,6 +227,22 @@ const FullDetails_Reminder = () => {
             toast.error("Server error");
             console.error(error);
         }
+    }
+    if (loading) {
+        return <Loader />;
+    }
+    if (!item) {
+        return (
+            <div className="no-data-container">
+                <img src={assets.no_data_icon} alt="No Data" className="no-data-img" />
+                <h2>No Data Found</h2>
+                <p>This customer record may have been removed or is unavailable.</p>
+
+                <button onClick={() => navigate("/reminder", { replace: true })}>
+                    Go Back
+                </button>
+            </div>
+        );
     }
     return (
         <div className="remind-full-list-container">
@@ -279,7 +304,7 @@ const FullDetails_Reminder = () => {
                             <hr /></>
                     )}
 
- <div className="service-history-block">
+                    <div className="service-history-block">
                         <label className="service-history-label">Services:</label>
 
                         {currentHistory ? (

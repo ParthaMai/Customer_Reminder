@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useRef } from 'react';
 import { useParams } from "react-router-dom";
 import { StoreContext } from '../../../context/StoreContext';
+import Loader from '../../../components/Loader/Loader';
 
 
 const FullDetails_Pending = () => {
@@ -16,6 +17,8 @@ const FullDetails_Pending = () => {
     const { token, url, setPendingCache, setPendingList } = useContext(StoreContext);
     const [historyIndex, setHistoryIndex] = useState(0);
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
+
 
     // For captcha
     const [captcha, setCaptcha] = useState("");
@@ -217,6 +220,8 @@ const FullDetails_Pending = () => {
             }
         }catch (error) {
             toast.error("Server error");
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -272,9 +277,21 @@ const FullDetails_Pending = () => {
             console.error(error);
         }
     }
+    if (loading) {
+        return <Loader />;
+    }
     if (!item) {
-        return <div>Loading...</div>;
-   
+        return (
+            <div className="no-data-container">
+            <img src={assets.no_data_icon} alt="No Data" className="no-data-img" />
+            <h2>No Data Found</h2>
+            <p>This customer record may have been removed or is unavailable.</p>
+
+            <button onClick={() => navigate("/list_Pending_Calls", { replace: true })}>
+                Go Back
+            </button>
+            </div>
+        );
     }
     return (
         <div className="remind-full-list-container">
