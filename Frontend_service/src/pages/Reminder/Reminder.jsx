@@ -6,10 +6,12 @@ import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { StoreContext } from '../../context/StoreContext';
+import Loader1 from '../../components/Loader/Loader1';
 
 const Reminder = () => {
 
   const { url, token, reminderList, reminderPage, setReminderPage, reminderTotalPages, reminderCategory, setReminderCategory, fetchReminderList } = useContext(StoreContext);
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -18,15 +20,20 @@ const Reminder = () => {
   };
 
 
-      // 🔝 Scroll to top when page loads
-      useEffect(() => {
-          window.scrollTo({ top: 0, behavior: "smooth" });
-      }, []);
-  
+  // 🔝 Scroll to top when page loads
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
 
   useEffect(() => {
     if (!token) return;
-    fetchReminderList(reminderPage, reminderCategory);
+    const loadData = async () => {
+      setLoading(true);
+      await fetchReminderList(reminderPage, reminderCategory);
+      setLoading(false)
+    };
+    loadData();
   }, [token, reminderCategory, reminderPage]);
 
   return (
@@ -40,10 +47,10 @@ const Reminder = () => {
           <button
             key={type}
             className={reminderCategory === type ? "active" : ""}
-            onClick={() =>{
-               setReminderCategory(type)
-               setReminderPage(1);
-              }}
+            onClick={() => {
+              setReminderCategory(type)
+              setReminderPage(1);
+            }}
           >
             {type}
           </button>
@@ -77,7 +84,9 @@ const Reminder = () => {
             Next
           </button>
         </div>
-        {reminderList.length === 0 ? (
+        {loading ? (
+          <Loader1 />
+        ) : reminderList.length === 0 ? (
           <p className="no-data">
             No reminders for {reminderCategory}
           </p>

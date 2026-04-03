@@ -210,7 +210,7 @@ const FullDetails_Pending = () => {
 
 
     const fetchFullList = async () => {
-        try{
+        try {
             const response = await axios.get(`${url}/api/pending-list/pending-fulllist`, { params: { id: itemId }, headers: { token } });
             if (response.data.success) {
                 setItem(response.data.data);
@@ -218,14 +218,14 @@ const FullDetails_Pending = () => {
             else {
                 toast.error("Error");
             }
-        }catch (error) {
+        } catch (error) {
             toast.error("Server error");
         } finally {
             setLoading(false);
         }
     }
 
-    
+
     // useEffect(() => {
     //     if (!token) return;
     //     fetchFullList();
@@ -233,22 +233,22 @@ const FullDetails_Pending = () => {
     // }, [token])
 
     useEffect(() => {
-    if (!token || !itemId) return;
-    fetchFullList();
-    generateCaptcha();
-}, [token, itemId]);
+        if (!token || !itemId) return;
+        fetchFullList();
+        generateCaptcha();
+    }, [token, itemId]);
 
     const removeCustomer = async (itemId) => {
         const isConfirmed = window.confirm("Are you sure Complete your Pending call task?");
         if (!isConfirmed) return;
         try {
             const response = await axios.post(`${url}/api/pending-list/remove`, { id: itemId }, { headers: { token } });
-            
+
             if (response.data.success) {
                 toast.success(response.data.message);
                 setPendingList(prev => prev.filter(p => p._id !== itemId));
                 setPendingCache({});
-                
+
                 navigate("/list_Pending_Calls", { replace: true });
             }
             else {
@@ -283,13 +283,13 @@ const FullDetails_Pending = () => {
     if (!item) {
         return (
             <div className="no-data-container">
-            <img src={assets.no_data_icon} alt="No Data" className="no-data-img" />
-            <h2>No Data Found</h2>
-            <p>This customer record may have been removed or is unavailable.</p>
+                <img src={assets.no_data_icon} alt="No Data" className="no-data-img" />
+                <h2>No Data Found</h2>
+                <p>This customer record may have been removed or is unavailable.</p>
 
-            <button onClick={() => navigate("/list_Pending_Calls", { replace: true })}>
-                Go Back
-            </button>
+                <button onClick={() => navigate("/list_Pending_Calls", { replace: true })}>
+                    Go Back
+                </button>
             </div>
         );
     }

@@ -5,11 +5,15 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom';
 import { StoreContext } from '../../context/StoreContext';
+import Loader1 from '../../components/Loader/Loader1';
 
 const Pending_Calls = () => {
 
     const { token, url,
         pendingList, pendingPage, setPendingPage, pendingTotalPages, pendingCategory, setPendingCategory, fetchPendingList } = useContext(StoreContext);
+
+    // For loading
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const handleUpdate = (id) => {
         navigate(`/list_Pending/FullList_Pending/${id}`);
@@ -31,7 +35,13 @@ const Pending_Calls = () => {
 
     useEffect(() => {
         if (!token) return;
-        fetchPendingList(pendingPage, pendingCategory);
+        const loadData = async () => {
+            setLoading(true);
+            await fetchPendingList(pendingPage, pendingCategory);
+            setLoading(false);
+        };
+
+        loadData();
     }, [token, pendingCategory, pendingPage]);
 
     return (
@@ -93,7 +103,9 @@ const Pending_Calls = () => {
 
 
                 {/* Data */}
-                {pendingList.length === 0 ? (
+                {loading ? (
+                    <Loader1 />
+                ) : pendingList.length === 0 ? (
                     <p className="no-data">No pending calls for {pendingCategory}</p>
                 ) : pendingList.map((item, index) => (
                     <div key={index} className="list-cash-table-format" onClick={() => handleUpdate(item._id)} // ✅ HERE
