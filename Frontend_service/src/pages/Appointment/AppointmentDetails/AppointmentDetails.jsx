@@ -8,6 +8,7 @@ import { assets } from '../../../assets/assets';
 import { StoreContext } from '../../../context/StoreContext';
 import html2pdf from "html2pdf.js";
 import Invoice from "./Invoice";
+import Loader from '../../../components/Loader/Loader';
 
 const AppointmentDetails = () => {
     const { token, url , setBookingCache} = useContext(StoreContext);
@@ -17,17 +18,17 @@ const AppointmentDetails = () => {
     const [loading, setLoading] = useState(false);
     const [selectedNumber, setSelectedNumber] = useState("");
     const navigate = useNavigate();
-
+    const [saving, setSaving] = useState(true);
 
     const { id: itemId } = useParams();// previous state item id like props
-    const [item, setItem] = useState({});
+    const [item, setItem] = useState(null);
 
 
     const invoiceRef = useRef();
     const scrollRef = useRef(null);
 
      // For services
-    const sortedHistory = item.serviceHistory
+    const sortedHistory = item?.serviceHistory
         ? [...item.serviceHistory].sort(
             (a, b) => new Date(b.serviceDate) - new Date(a.serviceDate)
         )
@@ -251,34 +252,56 @@ const AppointmentDetails = () => {
     };
 
     const fetchFullList = async () => {
-        const response = await axios.get(`${url}/api/booking/Booking-FullDetails`, { params: { id: itemId }, headers: { token } });
-        if (response.data.success) {
-            setItem(response.data.data);
-        }
-        else {
-            toast.error("Error");
+        try {
+            const response = await axios.get(`${url}/api/booking/Booking-FullDetails`, { params: { id: itemId }, headers: { token } });
+            if (response.data.success) {
+                setItem(response.data.data);
+            }
+            else {
+                toast.error("Error");
+            }
+        } catch (error) {
+            toast.error("Server error");
+        } finally {
+            setSaving(false);
         }
     }
-    useEffect(() => {
-        const total = data.services.reduce((sum, service) => {
-            return sum + Number(service.price || 0);
-        }, 0);
+        useEffect(() => {
+            const total = data.services.reduce((sum, service) => {
+                return sum + Number(service.price || 0);
+            }, 0);
 
-        setTotalPrice(total);
-    }, [data.services]);
+            setTotalPrice(total);
+        }, [data.services]);
 
-    useEffect(() => {
-        if (!token) return;
-        fetchFullList()
-    }, [token])
+        useEffect(() => {
+            if (!token) return;
+            fetchFullList()
+        }, [token])
 
-    // Block to start
-    useEffect(() => {
-        if (scrollRef.current) {
-            scrollRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
-    }, []);
+        // Block to start
+        useEffect(() => {
+            if (scrollRef.current) {
+                scrollRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+        }, []);
 
+        if (saving) {
+            return <Loader />;
+    }
+    if (!item) {
+        return (
+            <div className="no-data-container">
+                <img src={assets.no_data_icon} alt="No Data" className="no-data-img" />
+                <h2>No Data Found</h2>
+                <p>This customer record may have been removed or is unavailable.</p>
+
+                <button onClick={() => navigate("/appointment", { replace: true })}>
+                    Go Back
+                </button>
+            </div>
+        );
+    }
     return (
         <div className="appointment-fulldetails-list-container">
             <div className="appointment-fulldetails-table">

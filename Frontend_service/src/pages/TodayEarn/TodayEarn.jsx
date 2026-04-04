@@ -28,7 +28,7 @@ const TodayEarn = () => {
   return (
     <div className="earn-container">
 
-      <h2 className="earn-title">💰 This Week Earnings</h2>
+      <h2 className="earn-title">💰 This Week Sales</h2>
 
       <div className="earn-grid">
         {days.map((day, index) => (

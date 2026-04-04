@@ -32,7 +32,7 @@ const TotalEarning = () => {
 
   return (
     <div className="earn-container">
-      <h2 className="earn-title">💰 Total Earnings Per Month</h2>
+      <h2 className="earn-title">💰 Total Sales Per Month</h2>
 
       <div className="earn-grid">
         {months.map((month, index) => (

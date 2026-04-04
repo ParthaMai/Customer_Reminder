@@ -6,10 +6,12 @@ import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom';
 import { StoreContext } from '../../context/StoreContext';
 import { useMemo, useCallback } from "react";
+import Loader1 from '../../components/Loader/Loader1';
 
 const Appointment = () => {
 
     const { token, bookingList, bookingPage, setBookingPage, bookingTotalPages, bookingCategory, setBookingCategory, fetchBookingList } = useContext(StoreContext);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const handleUpdate = (id) => {
         navigate(`/appointment/FullList/${id}`);
@@ -17,7 +19,13 @@ const Appointment = () => {
 
     useEffect(() => {
         if (!token) return;
-        fetchBookingList(bookingPage, bookingCategory);
+        const loadData = async () => {
+            setLoading(true);
+            await fetchBookingList(bookingPage, bookingCategory);
+            setLoading(false);
+        };
+
+        loadData();
 
     }, [token, bookingCategory, bookingPage]);
     return (
@@ -56,28 +64,40 @@ const Appointment = () => {
                 </div>
 
                 {/* ✅ Pagination */}
-                <div className="pagination">
-                    <button
-                        disabled={bookingPage === 1}
-                        onClick={() => fetchBookingList(bookingPage - 1, bookingCategory)}
-                    >
-                        Prev
-                    </button>
+                {/* ✅ Pagination */}
+                {bookingTotalPages > 1 && (
+                    <div className="pagination">
+                        <button
+                            disabled={bookingPage === 1}
+                            onClick={() => {
+                                const newPage = bookingPage - 1;
+                                setBookingPage(newPage); // 🔥 FIX
+                            }}
+                        >
+                            Prev
+                        </button>
 
-                    <span>{bookingPage} / {bookingTotalPages}</span>
+                        <span>{bookingPage} / {bookingTotalPages}</span>
 
-                    <button
-                        disabled={bookingPage === bookingTotalPages}
-                        onClick={() => fetchBookingList(bookingPage + 1, bookingCategory)}
-                    >
-                        Next
-                    </button>
-                </div>
+                        <button
+                            disabled={bookingPage === bookingTotalPages}
+                            onClick={() => {
+                                const newPage = bookingPage + 1;
+                                setBookingPage(newPage); // 🔥 FIX
+                            }}
+                        >
+                            Next
+                        </button>
+                    </div>
+                )}
                 {/* ✅ Empty State + List */}
-                {bookingList.length === 0 ? (
-                    <p className="no-data">
-                        No bookings for {bookingCategory}
-                    </p>
+                {loading ? (
+                    <Loader1 />
+                ) : bookingList.length === 0 ? (
+                    <div className="no-data-container">
+                        <img src={assets.no_data_icon} alt="No Data" className="no-data-img" />
+                        <p className="no-data">No bookings for {bookingCategory}</p>
+                    </div>
                 ) : bookingList.map((item) => (
 
                     <div key={item._id} className="booking-list-table-format" onClick={() => handleUpdate(item._id)} // ✅ HERE
