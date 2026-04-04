@@ -19,9 +19,11 @@ const setTodayExtendReminderForFirst80 = async () => {
     today.setHours(0, 0, 0, 0);
 
     // 1️⃣ Fetch first 80 records
-    const customers = await Service_CustomerModel.find({})
+    const customers = await Service_CustomerModel.find({
+      serviceCategory: "Chimney"
+    })
       .sort({ createdAt: 1 }) // optional
-      .limit(80);
+      .limit(40);
 
     console.log(`Found ${customers.length} records`);
 
@@ -31,7 +33,7 @@ const setTodayExtendReminderForFirst80 = async () => {
         filter: { _id: customer._id },
         update: {
           $set: {
-            nextReminderDate: today
+            bookingDate: today
           }
         }
       }

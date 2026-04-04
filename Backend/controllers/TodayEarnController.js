@@ -89,19 +89,28 @@ const getServiceHistoryByDate = async (req, res) => {
     const end = new Date(date);
     end.setHours(23, 59, 59, 999);
 
-    const data = await Service_CustomerModel.find({
-      userId: userId,
-      isCompleted: true,
-      serviceDate: {
-        $gte: start,
-        $lte: end
-      }
-    }).sort({ serviceDate: -1 });
+const customers = await Service_CustomerModel.find({
+  userId,
+  isCompleted: true
+});
 
-    res.json({
-      success: true,
-      data
+let filteredData = [];
+
+customers.forEach(customer => {
+  const matchedServices = customer.serviceHistory.filter(s => {
+    const d = new Date(s.serviceDate);
+    return d >= start && d <= end;
+  });
+
+  if (matchedServices.length > 0) {
+    filteredData.push({
+      ...customer._doc,
+      serviceHistory: matchedServices
     });
+  }
+});
+
+res.json({ success: true, data: filteredData});
 
   } catch (error) {
     console.error(error);
