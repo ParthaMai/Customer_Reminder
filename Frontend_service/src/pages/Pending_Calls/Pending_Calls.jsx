@@ -106,7 +106,10 @@ const Pending_Calls = () => {
                 {loading ? (
                     <Loader1 />
                 ) : pendingList.length === 0 ? (
-                    <p className="no-data">No pending calls for {pendingCategory}</p>
+                    <div className="no-data-container">
+                        <img src={assets.no_data_icon} alt="No Data" className="no-data-img" />
+                        <p className="no-data">No pending calls for {pendingCategory}</p>
+                    </div>
                 ) : pendingList.map((item, index) => (
                     <div key={index} className="list-cash-table-format" onClick={() => handleUpdate(item._id)} // ✅ HERE
                         style={{ cursor: "pointer" }}>

@@ -157,7 +157,15 @@
   margin-top: 20px;
   font-size: 14px;
 }
-
+.no-service-container {
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  text-align: center;
+}
 
 @media (max-width: 600px) {
 
@@ -175,28 +183,56 @@
     align-self: flex-end;
   }
 
-  /* ✅ FIXED: keep row layout */
+  /* ✅ Premium service row */
   .service-row {
     display: flex;
-    flex-direction: row; /* 🔥 IMPORTANT */
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
+
+    padding: 10px 12px;
+    margin-bottom: 6px;
+
+    border-radius: 10px;
+    background: linear-gradient(135deg, #f8fafc, #eef2ff);
+    border: 1px solid #e0e7ff;
+
+    box-shadow: 0 2px 6px rgba(79, 70, 229, 0.08);
+    transition: all 0.2s ease;
+  }
+
+  /* subtle interaction */
+  .service-row:active {
+    transform: scale(0.98);
   }
 
   /* Service name */
   .service-row span:first-child {
     flex: 1;
-    min-width: 0; /* 🔥 KEY FIX */
+    min-width: 0;
+
+    font-size: 14px;
+    font-weight: 500;
+    color: #1e293b;
+
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  /* Price */
+  /* Price (clean badge style) */
   .service-row span:last-child {
+    align-self: flex-start;
     white-space: nowrap;
+
+    font-size: 13px;
     font-weight: 600;
+
+    color: #ffffff;
+    background: #625cdf;
+
+    padding: 4px 8px;
+    border-radius: 6px;
   }
 
   .history-card {

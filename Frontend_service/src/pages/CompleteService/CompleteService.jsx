@@ -18,7 +18,7 @@ const MonthlyServices = () => {
         headers: { token },
       });
       if (res.data.success) {
-        setServices(res.data.data.services); // only keep services
+        setServices(res.data?.data?.services || {});// only keep services
       }
     } catch (err) {
       console.error("Error fetching monthly services:", err);

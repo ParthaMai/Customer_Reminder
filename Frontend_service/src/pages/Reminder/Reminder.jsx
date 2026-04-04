@@ -87,9 +87,10 @@ const Reminder = () => {
         {loading ? (
           <Loader1 />
         ) : reminderList.length === 0 ? (
-          <p className="no-data">
-            No reminders for {reminderCategory}
-          </p>
+          <div className="no-data-container">
+            <img src={assets.no_data_icon} alt="No Data" className="no-data-img" />
+            <p className="no-data">No Reminders for {reminderCategory}</p>
+          </div>
         ) : reminderList.map((item) => (
           <div key={item._id} className="reminder-list-table-format" onClick={() => handleUpdate(item._id)} // ✅ HERE
             style={{ cursor: "pointer" }}>

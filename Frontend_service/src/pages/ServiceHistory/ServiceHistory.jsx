@@ -4,9 +4,13 @@ import "react-calendar/dist/Calendar.css";
 import axios from "axios";
 import { StoreContext } from "../../context/StoreContext";
 import "./ServiceHistory.css";
+import { assets } from "../../assets/assets";
+import Loader1 from "../../components/Loader/Loader1";
 
 const ServiceHistory = () => {
   const { url, token } = useContext(StoreContext);
+  // For loading 
+  const [loading, setLoading] = useState(true);
 
   const [date, setDate] = useState(new Date());
   const [history, setHistory] = useState([]);
@@ -15,7 +19,7 @@ const ServiceHistory = () => {
     try {
       const formattedDate = selectedDate.toISOString();
 
-      const res = await axios.get( `${url}/api/todayEarn/service-history?date=${formattedDate}`,
+      const res = await axios.get(`${url}/api/todayEarn/service-history?date=${formattedDate}`,
         { headers: { token } }
       );
 
@@ -29,15 +33,21 @@ const ServiceHistory = () => {
 
   useEffect(() => {
     if (!token) return;
-    fetchHistory(date);
-  }, [date,token]);
+    const loadData = async () => {
+      setLoading(true);
+      await fetchHistory(date);
+      setLoading(false);
+    };
+
+    loadData();
+  }, [date, token]);
 
   return (
     <div className="history-page">
 
-     <h2 class="history-title">
-    📅 Service History
-    </h2>
+      <h2 class="history-title">
+        📅 Service History
+      </h2>
 
       {/* Calendar */}
       <div className="calendar-box">
@@ -46,31 +56,43 @@ const ServiceHistory = () => {
 
       {/* History List */}
       <div className="history-list">
-        {history.length === 0 ? (
-          <p>No services found for this date</p>
+        {loading ? (
+          <Loader1 />
+        ) : history.length === 0 ? (
+          <div className="no-service-container">
+            <img src={assets.no_data_icon} alt="No Data" className="no-data-img" />
+            <p className="no-data">No services found for this date</p>
+          </div>
         ) : (
           history.map((item, index) => (
             <div key={index} className="history-card">
 
               <div className="top">
-                <h3>{item.name}- {item.serviceCategory}</h3>
+                <h3>{item.name} - {item.serviceCategory}</h3>
                 <span>{item.mobile1}</span>
-                <span>₹{item.totalPrice}</span>
               </div>
 
-              <p>
-                <strong>Completed:</strong>{" "}
-                {new Date(item.serviceDate).toLocaleDateString()}
-                </p>
+              {item.serviceHistory.map((entry, i) => (
+                <div key={i} className="inner-history">
 
-              <div className="services">
-                {item.services.map((s, i) => (
-                  <div key={i} className="service-row">
-                    <span>{s.description}</span>
-                    <span>₹{s.price}</span>
+                  <p>
+                    <strong>Completed:</strong>{" "}
+                    {new Date(entry.serviceDate).toLocaleDateString()}
+                  </p>
+
+                  <span>₹{entry.totalPrice}</span>
+
+                  <div className="services">
+                    {entry.services.map((s, j) => (
+                      <div key={j} className="service-row">
+                        <span>{s.description}</span>
+                        <span>₹{s.price}</span>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+
+                </div>
+              ))}
 
             </div>
           ))
