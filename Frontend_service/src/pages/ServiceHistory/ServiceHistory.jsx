@@ -68,7 +68,9 @@ const ServiceHistory = () => {
             <div key={index} className="history-card">
 
               <div className="top">
-                <h3>{item.name} - {item.serviceCategory}</h3>
+                <h3>{item.name} - 
+                   <span className="category-badge">{item.serviceCategory}</span>
+                </h3>
                 <span>{item.mobile1}</span>
               </div>
 
@@ -80,7 +82,7 @@ const ServiceHistory = () => {
                     {new Date(entry.serviceDate).toLocaleDateString()}
                   </p>
 
-                  <span>₹{entry.totalPrice}</span>
+                  <span className="price-badge">Total Price - ₹{entry.totalPrice}</span>
 
                   <div className="services">
                     {entry.services.map((s, j) => (

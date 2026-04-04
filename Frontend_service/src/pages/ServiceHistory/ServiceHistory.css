@@ -166,7 +166,33 @@
   gap: 15px;
   text-align: center;
 }
+.category-badge {
+  margin-left: 6px;
 
+  background: linear-gradient(135deg, #ff7f50, #ff5722) !important;
+  color: #ffffff;
+
+  padding: 3px 8px;
+  border-radius: 6px;
+
+  font-size: 12px;
+  font-weight: 500;
+
+  display: inline-block;
+}
+.price-badge {
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+  color: #ffffff;
+
+  padding: 4px 10px;
+  border-radius: 8px;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  display: inline-block;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.25);
+}
 @media (max-width: 600px) {
 
   .history-page {
