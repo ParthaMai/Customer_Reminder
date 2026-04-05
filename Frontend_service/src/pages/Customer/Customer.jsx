@@ -165,7 +165,7 @@ const Customer = () => {
                 console.log(error);
                 setMobileStatus(null);
             }
-        }, 300);
+        }, 150);
 
         return () => clearTimeout(delay);
     }, [data.mobile1, serviceCategory]);
