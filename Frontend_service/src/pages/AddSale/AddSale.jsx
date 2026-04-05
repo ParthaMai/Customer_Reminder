@@ -89,7 +89,7 @@ const AddSale = () => {
                 setMobileStatus(null);
             }
 
-        }, 300);
+        }, 150);
 
         return () => clearTimeout(delay);
 
