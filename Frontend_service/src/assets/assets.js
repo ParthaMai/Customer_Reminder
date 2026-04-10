@@ -42,6 +42,13 @@ import visible_icon from './visible_icon.png'
 import visible_off from './visible_off.png'
 import invoice_icon from './invoice_icon.png'
 import no_data_icon from './no_data_icon.png'
+import features_icon from './features_icon.png'
+import bill_icon from './bill_icon.png'
+import inventory_icon from './inventory_icon.png'
+import customer_icon from './customer_icon.png'
+import calls_icon from './calls_icon.png'
+import booking_icon from './booking_icon.png'
+import sale_icon from './sale_icon.png'
 
 export const assets = {
     cross_icon,
@@ -84,5 +91,12 @@ export const assets = {
     visible_icon,
     visible_off,
     invoice_icon,
-    no_data_icon
+    no_data_icon,
+    features_icon,
+    bill_icon,
+    inventory_icon,
+    customer_icon,
+    booking_icon,
+    calls_icon,
+    sale_icon
 }

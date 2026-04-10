@@ -108,7 +108,7 @@ const Sidebar = () => {
       <h2 className="section-title">Tasks</h2>
 
       <div className="row">
-        <div className="box" onClick={handleDeniedClick}>
+        <div className="box" onClick={() => go("/landing-page")}>
           <img src={assets.premium_customer} alt="" />
           Premium Customers
         </div>

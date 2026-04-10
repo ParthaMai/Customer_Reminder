@@ -26,6 +26,7 @@ import MonthlyStats from './pages/CompleteService/CompleteService'
 import SubsCription from './pages/Subscription/SubsCription'
 import BookingAppointment from './pages/BookingAppointment/BookingAppointment'
 import AddSale from './pages/AddSale/AddSale'
+import LandingPage from './pages/LandingPage/LandingPage'
 
 const App = () => {
 
@@ -61,6 +62,7 @@ const App = () => {
           <Route path="/subscription" element = {<SubsCription/>} />
           <Route path="/booking-appointment" element = {<BookingAppointment/>} />
           <Route path="/add-sale" element = {<AddSale/>} />
+          <Route path="/landing-page" element = {<LandingPage/>} />
 
           
           {/* <Route path='/dob_reminder' element = {<Dob_reminder url={url} />} />
