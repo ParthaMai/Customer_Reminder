@@ -166,13 +166,37 @@ body {
   transition: 0.4s;
 }
 
+/* hover effect */
 .glass-card:hover {
   transform: translateY(-10px);
 }
 
-.glass-card img {
+/* IMAGE + VIDEO COMMON STYLE */
+.glass-card video {
   width: 100%;
+  height: auto;
+  display: block;
   border-radius: 16px;
+  object-fit: cover;
+}
+
+/* MAIN VIDEO FIX (mobile safety) */
+.main-video video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* MOBILE FIX */
+@media (max-width: 768px) {
+  .glass-card {
+    padding: 8px;
+    border-radius: 18px;
+  }
+
+  .glass-card video {
+    width: 100%;
+    max-width: 100%;
+  }
 }
 
 /* FLOATING BADGES */
@@ -186,8 +210,8 @@ body {
   animation: float 3s ease-in-out infinite;
 }
 
-.badge-1 { top: 10%; left: -20px; }
-.badge-2 { bottom: 10%; right: -20px; animation-delay: 1.5s; }
+.badge-1 { top: -5%; left: -20px; }
+.badge-2 { bottom: -15%; right: -20px; animation-delay: 1.5s; }
 
 @keyframes float {
   0%, 100% { transform: translateY(0); }
@@ -207,90 +231,95 @@ body {
   display: block;
 }
 
-/* PRICING */
-/* PRICING */
+/* PRICING SECTION */
 /* PRICING SECTION */
 .pricing {
-  padding: 120px 0;
-  background: #f8fbff;
+  padding: 110px 0;
+  background: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%);
 }
 
-/* GRID FIX */
+/* GRID */
 .pricing-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 30px;
+  gap: 28px;
   align-items: stretch;
+  margin-top: 40px;
 }
 
 /* CARD */
 .price-card {
   background: #ffffff;
-  padding: 35px 25px;
-  border-radius: 20px;
+  padding: 38px 26px;
+  border-radius: 18px;
   text-align: center;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #eef2f7;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: all 0.3s ease;
+  min-height: 430px;
   position: relative;
-  min-height: 420px;
+  transition: all 0.25s ease;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
 }
 
-/* CLEAN HOVER (not overdone) */
+/* HOVER */
 .price-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+  transform: translateY(-8px);
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.10);
+  border-color: #dbeafe;
 }
 
-/* HIGHLIGHT CARD (MAIN FIX) */
+/* MOST POPULAR CARD */
 .highlight {
-  border: 2px solid #2563eb;
-  transform: scale(1.05);
-  box-shadow: 0 20px 50px rgba(37, 99, 235, 0.15);
+  border: 2px solid #3b82f6;
+  transform: scale(1.04);
+  box-shadow: 0 25px 60px rgba(59, 130, 246, 0.18);
   z-index: 2;
 }
 
 /* TITLE */
 .price-card h3 {
   font-size: 20px;
-  margin-bottom: 10px;
+  font-weight: 600;
   color: #0f172a;
+  margin-bottom: 8px;
 }
 
 /* PRICE */
 .price {
-  font-size: 36px;
-  font-weight: 700;
-  margin: 15px 0;
+  font-size: 40px;
+  font-weight: 800;
   color: #2563eb;
+  margin: 18px 0;
+  letter-spacing: -0.5px;
 }
 
 .price span {
-  font-size: 14px;
+  font-size: 13px;
   color: #64748b;
-  margin-left: 4px;
+  font-weight: 500;
+  margin-left: 6px;
 }
 
-/* LIST */
+/* FEATURES LIST */
 .price-card ul {
   list-style: none;
   padding: 0;
-  margin: 20px 0;
+  margin: 22px 0;
   text-align: left;
 }
 
 .price-card li {
-  padding: 8px 0;
   font-size: 14px;
   color: #475569;
+  padding: 8px 0;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
-/* SIMPLE CHECK */
+/* CHECK ICON */
 .price-card li::before {
   content: "✓";
   color: #22c55e;
@@ -300,51 +329,60 @@ body {
 /* BUTTON */
 .price-card button {
   margin-top: auto;
-  padding: 12px;
   width: 100%;
-  border-radius: 8px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: all 0.2s ease;
 }
 
-/* POPULAR TAG FIX */
+/* PRIMARY BUTTON */
+.btn-primary {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+}
+
+/* OUTLINE BUTTON */
+.btn-outline {
+  background: transparent;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+}
+
+.btn-outline:hover {
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+/* POPULAR TAG */
 .popular-tag {
   position: absolute;
-  top: -12px;
+  top: -10px;
   left: 50%;
   transform: translateX(-50%);
   background: #2563eb;
-  color: #fff;
+  color: white;
   font-size: 12px;
   padding: 5px 12px;
-  border-radius: 20px;
+  border-radius: 999px;
   font-weight: 600;
+  letter-spacing: 0.3px;
 }
 
-/* RESPONSIVE FIX */
+/* RESPONSIVE */
 @media (max-width: 768px) {
   .highlight {
     transform: scale(1);
   }
-}
-/* TOP PRICING NOTE */
-/* THE HERO LIGHT BANNER */
-.pricing-highlight-light {
-  position: relative;
-  margin: 50px auto;
-  padding: 60px 30px; /* reduced from 80px → smaller card */
-  max-width: 720px; /* reduced from 850px */
-  text-align: center;
-  border-radius: 32px;
-  
-  /* Light Blue Gradient */
-  background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
-  
-  /* Soft blue border */
-  border: 1px solid rgba(14, 127, 233, 0.15);
-  
-  /* Blue shadow */
-  box-shadow: 0 20px 50px rgba(14, 116, 233, 0.08);
-  overflow: hidden;
-  transition: all 0.4s ease;
+
+  .price {
+    font-size: 34px;
+  }
 }
 
 /* Top Accent */
@@ -433,6 +471,20 @@ body {
   border-radius: 10px;
   border: 1px solid #e2e8f0;
   box-shadow: 0 3px 5px rgba(0,0,0,0.03);
+}
+.pricing-highlight-light {
+  position: relative;
+  margin: 60px auto;
+  padding: 70px 40px;
+  max-width: 780px;
+  text-align: center;
+  border-radius: 28px;
+
+  background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+  border: 1px solid rgba(59, 130, 246, 0.15);
+  box-shadow: 0 20px 60px rgba(59, 130, 246, 0.10);
+
+  overflow: hidden;
 }
 
 /* Hover */

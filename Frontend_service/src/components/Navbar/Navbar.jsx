@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect } from 'react'
 import './Navbar.css'
 import { assets } from '../../assets/assets'
 import { Link, NavLink } from 'react-router-dom'
@@ -10,6 +10,18 @@ const navbar = ({setShowLogin}) => {
   const { token,setToken, reminderCount } = useContext(StoreContext);
   const navigate = useNavigate();
 
+    // 🔥 AUTO REDIRECT IF NOT LOGGED IN
+useEffect(() => {
+  const timer = setTimeout(() => {
+    if (!token) {
+      navigate("/landing-page");
+    }else{
+      navigate("/")
+    }
+  }, 300); // wait 0.9s
+
+  return () => clearTimeout(timer);
+}, [token]);
     //For logout
     const logout = () =>{
       localStorage.removeItem("token");

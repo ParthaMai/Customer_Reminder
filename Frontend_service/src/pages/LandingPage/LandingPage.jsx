@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './LandingPage.css';
 import { assets } from '../../assets/assets';
 import bill_icon from "../../assets/bill_icon.png"
@@ -8,6 +8,7 @@ import calls_icon from "../../assets/calls_icon.png"
 import booking_icon from "../../assets/booking_icon.png"
 import sale_icon from "../../assets/sale_icon.png"
 import { useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -81,6 +82,15 @@ const features = [
 ];
 
 const LandingPage = () => {
+  
+    const [toggle, setToggle] = useState(false);
+    const handleCall = () => {
+    const number = toggle ? "9883737708" : "9735359121";
+
+    window.location.href = `tel:${number}`;
+    
+    setToggle(!toggle);
+    };
 
 useEffect(() => {
   const elements = document.querySelectorAll(".reveal");
@@ -110,11 +120,13 @@ useEffect(() => {
                     <div className="hero-text">
                         <h1>GROW Your Business <span>Smarter</span></h1>
                         <div className="hero-image-wrapper">
-                            <div className="glass-card main-img">
-                                <img
-                                    src={assets.features_icon}
-                                    alt="Modern Dashboard"
-                                />
+                            <div className="glass-card main-video">
+                            <video
+                                src="https://res.cloudinary.com/dmos7gusc/video/upload/v1775905561/Promo_video_nb6v4j.mp4"
+                                autoPlay
+                                controls
+                                playsInline
+                            />
                             </div>
                             <div className="floating-badge badge-1">📈 +24% Sales</div>
                             <div className="floating-badge badge-2">👥 1.2k New Users</div>
@@ -125,8 +137,8 @@ useEffect(() => {
                             improve service efficiency.
                         </p>
                         <div className="hero-buttons">
-                            <button className="btn-primary">Start Free Trial</button>
-                            <button className="btn-secondary">View Live Demo</button>
+                            <button className="btn-primary" onClick={handleCall}>Start Free Trial</button>
+                            <button className="btn-secondary" onClick={handleCall}>View Live Demo</button>
                         </div>
                     </div>
 
@@ -192,44 +204,44 @@ useEffect(() => {
                                 <li>No payment required</li>
                                 <li>Limited access</li>
                             </ul>
-                            <button className="btn-outline">Start Free</button>
+                            <button className="btn-outline" onClick={handleCall}>Start Free</button>
                         </div>
 
                         {/* Starter */}
                         <div className="price-card">
                             <h3>Starter</h3>
-                            <div className="price">₹1499<span>/per year</span></div>
+                            <div className="price">₹125<span>/per month</span></div>
                             <ul>
                                 <li>500 Customers</li>
                                 <li>Full CRM Access</li>
                                 <li>Email Support</li>
                             </ul>
-                            <button className="btn-outline">Choose Plan</button>
+                            <button className="btn-outline" onClick={handleCall}>Choose Plan</button>
                         </div>
 
                         {/* Growth (Most Popular) */}
                         <div className="price-card highlight">
                             <div className="popular-tag">Most Popular</div>
                             <h3>Growth</h3>
-                            <div className="price">₹2999<span>/per year</span></div>
+                            <div className="price">₹249<span>/per month</span></div>
                             <ul>
                                 <li>1000 Customers</li>
                                 <li>Priority Support</li>
                                 <li>Advanced Tools</li>
                             </ul>
-                            <button className="btn-primary">Choose Plan</button>
+                            <button className="btn-primary" onClick={handleCall}>Choose Plan</button>
                         </div>
 
                         {/* Pro */}
                         <div className="price-card">
                             <h3>Pro</h3>
-                            <div className="price">₹3999<span>/per year</span></div>
+                            <div className="price">₹299<span>/per month</span></div>
                             <ul>
                                 <li>1500 Customers</li>
                                 <li>All Features Included</li>
                                 <li>Premium Support</li>
                             </ul>
-                            <button className="btn-outline">Choose Plan</button>
+                            <button className="btn-outline" onClick={handleCall}>Choose Plan</button>
                         </div>
 
                     </div>
@@ -240,8 +252,8 @@ useEffect(() => {
             <section className="cta">
                 <div className="cta-content">
                     <h2>Ready to transform your workflow?</h2>
-                    <p>Join 1,000+ businesses growing with our CRM.</p>
-                    <button className="btn-white">Get Started for Free</button>
+                    <p>Join 1,000+ businesses growing with our Gromybusiness.com.</p>
+                    <button className="btn-white" onClick={() => navigate("/contact-us")}>Get Started for Free</button>
                 </div>
             </section>
         </div>
