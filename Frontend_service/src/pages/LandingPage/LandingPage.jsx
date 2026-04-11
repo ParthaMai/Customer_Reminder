@@ -7,6 +7,7 @@ import customer_icon from "../../assets/customer_icon.png"
 import calls_icon from "../../assets/calls_icon.png"
 import booking_icon from "../../assets/booking_icon.png"
 import sale_icon from "../../assets/sale_icon.png"
+import { useEffect } from 'react';
 
 
 
@@ -80,6 +81,27 @@ const features = [
 ];
 
 const LandingPage = () => {
+
+useEffect(() => {
+  const elements = document.querySelectorAll(".reveal");
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("active");
+        }
+      });
+    },
+    {
+      threshold: 0.15,
+    }
+  );
+
+  elements.forEach((el) => observer.observe(el));
+
+  return () => observer.disconnect();
+}, []);
     return (
         <div className="landing">
             {/* HERO SECTION */}
@@ -117,7 +139,7 @@ const LandingPage = () => {
 
             <div className="feature-container">
                 {features.map((card, index) => (
-                    <div className={`feature-card ${card.color}`} key={index}>
+                    <div className={`feature-card reveal ${card.color}`} key={index}>
                         <div className="card-header">
                             <div className="icon-box"><img src={card.icon} alt='' /></div>
                             <span className="badge">4 features</span>
@@ -152,7 +174,7 @@ const LandingPage = () => {
                 </div>
             </div>
             {/* PRICING */}
-            <section className="pricing">
+            <section className="pricing reveal">
                 <div className="container">
                     <div className="section-header">
                         <h2>Simple, Transparent Pricing</h2>

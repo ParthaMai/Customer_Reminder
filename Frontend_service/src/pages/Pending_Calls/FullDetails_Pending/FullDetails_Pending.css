@@ -170,7 +170,7 @@
 .save-btn:hover {
   background-color: #555;
 }
-.field.service-category p.highlight {
+.field.service-category p.highlights {
     background-color: #ff7f50; /* coral/orange highlight */
     color: white;              /* text color */
     padding: 3px 8px;          /* some spacing */

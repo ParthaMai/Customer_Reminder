@@ -9,6 +9,21 @@
   --shadow: 0 20px 25px -5px rgb(0 0 0 / 0.08), 0 10px 15px -6px rgb(0 0 0 / 0.05);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+/* INITIAL STATE (hidden) */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s ease;
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* RESET */
 * {
   box-sizing: border-box;
@@ -514,7 +529,7 @@ body {
   border-radius: 20px;
   padding: 25px;
   border: 1px solid #e2e8f0;
-  transition: 0.35s ease;
+  transition: all 0.8s ease;
   position: relative;
 }
 

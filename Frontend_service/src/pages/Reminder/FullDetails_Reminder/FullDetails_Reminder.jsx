@@ -257,7 +257,7 @@ const FullDetails_Reminder = () => {
                     <hr />
                     <div className="field service-category">
                         <label>Service Category:</label>
-                        <p className="highlight">{item.serviceCategory}</p>
+                        <p className="highlights">{item.serviceCategory}</p>
                     </div>
                     <hr />
                     <div className="field">
