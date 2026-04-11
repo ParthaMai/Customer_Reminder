@@ -67,23 +67,31 @@ const Reminder = () => {
           <b>Service Cost</b>
         </div>
         {/* ✅ PAGINATION */}
-        <div className="reminder-pagination">
-          <button
-            disabled={reminderPage === 1}
-            onClick={() => fetchReminderList(reminderPage - 1)}
-          >
-            Prev
-          </button>
+        {reminderTotalPages > 1 && (
+          <div className="reminder-pagination">
+            <button
+              disabled={reminderPage === 1}
+              onClick={() => {
+                const newPage = reminderPage - 1;
+                setReminderPage(newPage)
+              }}
+            >
+              Prev
+            </button>
 
-          <span>{reminderPage} / {reminderTotalPages}</span>
+            <span>{reminderPage} / {reminderTotalPages}</span>
 
-          <button
-            disabled={reminderPage === reminderTotalPages}
-            onClick={() => fetchReminderList(reminderPage + 1)}
-          >
-            Next
-          </button>
-        </div>
+            <button
+              disabled={reminderPage === reminderTotalPages}
+              onClick={() => {
+                const newPage = reminderPage + 1;
+                setReminderPage(newPage)
+              }}
+            >
+              Next
+            </button>
+          </div>
+        )}
         {loading ? (
           <Loader1 />
         ) : reminderList.length === 0 ? (

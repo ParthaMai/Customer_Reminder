@@ -7,11 +7,13 @@ import { assets } from '../../../assets/assets';
 import { useNavigate, useParams } from "react-router-dom";
 import React from 'react'
 import { StoreContext } from '../../../context/StoreContext';
+import Loader from '../../../components/Loader/Loader';
 
 const FullList_Customer = () => {
     const { token, url, setCustomerCache, setCustomerList } = useContext(StoreContext);
     const [historyIndex, setHistoryIndex] = useState(0);
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
 
     const { id: itemId } = useParams(); // previous state item id like props
 
@@ -54,12 +56,18 @@ const FullList_Customer = () => {
 
 
     const fetchFullList = async () => {
-        const response = await axios.get(`${url}/api/service_Customer/fullList`, { params: { id: itemId }, headers: { token } });
-        if (response.data.success) {
-            setItem(response.data.data);
-        }
-        else {
-            toast.error("Error");
+        try {
+            const response = await axios.get(`${url}/api/service_Customer/fullList`, { params: { id: itemId }, headers: { token } });
+            if (response.data.success) {
+                setItem(response.data.data);
+            }
+            else {
+                toast.error("Error");
+            }
+        } catch (error) {
+            toast.error("Server Error")
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -67,6 +75,10 @@ const FullList_Customer = () => {
         if (!token) return;
         fetchFullList()
     }, [itemId, token])
+
+    if (loading) {
+        return <Loader />;
+    }
 
     const removeCustomer = async (itemId) => {
         const isConfirmed = window.confirm("Are you sure you want to delete this customer?");
@@ -88,6 +100,21 @@ const FullList_Customer = () => {
             console.error(error);
         }
     }
+
+    if (!item) {
+        return (
+            <div className="no-data-container">
+                <img src={assets.no_data_icon} alt="No Data" className="no-data-img" />
+                <h2>No Data Found</h2>
+                <p>This customer record may have been removed or is unavailable.</p>
+
+                <button onClick={() => navigate("/list_Service_Customer", { replace: true })}>
+                    Go Back
+                </button>
+            </div>
+        );
+    }
+
     return (
         <div className="full-list-container">
 

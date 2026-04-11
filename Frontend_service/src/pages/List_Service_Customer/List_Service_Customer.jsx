@@ -9,6 +9,7 @@ import { useContext } from 'react'
 import { StoreContext } from '../../context/StoreContext'
 import { useCallback } from "react";
 import { useRef } from 'react'
+import Loader1 from '../../components/Loader/Loader1'
 
 const List_Service_Customer = () => {
 
@@ -18,6 +19,8 @@ const List_Service_Customer = () => {
     customerList, setCustomerList, customerPage, customerTotalPages, customerCategory, setCustomerCategory, setCustomerPage, fetchCustomerList, setCustomerCache } = useContext(StoreContext);
 
 
+  // For loading
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const handleUpdate = (id) => {
     navigate(`/list_Customer/FullList_Customer/${id}`);
@@ -80,7 +83,13 @@ const List_Service_Customer = () => {
     // if searching → skip normal fetch
     if (searchValue.trim()) return;
 
-    fetchCustomerList(customerPage, customerCategory);
+    const loadData = async () => {
+      setLoading(true);
+      await fetchCustomerList(customerPage, customerCategory);
+      setLoading(false);
+    };
+
+    loadData();
 
   }, [token, customerCategory, customerPage, fetchCustomerList]);
 
@@ -249,34 +258,50 @@ const List_Service_Customer = () => {
           </div>
         )}
 
-        {/* ❌ No Data */}
-        {displayList.length === 0 && (
-          <p className="no-data">
-            {searchValue.trim()
-              ? "No search results found"
-              : `No customers found for ${customerCategory}`}
-          </p>
-        )}
-        {/* 📄 Data */}
-        {displayList.map((item, index) => (
-          <div key={item._id} className="list-cash-table-format">
-            <img src={assets.user_icon} alt="customer" />
-            <p>{item.name}</p>
-
-            <img
-              src={assets.edit_icon}
-              alt="edit"
-              className="edit-icon"
-              onClick={() => handleUpdate(item._id)}
-            />
-
-            <p>{new Date(item.serviceDate).toISOString().split("T")[0]}</p>
-            <p>{item.mobile1}</p>
-            <p>₹{item.totalPrice}</p>
-
-            <p onClick={() => removeCustomer(item._id)} className='cursor'>x</p>
+        {/* Data */}
+        {loading ? (
+          <Loader1 />
+        ) : displayList.length === 0 ? (
+          <div className="no-data-container">
+            <img src={assets.no_data_icon} alt="No Data" className="no-data-img" />
+            <p className="no-data">
+              {searchValue.trim()
+                ? "No search results found"
+                : `No customers found for ${customerCategory}`}
+            </p>
           </div>
-        ))}
+        ) : (
+          displayList.map((item, index) => (
+            <div key={item._id} className="list-cash-table-format" onClick={() => handleUpdate(item._id)} style={{ cursor: "pointer" }}>
+              <img src={assets.user_icon} alt="customer" />
+              <p>{item.name}</p>
+
+              <img
+                src={assets.edit_icon}
+                alt="edit"
+                className="edit-icon"
+                onClick={(e) => {
+                  e.stopPropagation(); // prevent parent click
+                  handleUpdate(item._id);
+                }}
+              />
+
+              <p>{new Date(item.serviceDate).toISOString().split("T")[0]}</p>
+              <p>{item.mobile1}</p>
+              <p>₹{item.totalPrice}</p>
+
+              <p
+                onClick={(e) => {
+                  e.stopPropagation(); // prevent parent click
+                  removeCustomer(item._id);
+                }}
+                className="cursor"
+              >
+                x
+              </p>
+            </div>
+          ))
+        )}
 
       </div>
     </div>
