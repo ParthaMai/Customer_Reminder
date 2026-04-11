@@ -120,7 +120,8 @@ const FullList_Customer = () => {
 
             <div className="field-table">
                 <div className="field-table-format">
-                    <p className="field-card-title">Cash Customer Data</p>
+                    <p className="field-card-title">
+                        Customer Data</p>
                     <div className="field">
                         <label>Image:</label>
                         <img src={assets.user_icon} alt="Customer" />

@@ -57,15 +57,6 @@ const Reminder = () => {
         ))}
       </div>
       <div className="reminder-list-table">
-        <div className="reminder-list-table-format title">
-          <b>Remind Date</b>
-          <b>Image</b>
-          <b>Name</b>
-          <b>Show-Details</b>
-          <b>Service Date</b>
-          <b>Mobile No.</b>
-          <b>Service Cost</b>
-        </div>
         {/* ✅ PAGINATION */}
         {reminderTotalPages > 1 && (
           <div className="reminder-pagination">
@@ -100,36 +91,40 @@ const Reminder = () => {
             <p className="no-data">No Reminders for {reminderCategory}</p>
           </div>
         ) : reminderList.map((item) => (
-          <div key={item._id} className="reminder-list-table-format" onClick={() => handleUpdate(item._id)} // ✅ HERE
+          <div key={item._id} className="list-cash-table-format" onClick={() => handleUpdate(item._id)} // ✅ HERE
             style={{ cursor: "pointer" }}>
 
-            <p>
-              {item.create
-                ? new Date(item.create).toISOString().split("T")[0]
-                : "-"}
-            </p>
+            <div className="list-left">
+              <img src={assets.user_icon} alt="user" />
 
-            <img src={assets.user_icon} alt="customer" />
+              <div className="list-info">
+                {/* TOP ROW */}
+                <div className="list-top">
+                  <p className="list-name">{item.name}</p>
+                </div>
 
-            <p>{item.name}</p>
+                {/* BOTTOM ROW */}
+                <div className="list-bottom">
+                  <span>{item.mobile1}</span>
+                </div>
+              </div>
+            </div>
 
-            <img
-              src={assets.user_details}
-              alt="details"
-              className="user_details"
-              onClick={() => handleUpdate(item._id)}
-            />
 
-            <p>
-              {item.serviceDate
-                ? new Date(item.serviceDate).toISOString().split("T")[0]
-                : "-"}
-            </p>
-
-            <p>{item.mobile1}</p>
-
-            <p>₹{item.totalPrice}</p>
-
+            <div className="list-right">
+              <div className="list-price">
+                ₹{item.totalPrice}
+                <span>Service Cost</span>
+              </div>
+            </div>
+            <div className="list-remind">
+              <p>
+                {item.create
+                  ? new Date(item.create).toISOString().split("T")[0]
+                  : "-"}
+              </p>
+              <span> Remind Date</span>
+            </div>
           </div>
         ))}
       </div>

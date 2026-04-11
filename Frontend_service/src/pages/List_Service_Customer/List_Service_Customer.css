@@ -1,207 +1,182 @@
-.list-cash {
-  width: 90%;
-  max-width: 1100px;
-  margin: 40px auto;
-  background-color: #f9f9f9;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  font-family: Arial, sans-serif;
-  color: #333;
-  font-size: max(1vw, 14px);
-}
-
+/* Header */
 .list-cash > p {
-    font-size: 22px;
+  font-size: 22px;
   font-weight: 600;
-  margin-bottom: 20px;
-  color: #1e3a8a;
+   color: #0e2e7a; 
+  margin-bottom: 15px;
 }
 
-.list-cash-table {
-  width: 100%;
-  overflow-x: auto;
-  padding-bottom: 60px;
-}
-
-/* Row layout */
-.list-cash-table-format {
-  display: grid;
-  grid-template-columns: 
-  0.7fr   /* Image */
-  1.2fr     /* Name */
-  0.7fr     /* Update */
-  1.2fr   /* Purchase Date */
-  1.5fr   /* Mobile No. */
-  0.8fr     /* Price */
-  0.6fr;  /* Action */
-    
-  align-items: center;
+/* Category Tabs */
+.service-type-selector {
+  display: flex;
   gap: 10px;
-  padding: 12px 10px;
-  border-bottom: 1px solid #ddd;
+  margin-bottom: 15px;
+}
+
+.service-type-selector button {
+  padding: 6px 16px;
+  border: none;
+  border-radius: 20px;
+  background: #e2e8f0;
+  cursor: pointer;
   font-size: 14px;
-}
-.edit-icon {
-  width: 22px;
-  height: 22px;
-  cursor: pointer;
-  margin: auto;
-  display: block;
-  opacity: 0.7;
+  transition: 0.3s;
 }
 
-.edit-icon:hover {
-  opacity: 1;
-  transform: scale(1.1);
+.service-type-selector button.active {
+  background: #317aee;
+  color: white;
+  font-weight: 500;
 }
-
-
-
-.list-cash-table-format.title {
-  background-color: #ebe6e6;
-  font-weight: 600;
-  border-radius: 6px 6px 0 0;
-}
-
-
-.list-cash-table-format img:not(.edit-icon)  {
-  width: 45px;
-  height: 45px;
-  object-fit: cover;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-
-.cursor {
-  color: red;
-  font-weight: bold;
-  cursor: pointer;
-  text-align: center;
-  font-size: 18px;
-}
-
-.list-cash-table-format:not(.title):hover {
-  background-color: #f2f2f2;
-}
-/* Search box */
+/* Search */
 .search-box {
   display: flex;
-  gap: 12px;
-  margin-bottom: 15px;
-  align-items: center;
-}
-.search-input-wrapper {
-  position: relative;
-  width: 260px;
-  margin-bottom: 10px;
-}
-
-/* Search icon */
-.search-icon {
-  position: absolute;
-  top: 50%;
-  left: 10px;
-  transform: translateY(-50%);
-  width: 18px;
-  height: 18px;
-  opacity: 0.6;
-  pointer-events: none;
-}
-
-/* Input field */
-.search-input-wrapper input {
-  width: 100%;
-  padding: 8px 10px 8px 38px; /* IMPORTANT */
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  outline: none;
-}
-
-/* Select box */
-.search-box select {
-  width: 260px;
-  height: 38px;              /* force same height */
-  padding: 8px 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  box-sizing: border-box;    /* VERY IMPORTANT */
-}
-.search-input-wrapper input:focus {
-  border-color: #888;
-}
-
-/*Pagination */
-
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 20px 0;
   gap: 10px;
-  font-family: Arial, sans-serif;
+  margin-bottom: 20px;
 }
 
-.pagination button {
-  padding: 6px 12px;
-  border: 1px solid #ccc;
-  background-color: #f9f9f9;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.2s, color 0.2s;
+.search-input-wrapper input {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  outline: none;
+  width: 220px;
+  background: #fff;
 }
 
-.pagination button:hover:not(:disabled) {
-  background-color: #007bff;
-  color: #fff;
-}
-
-.pagination button:disabled {
-  background-color: #eee;
-  color: #999;
-  cursor: not-allowed;
-}
-
-.pagination span {
-  font-weight: bold;
-  font-size: 14px;
-}
-.no-data {
-  text-align: center;
-  margin: 20px 0;
-  color: #888;
-  font-size: 16px;
+.search-box select {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
 }
 
 
-/* Mobile */
-@media (max-width: 600px) {
+
+/* LIST */
+.list-cash-table {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  padding-bottom: 50px;
+}
+
+/* CARD */
+.list-cash-table-format {
+  display: flex !important;
+  align-items: flex-start !important;   /* ✅ supports multi-line name */
+  justify-content: space-between !important;
+  gap: 10px !important;
+
+  width: 100% !important;              /* ✅ full width */
+  background: #f6f9fd !important;
+  padding: 10px 14px !important;
+  border-radius: 20px !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+/* LEFT */
+.list-left {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 10px !important;
+  flex: 1 !important;
+  min-width: 0 !important;            /* ✅ required */
+}
+
+/* IMAGE */
+.list-left img {
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 50% !important;
+  background: #dbeafe !important;
+  padding: 4px !important;
+  flex-shrink: 0 !important;
+}
+
+/* TEXT */
+.list-info {
+  display: flex !important;
+  flex-direction: column !important;
+  min-width: 0 !important;
+}
+
+/* NAME */
+.list-name {
+  font-size: 14px !important;
+  font-weight: 650 !important;
+  color: #233547 !important;
+  margin: 0 !important;
+
+  white-space: normal !important;   /* ✅ allow wrap */
+  word-break: break-word !important;
+}
+
+/* MOBILE */
+.list-bottom span {
+  font-size: 12px !important;
+  color: #64748b !important;
+}
+
+/* RIGHT */
+.list-right {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  margin-left: auto !important;   /* 🔥 push right */
+  flex-shrink: 0 !important;
+}
+
+/* PRICE */
+.list-price {
+  display: flex !important;
+  flex-direction: column !important;   /* 🔥 this makes it go below */
+  align-items: flex-end !important;    /* align right side nicely */
+  
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: #16a34a !important;
+}
+.list-price span {
+  color: #64748b !important;   /* ✅ modern grey */
+  font-size: 12px;
+  font-weight: 500 !important;
+}
+/* BUTTON */
+.edit-btn {
+  padding: 5px 12px !important;
+  border-radius: 999px !important;
+  border: none !important;
+  background: #1e6ae4 !important;
+  color: white !important;
+  font-size: 12px !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+}
+.pagination {
+  border-radius: 40% !important;
+  margin-top: 20px;
+}
+
+/* 💻 Desktop Fix */
+@media (min-width: 768px) {
+  
+  .list-cash {
+    max-width: 900px !important;   /* ✅ control total width */
+    margin: 0 auto !important;     /* ✅ center */
+  }
+
   .list-cash-table-format {
-    grid-template-columns: 
-      0.7fr   /* Image */
-      0.7fr     /* Name */
-      0.6fr   /* Update */
-      0.5fr     /* Price */
-      0.5fr;  /* Action */
+    padding: 12px 18px !important; /* slightly bigger */
   }
 
-  /* Hide Purchase Date */
-  .list-cash-table-format p:nth-child(4) {
-    display: none;
+  /* LEFT should not stretch too much */
+  .list-left {
+    flex: 0 0 60% !important;  /* ✅ limit left width */
   }
 
-  /* Hide Mobile No */
-  .list-cash-table-format p:nth-child(5) {
-    display: none;
-  }
-
-  /* Hide headings */
-  .list-cash-table-format.title b:nth-child(4) {
-    display: none;
-  }.list-cash-table-format.title b:nth-child(5) {
-    display: none;
+  /* RIGHT stays compact */
+  .list-right {
+    flex: 0 0 auto !important;
+    gap: 20px !important;
   }
 }
-

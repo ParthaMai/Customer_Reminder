@@ -208,17 +208,6 @@ const List_Service_Customer = () => {
 
       {/* 📋 Table */}
       <div className="list-cash-table">
-
-        <div className="list-cash-table-format title">
-          <b>Image</b>
-          <b>Name</b>
-          <b>Update</b>
-          <b>Service Date</b>
-          <b>Mobile No.</b>
-          <b>Service Cost</b>
-          <b>Action</b>
-        </div>
-
         {/* 🔁 Pagination */}
         {customerTotalPages > 1 && (
           <div className="pagination">
@@ -271,34 +260,42 @@ const List_Service_Customer = () => {
             </p>
           </div>
         ) : (
-          displayList.map((item, index) => (
-            <div key={item._id} className="list-cash-table-format" onClick={() => handleUpdate(item._id)} style={{ cursor: "pointer" }}>
-              <img src={assets.user_icon} alt="customer" />
-              <p>{item.name}</p>
+          displayList.map((item) => (
+            <div key={item._id}  className="list-cash-table-format" onClick={() => handleUpdate(item._id)} >
+              {/* LEFT SIDE */}
+              <div className="list-left">
+                <img src={assets.user_icon} alt="user" />
 
-              <img
-                src={assets.edit_icon}
-                alt="edit"
-                className="edit-icon"
-                onClick={(e) => {
-                  e.stopPropagation(); // prevent parent click
-                  handleUpdate(item._id);
-                }}
-              />
+                <div className="list-info">
+                  {/* TOP ROW */}
+                  <div className="list-top">
+                    <p className="list-name">{item.name}</p>
+                  </div>
 
-              <p>{new Date(item.serviceDate).toISOString().split("T")[0]}</p>
-              <p>{item.mobile1}</p>
-              <p>₹{item.totalPrice}</p>
+                  {/* BOTTOM ROW */}
+                  <div className="list-bottom">
+                    <span>{item.mobile1}</span>
+                  </div>
+                </div>
+              </div>
 
-              <p
-                onClick={(e) => {
-                  e.stopPropagation(); // prevent parent click
-                  removeCustomer(item._id);
-                }}
-                className="cursor"
-              >
-                x
-              </p>
+              {/* RIGHT SIDE */}
+              <div className="list-right">
+                <div className="list-price">
+                  ₹{item.totalPrice}
+                  <span>Service Cost</span>
+                </div>
+
+                <button
+                  className="edit-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleUpdate(item._id);
+                  }}
+                >
+                  Edit
+                </button>
+              </div>
             </div>
           ))
         )}

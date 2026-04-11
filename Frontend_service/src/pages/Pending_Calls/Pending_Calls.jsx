@@ -63,15 +63,6 @@ const Pending_Calls = () => {
             </div>
             <p>Pending Calls list</p>
             <div className="list-cash-table">
-                <div className="list-cash-table-format title">
-                    <b>Image</b>
-                    <b>Name</b>
-                    <b>Update</b>
-                    <b>Service Date</b>
-                    <b>Mobile No.</b>
-                    <b>Service Cost</b>
-                    <b>Service Date</b>
-                </div>
 
                 {/* Pagination */}
                 {pendingTotalPages > 1 && (
@@ -113,18 +104,32 @@ const Pending_Calls = () => {
                 ) : pendingList.map((item, index) => (
                     <div key={index} className="list-cash-table-format" onClick={() => handleUpdate(item._id)} // ✅ HERE
                         style={{ cursor: "pointer" }}>
-                        <img src={assets.user_icon} alt="customer" />
-                        <p>{item.name}</p>
-                        <img
-                            src={assets.edit_icon}
-                            alt="edit"
-                            className="edit-icon"
-                            onClick={() => handleUpdate(item._id)}
-                        />
-                        <p>{new Date(item.serviceDate).toISOString().split("T")[0]}</p>
-                        <p>{item.mobile1}</p>
-                        <p>₹{item.totalPrice}</p>
-                        <p>{new Date(item.serviceDate).toISOString().split("T")[0]}</p>
+                        <div className="list-left">
+                            <img src={assets.user_icon} alt="user" />
+
+                            <div className="list-info">
+                                {/* TOP ROW */}
+                                <div className="list-top">
+                                    <p className="list-name">{item.name}</p>
+                                </div>
+
+                                {/* BOTTOM ROW */}
+                                <div className="list-bottom">
+                                    <span>{item.mobile1}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {/* RIGHT SIDE */}
+                        <div className="list-right">
+                            <div className="list-price">
+                                ₹{item.totalPrice}
+                                <span>Service Cost</span>
+                            </div>
+                            <div className="list-remind">
+                            <p>{new Date(item.create).toISOString().split("T")[0]}</p>
+                            <span> Remind Date</span>
+                            </div>
+                        </div>
                     </div>
                 ))}
             </div>
