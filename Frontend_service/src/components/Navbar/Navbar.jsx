@@ -15,13 +15,11 @@ useEffect(() => {
   const timer = setTimeout(() => {
     if (!token) {
       navigate("/landing-page");
-    }else{
-      navigate("/")
     }
   }, 300); // wait 0.9s
 
   return () => clearTimeout(timer);
-}, [token]);
+}, [token, navigate]);
     //For logout
     const logout = () =>{
       localStorage.removeItem("token");
