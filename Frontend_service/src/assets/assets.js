@@ -22,7 +22,6 @@ import person_add_icon from './person_add_icon.png'
 import customer_list from './customer_list.png'
 import pending_icon from './pending_icon.png'
 import history_icon from './history_icon.png'
-import Today_Earn from './Today_Earn.png'
 import complete_service from './complete_service.png'
 import reject_customer from './reject_customer.png'
 import contact_icon from './contact_icon.png'
@@ -49,6 +48,17 @@ import customer_icon from './customer_icon.png'
 import calls_icon from './calls_icon.png'
 import booking_icon from './booking_icon.png'
 import sale_icon from './sale_icon.png'
+import customer_img from './customer_img.png'
+import addCustomer_icon from './addCustomer_icon.png'
+import phone_icon from './phone_icon.png'
+import sales_img from './sales_img.png'
+import service_icon from './service_icon.png'
+import reminder_icon from './reminder_icon.png'
+import support_icon from './support_icon.png'
+import Coin_Bag_icon from './Coin_Bag_icon.png'
+import coin_icon from './coin_icon.png'
+import Book_appointment_icon from './Book_appointment_icon.png'
+import task_icon from './task_icon.png'
 
 export const assets = {
     cross_icon,
@@ -72,7 +82,6 @@ export const assets = {
     customer_list,
     pending_icon,
     history_icon,
-    Today_Earn,
     complete_service,
     reject_customer,
     contact_icon,
@@ -98,5 +107,16 @@ export const assets = {
     customer_icon,
     booking_icon,
     calls_icon,
-    sale_icon
+    sale_icon,
+    customer_img,
+    addCustomer_icon,
+    phone_icon,
+    sales_img,
+    service_icon,
+    reminder_icon,
+    support_icon,
+    Coin_Bag_icon,
+    coin_icon,
+    Book_appointment_icon,
+    task_icon
 }

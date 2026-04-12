@@ -27,6 +27,7 @@ import SubsCription from './pages/Subscription/SubsCription'
 import BookingAppointment from './pages/BookingAppointment/BookingAppointment'
 import AddSale from './pages/AddSale/AddSale'
 import LandingPage from './pages/LandingPage/LandingPage'
+import CompletedTask from './pages/CompletedTask/CompletedTask'
 
 const App = () => {
 
@@ -63,6 +64,7 @@ const App = () => {
           <Route path="/booking-appointment" element = {<BookingAppointment/>} />
           <Route path="/add-sale" element = {<AddSale/>} />
           <Route path="/landing-page" element = {<LandingPage/>} />
+          <Route path="/completed-tasks" element = {<CompletedTask/>} />
 
           
           {/* <Route path='/dob_reminder' element = {<Dob_reminder url={url} />} />

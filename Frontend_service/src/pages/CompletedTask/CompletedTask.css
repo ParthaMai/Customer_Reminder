@@ -1,0 +1,16 @@
+.task-count {
+  margin: 12px 0 20px;
+  padding: 8px 16px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #d63062;
+
+  background: #eef2ff;
+  border-radius: 999px; /* pill shape */
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  border: 1px solid #c7d2fe;
+}

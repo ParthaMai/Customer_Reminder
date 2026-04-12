@@ -127,7 +127,11 @@ const FullList_Customer = () => {
                         <img src={assets.user_icon} alt="Customer" />
                     </div>
                     <hr />
-
+                    <div className="field service-category">
+                        <label>Service Category:</label>
+                        <p className="highlights">{item.serviceCategory}</p>
+                    </div>
+                    <hr />
                     <div className="field">
                         <label>Name:</label>
                         {isEditing ? (
@@ -270,6 +274,15 @@ const FullList_Customer = () => {
                             </p>
                         )}
                     </div>
+                    <hr />
+                    {item.callingDate && (
+                        <>
+                            <div className="field">
+                                <label>Last Call Date : </label>
+                                <p>{new Date(item.callingDate).toISOString().split("T")[0]}</p>
+                            </div>
+                            <hr /></>
+                    )}
                     <hr />
                     {item.nextReminderDate && (
                         <>
