@@ -2,40 +2,6 @@
   padding: 22px;
 }
 
-/* 3 Column Row */
-.row {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 18px;
-}
-
-/* Main Box */
-.box {
-  flex: 1;
-  height: 70px;
-  background: #d6e4ff;
-  border-radius: 20px;
-
-  display: flex;
-  flex-direction: column;      /* 🔥 IMPORTANT */
-  align-items: center;         /* center horizontally */
-  justify-content: center;     /* center vertically */
-
-  text-decoration: none;
-  color: #1f2933;
-  margin: 0 8px;
-  padding: 10px;
-}
-
-/* Icon style */
-.box img {
-  background: #d6e4ff;
-  width: 25px;
-  height: 25px;
-  margin-bottom: 6px;
-}
-
 /* Text */
 .box {
   text-align: center;
@@ -48,6 +14,10 @@
 }
 
 .box:hover {
+  background: #c0d3f3;
+  transform: translateY(-3px);
+}
+.box-right:hover {
   background: #c0d3f3;
   transform: translateY(-3px);
 }

@@ -1,0 +1,317 @@
+/* For top navbar */
+/* 4 Column Row */
+.rows {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding: 10px 5px;
+}
+
+/* Main Box (Container for Icon + Text) */
+.boxes {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+/* 🔥 The soft rounded square behind the icon */
+.icon-wrapper {
+  width: 45px;
+  height: 45px;
+  background: #ffe5d0; /* Soft purple/blue tint from your screenshot */
+  border-radius: 12px; /* Smooth, modern corners */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px; /* Space between icon box and text */
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+/* Subtle hover effect */
+.boxes:hover .icon-wrapper {
+  transform: scale(1.05);
+  background: #d1dbff;
+}
+
+/* Icon Image Style */
+.icon-wrapper img {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  /* Optional: If your icons are black/gray and you want them to look dark blue like the image, 
+     you can apply a CSS filter here, but native colored assets are better */
+}
+.boxes {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent; /* removes blue mobile highlight */
+  outline: none;
+}
+/* Text Style */
+.boxes p {
+  margin: 0;
+  font-size: 13px;
+  color: #4a4a4a; /* Slightly muted dark gray */
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap; /* Prevents text from breaking into two lines */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/*For Active class */
+/* Changes the icon wrapper when active */
+.boxes.active .icon-wrapper {
+  background: #b0d6fa; /* Slightly darker background so it stands out */
+  
+  /* This creates the color ring OUTSIDE the div */
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #4c5bb7; 
+}
+
+/* Changes the text when active */
+.boxes.active p {
+  color: #4c5bb7; /* Match the ring color */
+  font-weight: 700; /* Make it bold */
+}
+
+/* Optional: Stop the hover effect from scaling the active box */
+.boxes.active:hover .icon-wrapper {
+  transform: none; 
+}
+
+/* Mobile Adjustments */
+@media (max-width: 400px) {
+  .icon-wrapper {
+    width: 50px;
+    height: 50px;
+  }
+  .icon-wrapper img {
+    width: 24px;
+    height: 24px;
+  }
+  .boxes p {
+    font-size: 11px; /* Smaller text for narrow screens */
+  }
+}
+
+
+/* Reset body to ensure the dashboard touches the edges of the screen */
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Premium Fintech Gradient Dashboard */
+.dashboard {
+  padding: 24px;
+  min-height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #f8fafc;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(226, 232, 255, 0.8) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(255, 255, 255, 1) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(219, 234, 254, 0.6) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(243, 244, 246, 0.8) 0px, transparent 50%);
+  transition: background 0.5s ease-in-out;
+}
+
+/* .dashboard {
+  padding: 24px;
+  background: #f5f7fb;
+} */
+
+/* Row Layout */
+.row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+/* Card Box */
+.box {
+  position: relative; 
+  flex: 1;
+  min-height: 120px;
+    background: linear-gradient(135deg, #dbeafe, #ede9fe);
+  border-radius: 25px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  padding: 10px;
+  padding-right: 60px;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+.box-right {
+  position: relative; 
+  flex: 1;
+  min-height: 120px;
+    background: linear-gradient(135deg, #dbeafe, #ede9fe);
+  border-radius: 25px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  padding: 10px;
+  padding-right: 40px;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+.card-img {
+  position: absolute;
+  top: 15px;
+  right: 10px;
+  width: 70px !important;   /* adjust as needed */
+  height:70px !important;
+}
+.card-right-img{
+  position: absolute;
+  bottom: 5px;
+  right: 10px;
+  width: 60px !important;   /* adjust as needed */
+  height: 60px !important;
+}
+.card2-row-img{
+  position: absolute;
+  bottom: 5px;
+  right: 10px;
+  width: 35px !important;   /* adjust as needed */
+  height: 35px !important;
+}
+.card-text {
+  padding-right: 22px;
+  margin-top: 20px;
+  max-width: 100%;
+  line-height: 1.2;
+}
+.card-right-text{
+  padding-right: 20px;
+  margin-top: 5x;
+  max-width: 100%;
+  line-height: 1.3;
+}
+.card-text h4 {
+  font-family: "Times New Roman", serif;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+  background: linear-gradient(90deg, #1d4ed8, #6d28d9);
+  background-clip: text;              /* standard */
+  -webkit-background-clip: text;      /* for Chrome/Safari */
+  color: transparent;                 /* fallback */
+  -webkit-text-fill-color: transparent;
+}
+.box-right h4{
+  font-family: "Times New Roman", serif;
+  font-size: 16px;
+  font-weight: 700;
+}
+.card-premium-text p{
+    padding-right: 20px;
+    margin-top: 5px;
+    max-width: 100%;
+    font-size: 12px;
+    color: #5b6677;
+}
+
+.card-text p {
+  font-size: 11px;
+  color: #5b6677;
+  margin-top: 5px !important;
+}
+.card-right-text h4 {
+  font-family: "Times New Roman", serif;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+  background: linear-gradient(90deg, #1d4ed8, #6d28d9);
+  background-clip: text;              /* standard */
+  -webkit-background-clip: text;      /* for Chrome/Safari */
+  color: transparent;                 /* fallback */
+  -webkit-text-fill-color: transparent;
+}
+
+.card-right-text p {
+  font-size: 11px;
+  color: #5b6677;
+  margin-top: 5px !important;
+}
+
+/* Image inside card */
+.box img {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+/* Text */
+.box {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2b2f38;
+}
+
+/* Hover effect */
+.box:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+.box-right:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Action section (slightly different tone) */
+.action-box {
+  background: #eef2f7;
+}
+
+.action-box:hover {
+  background: #e4e9f2;
+}
+
+/* Empty box */
+.empty {
+  background: transparent;
+  pointer-events: none;
+  cursor: default;
+  box-shadow: none;
+}
+
+/* Section Title */
+.section-title {
+  margin: 18px 6px 10px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .row {
+    flex-wrap: wrap;
+  }
+
+  .box {
+    flex: 1 1 48%;
+    min-height: 140px;
+    font-size: 13px;
+  }
+
+  .box img {
+    width: 45px;
+    height: 45px;
+  }
+}
