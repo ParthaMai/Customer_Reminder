@@ -28,6 +28,18 @@ const serviceHistorySchema = new mongoose.Schema({
   }
 });
 
+const taskSchema = new mongoose.Schema({
+  isComplete: {
+    type: Boolean,
+    default: false,
+    index: true
+  },
+  completedDate: {
+    type: Date,
+    default: null
+  },
+});
+
 const Service_ReminderSchema = new mongoose.Schema(
   {
     userId:{
@@ -125,6 +137,11 @@ const Service_ReminderSchema = new mongoose.Schema(
     callingDate: {
       type: Date,
       default: null
+    },
+    // For task
+    tasks: {
+      type: [taskSchema],
+      default: []
     }
   },
   { timestamps: true }

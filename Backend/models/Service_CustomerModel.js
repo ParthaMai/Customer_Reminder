@@ -28,6 +28,18 @@ const serviceHistorySchema = new mongoose.Schema({
   }
 });
 
+const taskSchema = new mongoose.Schema({
+  isComplete: {
+    type: Boolean,
+    default: false,
+    index: true
+  },
+  completedDate: {
+    type: Date,
+    default: null
+  },
+});
+
 
 const Service_CustomerSchema = new mongoose.Schema(
   {
@@ -134,6 +146,11 @@ const Service_CustomerSchema = new mongoose.Schema(
     callingDate: {
       type: Date,
       default: null
+    },
+    // For task
+    tasks: {
+      type: [taskSchema],
+      default: []
     }
     
   },

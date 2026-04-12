@@ -1,6 +1,6 @@
 import express from "express"
 import multer from "multer";
-import { addNewCustomer, addService_Customer, checkMobileExists, checkMobileNumber, completeAppointment, createCustomerWithBooking, FullServiceList, removeCustomer, SearchServiceCustomer, Service_Customer_List, updateBooking, updateField } from "../controllers/ServiceController.js";
+import { addNewCustomer, addService_Customer, checkMobileExists, checkMobileNumber, completeAppointment, createCustomerWithBooking, FullServiceList, getCompletedTasksByDate, removeCustomer, SearchServiceCustomer, Service_Customer_List, updateBooking, updateField } from "../controllers/ServiceController.js";
 import authMiddleware from "../middleware/auth.js";
 
 
@@ -19,6 +19,6 @@ Service_CustomerRouter.post("/booking-update",authMiddleware,updateBooking);
 Service_CustomerRouter.post("/booking-complete",authMiddleware,completeAppointment);
 Service_CustomerRouter.get("/check-mobile", authMiddleware, checkMobileExists);
 Service_CustomerRouter.get("/check-mobileNo", authMiddleware, checkMobileNumber);
-
+Service_CustomerRouter.get("/tasks-completed", authMiddleware, getCompletedTasksByDate);
 
 export default Service_CustomerRouter;

@@ -84,7 +84,20 @@ const updatePending = async (req, res) => {
     // If nothing to update
     if (Object.keys(payload).length === 0) {
       return res.json({ success: false, message: "Please provide at least one field to update" });
+      
     }
+
+    await Service_CustomerModel.updateOne(
+      { _id, userId },
+      {
+        $push: {
+          tasks: {
+            isComplete: true,
+            completedDate: new Date()
+          }
+        }
+      }
+    );
 
     const updated = await Service_CustomerModel.findByIdAndUpdate(
       {

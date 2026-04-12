@@ -379,9 +379,24 @@ const updateBooking = async (req, res) => {
     if("serviceCategory" in req.body) payload.serviceCategory = serviceCategory;
     if ("nextReminderDate" in req.body) payload.nextReminderDate = new Date(nextReminderDate);
 
+    // ✅ Always set callingDate to today
+    payload.callingDate = new Date();
+
     if (Object.keys(payload).length === 0) {
       return res.json({ success: false, message: "Please provide at least one field to update" });
     }
+
+    await Service_CustomerModel.updateOne(
+      { _id, userId },
+      {
+        $push: {
+          tasks: {
+            isComplete: true,
+            completedDate: new Date()
+          }
+        }
+      }
+    );
 
     const updated = await Service_CustomerModel.findOneAndUpdate(
       { _id: _id, userId: userId },
@@ -491,4 +506,58 @@ const checkMobileNumber = async (req, res) => {
   }
 };
 
-export {addService_Customer,createCustomerWithBooking, Service_Customer_List, SearchServiceCustomer,removeCustomer,FullServiceList, updateField, updateBooking, completeAppointment, checkMobileExists, checkMobileNumber, addNewCustomer}
+const getCompletedTasksByDate = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const { date } = req.query;
+
+    if (!date) {
+      return res.json({ success: false, message: "Date is required" });
+    }
+
+    const selectedDate = new Date(date);
+
+    // 🔥 Create start & end of day
+    const startOfDay = new Date(selectedDate.setHours(0, 0, 0, 0));
+    const endOfDay = new Date(selectedDate.setHours(23, 59, 59, 999));
+
+    const data = await Service_CustomerModel.find({
+      userId,
+      tasks: {
+        $elemMatch: {
+          isComplete: true,
+          completedDate: {
+            $gte: startOfDay,
+            $lte: endOfDay
+          }
+        }
+      }
+    })
+      .select("name mobile1 tasks")
+      .lean();
+      let totalCount = 0;
+
+    // 🔥 Filter only matching tasks (important)
+    const result = data.map(item => {
+      const filteredTasks = item.tasks.filter(t =>
+        t.isComplete &&
+        new Date(t.completedDate) >= startOfDay &&
+        new Date(t.completedDate) <= endOfDay
+      );
+      // 🔥 count tasks
+      totalCount += filteredTasks.length;
+
+      return { _id: item._id, name: item.name, mobile1: item.mobile1, tasks: filteredTasks };
+    });
+
+    res.json({ success: true, totalCount,  data: result });
+
+  } catch (error) {
+    console.error(error);
+    res.json({ success: false, message: "Server error" });
+  }
+};
+
+
+export {addService_Customer,createCustomerWithBooking, Service_Customer_List, SearchServiceCustomer,removeCustomer,FullServiceList, updateField, updateBooking,
+   completeAppointment, checkMobileExists, checkMobileNumber, addNewCustomer, getCompletedTasksByDate}
