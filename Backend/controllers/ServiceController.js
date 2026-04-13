@@ -154,6 +154,9 @@ const addNewCustomer = async (req, res) => {
       description,
       dob,
 
+      isCompleted: true,
+      completedAt: latest.serviceDate,
+
       // Service / Booking Info
       serviceCategory,
       serviceDate: latest.serviceDate,  

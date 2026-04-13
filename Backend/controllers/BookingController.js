@@ -140,68 +140,6 @@ const removeBooking = async (req,res) => {
     }
 }
 
-//update service for Booking Customer
-
-// const updateServiceReminder = async (req, res) => {
-//   try {
-//     const userId = req.userId;
-//     const { _id, serviceDate, services, totalPrice, reminderPeriod, serviceCategory} = req.body;
-
-//     let payload = {};
-
-//     // Dynamic field updates
-//     if ("serviceDate" in req.body) {
-//       payload.serviceDate = new Date(serviceDate);
-//     }
-
-//     if ("reminderPeriod" in req.body) {
-//       payload.reminderPeriod = reminderPeriod;
-//     }
-
-//     if ("totalPrice" in req.body) {
-//       payload.totalPrice = totalPrice;
-//     }
-
-//     if ("services" in req.body) {
-//       // Filter valid services
-//       const validServices = services.filter(
-//         (s) => s.description && s.price
-//       );
-
-//       if (validServices.length > 0) {
-//         payload.services = validServices;
-//       }
-//     }
-
-//     if("serviceCategory" in req.body) {
-//       payload.serviceCategory = serviceCategory;
-//     }
-
-//     if (Object.keys(payload).length === 0) {
-//       return res.json({ success: false, message: "Please provide at least one field to update" });
-//     }
-
-//     // Update DB
-//     const updated = await Service_CustomerModel.findOneAndUpdate(
-//       { _id: _id, userId: userId },
-//       { $set: payload },
-//       { returnDocument: "after" }
-//     );
-
-//     // ❌ Not found
-//     if (!updated) {
-//       return res.json({ success: false, message: "Customer not found" });
-//     }
-
-//     res.json({ success: true, message: "Service reminder updated successfully" });
-
-//   } catch (error) {
-//     console.error(error);
-//     res.json({ success: false, message: "Server error" });
-//   }
-// };
-
-
 const updateServiceReminder = async (req, res) => {
   try {
     const userId = req.userId;
@@ -216,6 +154,8 @@ const updateServiceReminder = async (req, res) => {
     // ✅ SET fields
     if (serviceDateObj) {
       updateQuery.$set.serviceDate = serviceDateObj;
+      updateQuery.$set.completedAt = serviceDateObj;
+      updateQuery.$set.isCompleted = true;  
     }
 
     if (reminderPeriod) {

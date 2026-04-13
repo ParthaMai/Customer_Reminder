@@ -166,6 +166,7 @@ Service_CustomerSchema.index({ userId: 1,isCompleted: 1, completedAt: 1 });
 Service_CustomerSchema.index({userId: 1,serviceCategory: 1});
 Service_CustomerSchema.index({ userId: 1, isCompleted: 1 });
 Service_CustomerSchema.index({ userId: 1, mobile1: 1, serviceCategory: 1 });
+Service_CustomerSchema.index({ userId: 1, "tasks.isComplete": 1, "tasks.completedDate": 1});
 
 // ===== Pre-save middleware: set first reminder =====
 Service_CustomerSchema.pre("save", function () {

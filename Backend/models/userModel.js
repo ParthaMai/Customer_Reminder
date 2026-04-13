@@ -6,7 +6,8 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     image: {
-      type: String 
+      type: String,
+      default: ""
     },
     email: {
         type: String,
@@ -28,9 +29,13 @@ const userSchema = new mongoose.Schema({
     },
     billPasscode: {
         type: String,
-        default: ""
+        default: "A"
     },
     totalCustomer: {
+        type: Number,
+        default: 0
+    },
+    totalBill:{
         type: Number,
         default: 0
     }
