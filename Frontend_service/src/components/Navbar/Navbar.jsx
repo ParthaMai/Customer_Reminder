@@ -7,7 +7,7 @@ import { StoreContext } from '../../context/StoreContext'
 
 const navbar = ({setShowLogin}) => {
 
-  const { token,setToken, reminderCount } = useContext(StoreContext);
+  const { token,setToken, reminderCount, user } = useContext(StoreContext);
   const navigate = useNavigate();
 
     // 🔥 AUTO REDIRECT IF NOT LOGGED IN
@@ -41,7 +41,7 @@ useEffect(() => {
         </NavLink>
         {!token?<button className='signin-btn' onClick={()=>setShowLogin(true)}>Login</button>
         :<div className='navbar-profile'>
-          <img src={assets.profile_icon} alt="" />
+          <img src={user?.image || assets.profile_icon} alt="profile" />
           <ul className='nav-profile-dropdown'>
             <li onClick={logout}><img src={assets.logout_icon} alt="" /><p>Logout</p> </li>
           </ul>
