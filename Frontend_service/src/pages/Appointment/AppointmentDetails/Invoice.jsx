@@ -1,14 +1,18 @@
 import React from "react";
 import "./Invoice.css";
+import { useContext } from "react";
+import { StoreContext } from "../../../context/StoreContext";
 
 const Invoice = ({ customerInfo, items }) => {
+
+  const { user} = useContext(StoreContext);
   const total = items.reduce((sum, i) => sum + Number(i.price), 0);
 
   return (
     <div className="invoice-container">
       {/* --- HEADER --- */}
       <div className="invoice-header">
-        <h1>Sonar Bangla Shopping Complex</h1>
+        <h1>{user?.storeName}</h1>
         <p className="invoice-subtitle">Invoice / Bill of Supply</p>
       </div>
 
@@ -27,8 +31,9 @@ const Invoice = ({ customerInfo, items }) => {
         {/* Right Side: Invoice Details */}
         <div className="info-box right-box">
           <h3>Invoice Details:</h3>
+          <p><strong>Invoice No:</strong>{user?.billPasscode}{user?.totalBill}</p>
           <p><strong>Date:</strong> {customerInfo.serviceDate || "N/A"}</p>
-          <p><strong>Shop Contact No:</strong> {customerInfo.shopContact}</p>
+          <p><strong>Shop Contact No:</strong> {user?.mobile}</p>
         </div>
       </div>
 

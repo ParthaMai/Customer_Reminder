@@ -14,6 +14,9 @@ const StoreContextProvider = (props) => {
 
   const [token, setToken] = useState("");
 
+  // For user image
+  const [user, setUser] = useState(null);
+
   // For Count Reminder 
   const [reminderCount, setReminderCount] = useState(0);
 
@@ -238,40 +241,53 @@ const fetchCustomerList = async (pageNumber = 1, category = customerCategory, fo
     }
   };
 
-//   useEffect(() => {
-//     async function loadData() {
-//       if (localStorage.getItem("token")) {
-//         setToken(localStorage.getItem("token"));
-//       }
-//     }
-//     loadData();
-//   }, [])
+  // For Fethc Admin user
+  const fetchUser = async () => {
+  if (!token) return;
 
-//     // This is for Reminder Count
-// useEffect(() => {
-//   const storedToken = localStorage.getItem("token");
+  try {
+    const res = await axiosInstance.get(`${url}/api/user/profile`, {
+      headers: { token }
+    });
 
-//   if (storedToken) {
-//     setToken(storedToken);
-//     fetchReminderCount(storedToken); // 🔥 call directly
-//   }
-// }, []);
+    if (res.data.success) {
+      setUser(res.data.user);
 
-
-useEffect(() => {
-  const storedToken = localStorage.getItem("token");
-  if (storedToken) {
-    setToken(storedToken);
+      // optional persistence
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+    }
+  } catch (error) {
+    console.log(error);
   }
-}, []);
+};
 
-useEffect(() => {
-  if (token) {
-    fetchReminderCount();
-  }
-}, [token]);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      setToken(storedToken);
+    }
+  }, []);
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (token) {
+      fetchReminderCount();
+      fetchUser();
+    }
+  }, [token]);
   const contextValue = {
 
+    user,
+    setUser,
+    fetchUser,
+    
     url,
     token,
     setToken,

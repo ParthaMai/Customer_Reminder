@@ -11,7 +11,7 @@ import Invoice from "./Invoice";
 import Loader from '../../../components/Loader/Loader';
 
 const AppointmentDetails = () => {
-    const { token, url , setBookingCache} = useContext(StoreContext);
+    const { token, url , setBookingCache, setUser} = useContext(StoreContext);
     const [historyIndex, setHistoryIndex] = useState(0);
     const [totalPrice, setTotalPrice] = useState(0);
     const loadingRef = useRef(false);
@@ -198,6 +198,23 @@ const AppointmentDetails = () => {
                     services: [{ description: "", price: "" }],
                     reminderPeriod: ""
                 });
+                const res = await axios.post(`${url}/api/user/increment-bill`,{}, { headers: { token } });
+                if (res.data.success) {
+                    const updatedBill = res.data.totalBill;
+    
+                        // ✅ update context
+                        setUser(prev => ({
+                            ...prev,
+                            totalBill: updatedBill
+                        }));
+    
+                    // update local storage
+                    const user = JSON.parse(localStorage.getItem("user"));
+    
+                    user.totalBill = updatedBill;
+    
+                    localStorage.setItem("user", JSON.stringify(user));
+                }
 
                 toast.success(response.data.message);
                 return true;
@@ -596,8 +613,7 @@ const AppointmentDetails = () => {
                                 name: item.name,
                                 address: item.address,
                                 contact: item.mobile1,
-                                serviceDate: data.serviceDate,
-                                shopContact: "+91 9123456780",
+                                serviceDate: data.serviceDate
                             }}
                             items={data.services.map(s => ({ name: s.description, price: Number(s.price) }))}
                         />

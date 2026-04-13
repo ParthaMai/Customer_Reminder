@@ -28,6 +28,7 @@ import BookingAppointment from './pages/BookingAppointment/BookingAppointment'
 import AddSale from './pages/AddSale/AddSale'
 import LandingPage from './pages/LandingPage/LandingPage'
 import CompletedTask from './pages/CompletedTask/CompletedTask'
+import './Toast.css'
 
 const App = () => {
 
@@ -42,7 +43,7 @@ const App = () => {
     <div className='app'>
       
       <Navbar setShowLogin={setShowLogin} /> {/* Pass the login props */}
-      <ToastContainer /> 
+      <ToastContainer />
       <hr/>
         <Routes>
           <Route path="/" element={<Home />} />

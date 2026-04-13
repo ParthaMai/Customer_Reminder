@@ -9,7 +9,7 @@ import Invoice from '../Appointment/AppointmentDetails/Invoice';
 
 
 const AddSale = () => {
-    const { token, url } = useContext(StoreContext);
+    const { token, url, setUser } = useContext(StoreContext);
     const [totalPrice, setTotalPrice] = useState(0);
     const [data, setData] = useState({
         _id: null,
@@ -29,6 +29,7 @@ const AddSale = () => {
         totalPrice: "",
         reminderPeriod: ""
     });
+    
 
     const [mobileStatus, setMobileStatus] = useState(null);
     const [item, setItem] = useState(null);
@@ -133,6 +134,7 @@ const AddSale = () => {
         } catch (error) {
             console.error("Download failed:", error);
             toast.error("Failed to download invoice");
+            window.scrollTo({ top: 0, behavior: "smooth" });
         }
     };
     // For whatsapp  message
@@ -281,7 +283,31 @@ const AddSale = () => {
                     toast.error(res.data.message);
                 }
             }
+            await axios.post(`${url}/api/totalEarning/Total-Earning`,
+                {
+                    totalPrice: totalPrice,
+                    serviceDate: data.serviceDate,
+                    userId: item?.userId   // safer
+                },
+                { headers: { token } });
 
+            const res = await axios.post(`${url}/api/user/increment-bill`, {}, { headers: { token } });
+            if (res.data.success) {
+                const updatedBill = res.data.totalBill;
+
+                // ✅ update context
+                setUser(prev => ({
+                    ...prev,
+                    totalBill: updatedBill
+                }));
+
+            // update local storage
+                const user = JSON.parse(localStorage.getItem("user"));
+
+                user.totalBill = updatedBill;
+
+                localStorage.setItem("user", JSON.stringify(user));
+            }
             setData({
                 name: "",
                 mobile1: "",
@@ -521,8 +547,7 @@ const AddSale = () => {
                             name: customerData.name || "",
                             address: customerData.address || "",
                             contact: customerData.mobile1 || "",
-                            serviceDate: data.serviceDate,
-                            shopContact: "+91 9123456780",
+                            serviceDate: data.serviceDate
                         }}
                         items={data.services.map(s => ({
                             name: s.description,
