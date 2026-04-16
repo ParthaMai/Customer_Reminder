@@ -13,6 +13,7 @@ const ServiceHistory = () => {
   const [loading, setLoading] = useState(true);
 
   const [date, setDate] = useState(new Date());
+  console.log(date)
   const [history, setHistory] = useState([]);
 
   const fetchHistory = async (selectedDate) => {

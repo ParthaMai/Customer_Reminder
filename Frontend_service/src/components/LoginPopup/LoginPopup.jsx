@@ -129,7 +129,7 @@ const LoginPopup = ({ setShowLogin }) => {
         <div className="login-popup-input">
           {currState === "Login" ? <></> : <>
             <input name="name" onChange={onChangeHandler} value={data.name} type="text" placeholder='Your name' required />
-            <input name="mobile" onChange={onChangeHandler} value={data.mobile} type="tel" maxLength="10" placeholder='Mobile number' required />
+            <input name="email" onChange={onChangeHandler} value={data.email} type="email" placeholder='Your email' required />
             <div className="add-img-upload">
               <p>Upload Image (Optional)</p>
               <label htmlFor="image">
@@ -141,7 +141,7 @@ const LoginPopup = ({ setShowLogin }) => {
             <input name="billPasscode" onChange={onChangeHandler} value={data.billPasscode} type="text" placeholder='Bill PassCode - A, B , C...' required/>
           </>
           }
-          <input name="email" onChange={onChangeHandler} value={data.email} type="email" placeholder='Your email' required />
+          <input name="mobile" onChange={onChangeHandler} value={data.mobile} type="tel" maxLength="10" placeholder='Mobile number' required />
           <div className="password-wrapper">
             <input className="password-input" name="password" onChange={onChangeHandler} value={data.password} type={showPassword ? "text" : "password"} placeholder="Password" required />
 
