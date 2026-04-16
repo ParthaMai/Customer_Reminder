@@ -6,9 +6,14 @@ import cloudinary from "../config/cloudinary.js";
 
 // Login user
 const loginUser = async (req,res) => {
-    const {email,password}= req.body;
+    const { mobile, password } = req.body;
     try{
-        const user= await userModel.findOne({email});
+
+        // ✅ Validate mobile number
+        if (!mobile || !/^[0-9]{10}$/.test(mobile)) {
+            return res.json({ success: false, message: "Please enter a valid 10-digit mobile number" });
+        }
+        const user = await userModel.findOne({ mobile });
 
         if(!user) {
             return res.json({success:false,message:"user Doesn't exist"});
@@ -25,7 +30,7 @@ const loginUser = async (req,res) => {
     }
     catch(error){
         console.log(error);
-        res.json({success:false,message:"Error"});
+        res.json({success:false,message:"Oops! Something went wrong. OR Please contact support."});
     }
 }
 
@@ -48,8 +53,6 @@ const createToken = (id) => {
   // 👉 Convert difference to seconds
   const expiresIn = Math.floor((expiryDate - istNow) / 1000);
 
-  console.log(expiresIn)
-
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn });
 };
 
@@ -60,22 +63,36 @@ const registerUser = async (req, res) => {
     const imageUrl = req.file ? req.file.path : null;
     const publicId = req.file ? req.file.filename : null;
     try {
-        // checking is user already exists
-        const exists = await userModel.findOne({ email });
+
+      if (!mobile || !/^[0-9]{10}$/.test(mobile)) {
+            if (publicId) {
+                await cloudinary.uploader.destroy(publicId);
+            }
+            return res.json({  success: false,  message: "Please enter a valid 10-digit mobile number"  });
+        }
+        // ✅ Check if user already exists (by mobile)
+        const exists = await userModel.findOne({ mobile });
         if (exists) {
             if (publicId) {
                 await cloudinary.uploader.destroy(publicId);
             }
-            return res.json({ success: false, message: "User already Exists" });
+            return res.json({  success: false,  message: "User already exists with this mobile number" });
+        }
+        const Mailexists = await userModel.findOne({ email }); 
+        if (Mailexists) { 
+          if (publicId) { 
+            await cloudinary.uploader.destroy(publicId); 
+          } 
+          return res.json({ success: false, message: "This Email already Exists Try another Email" }); 
+        } 
+        //validating email format & strong password 
+        if (!validator.isEmail(email)) { 
+          if (publicId) { 
+            await cloudinary.uploader.destroy(publicId); 
+          } 
+          return res.json({ success: false, message: "Please enter a valid email" }); 
         }
 
-        //validating email format & strong password
-        if (!validator.isEmail(email)) {
-            if (publicId) {
-                await cloudinary.uploader.destroy(publicId);
-            }
-            return res.json({ success: false, message: "Please enter a valid email" });
-        }
         if (password.length < 8) {
              if (publicId) {
                 await cloudinary.uploader.destroy(publicId);
@@ -102,7 +119,7 @@ const registerUser = async (req, res) => {
     }
     catch(error){
         console.log(error);
-        res.json({success:false,message:"Error"});
+        res.json({success:false,message:"Oops! Something went wrong. OR Please contact support."});
     }
 }
 
@@ -118,6 +135,9 @@ const getUserProfile = async (req, res) => {
     res.json({ success: true, user });
 
   } catch (error) {
+    if (publicId) {
+          await cloudinary.uploader.destroy(publicId);
+      }
     console.log(error);
     res.json({ success: false, message: "Error fetching profile"});
   }

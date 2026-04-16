@@ -89,6 +89,8 @@ const getServiceHistoryByDate = async (req, res) => {
     const end = new Date(date);
     end.setHours(23, 59, 59, 999);
 
+    console.log(start);
+    console.log(end);
 const customers = await Service_CustomerModel.find({
   userId,
   isCompleted: true

@@ -538,7 +538,7 @@ const getCompletedTasksByDate = async (req, res) => {
     })
       .select("name mobile1 tasks")
       .lean();
-      let totalCount = 10;
+      let totalCount = 0;
 
     // 🔥 Filter only matching tasks (important)
     const result = data.map(item => {
