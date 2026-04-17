@@ -1,0 +1,83 @@
+/* Container to center everything perfectly on the screen */
+.no-internet-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh; /* Takes up most of the screen */
+  padding: 20px;
+  background-color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  text-align: center;
+}
+
+/* The SVG Illustration */
+.offline-illustration {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 24px;
+  opacity: 0.9;
+}
+
+/* Main Heading - styled like Amazon's dark charcoal */
+.offline-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #0F1111;
+  margin: 0 0 12px 0;
+  line-height: 1.2;
+}
+
+/* Subtitle text - lighter grey, highly readable */
+.offline-subtitle {
+  font-size: 16px;
+  color: #565959;
+  max-width: 400px;
+  line-height: 1.5;
+  margin: 0 0 32px 0;
+}
+
+/* The signature Amazon-style Action Button */
+.amazon-btn {
+  background-color: #FFD814;
+  border-color: #FCD200;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 8px; /* Modern Amazon radius */
+  color: #0F1111;
+  cursor: pointer;
+  padding: 10px 24px;
+  font-size: 15px;
+  font-weight: 500;
+  box-shadow: 0 2px 5px rgba(213,217,217, 0.5);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+  max-width: 250px;
+}
+
+.amazon-btn:hover {
+  background-color: #F7CA00;
+  border-color: #F2C200;
+  box-shadow: 0 2px 5px rgba(213,217,217, 0.8);
+}
+
+.amazon-btn:active {
+  background-color: #F0B800;
+  border-color: #008296; /* Amazon adds a slight blue focus ring sometimes, this grounds it */
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+/* Responsive adjustment for mobile phones */
+@media (max-width: 480px) {
+  .offline-title {
+    font-size: 20px;
+  }
+  .offline-subtitle {
+    font-size: 14px;
+  }
+  .offline-illustration {
+    width: 100px;
+    height: 100px;
+  }
+}

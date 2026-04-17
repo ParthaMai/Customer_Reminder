@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Navbar from './components/Navbar/Navbar'
 import Sidebar from './components/Sidebar/Sidebar'
 import { Route, Routes } from 'react-router-dom'
@@ -28,14 +28,32 @@ import BookingAppointment from './pages/BookingAppointment/BookingAppointment'
 import AddSale from './pages/AddSale/AddSale'
 import LandingPage from './pages/LandingPage/LandingPage'
 import CompletedTask from './pages/CompletedTask/CompletedTask'
-import './Toast.css'
+import NoInternet from './NoInternet'
 
 const App = () => {
 
-  const url = "https://customer-reminder-backend.onrender.com"
+  // const url = "https://customer-reminder-backend.onrender.com"
   //  const url = "http://192.168.1.8:4000"
 
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [showLogin,setShowLogin] = useState(false);
+
+    useEffect(() => {
+    const goOnline = () => setIsOnline(true);
+    const goOffline = () => setIsOnline(false);
+
+    window.addEventListener("online", goOnline);
+    window.addEventListener("offline", goOffline);
+
+    return () => {
+      window.removeEventListener("online", goOnline);
+      window.removeEventListener("offline", goOffline);
+    };
+  }, []);
+    // 🔥 MAIN LOGIC
+  if (!isOnline) {
+    return <NoInternet />;
+  }
 
   return (
     <>

@@ -28,6 +28,10 @@ const Reminder = () => {
 
   useEffect(() => {
     if (!token) return;
+     if (!navigator.onLine) {
+      toast.error("No Internet Connection");
+      return;
+    }
     const loadData = async () => {
       setLoading(true);
       await fetchReminderList(reminderPage, reminderCategory);

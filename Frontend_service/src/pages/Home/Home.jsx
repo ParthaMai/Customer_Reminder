@@ -10,6 +10,10 @@ const Home = () => {
   const { token, url } = useContext(StoreContext);
 
   const DobList = async () => {
+    if (!navigator.onLine) {
+      toast.error("No Internet Connection");
+      return;
+    }
     try {
       const response = await axios.get(`${url}/api/Birthday/dob-remind`);
       if (!response.data.success) {
@@ -21,6 +25,10 @@ const Home = () => {
     }
   }
   const RemindList = async () => {
+    if (!navigator.onLine) {
+      toast.error("No Internet Connection");
+      return;
+    }
     try {
       const response = await axios.get(`${url}/api/service-remind-list/remind`, { headers: { token } });
       if (!response.data.success) {
@@ -32,6 +40,10 @@ const Home = () => {
     }
   }
   const fetchList = async () => {
+    if (!navigator.onLine) {
+      toast.error("No Internet Connection");
+      return;
+    }
     try {
       const response = await axios.get(`${url}/api/pending-list/pending`, { headers: { token } });
       if (!response.data.success) {
@@ -43,6 +55,10 @@ const Home = () => {
     }
   }
   const BookingList = async () => {
+    if (!navigator.onLine) {
+      toast.error("No Internet Connection");
+      return;
+    }
     try {
       const response = await axios.get(`${url}/api/booking/Booking`, { headers: { token } });
       if (!response.data.success) {
@@ -57,7 +73,7 @@ const Home = () => {
   // use here to update only once or twice per day
   useEffect(() => {
 
-    if (!token) return; 
+    if (!token) return;
     RemindList(),
       fetchList(),
       DobList(),
