@@ -3,7 +3,7 @@ import Navbar from './components/Navbar/Navbar'
 import Sidebar from './components/Sidebar/Sidebar'
 import { Route, Routes } from 'react-router-dom'
 import Home from './pages/Home/Home'
-import { ToastContainer} from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import Reminder from './pages/Reminder/Reminder'
 import FullDetails_Reminder from './pages/Reminder/FullDetails_Reminder/FullDetails_Reminder'
 import Dob_reminder from './pages/Dob/Dob_reminder'
@@ -36,9 +36,9 @@ const App = () => {
   //  const url = "http://192.168.1.8:4000"
 
   const [isOnline, setIsOnline] = useState(navigator.onLine);
-  const [showLogin,setShowLogin] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
 
-    useEffect(() => {
+  useEffect(() => {
     const goOnline = () => setIsOnline(true);
     const goOffline = () => setIsOnline(false);
 
@@ -50,48 +50,48 @@ const App = () => {
       window.removeEventListener("offline", goOffline);
     };
   }, []);
-    // 🔥 MAIN LOGIC
+  // 🔥 MAIN LOGIC
   if (!isOnline) {
     return <NoInternet />;
   }
 
   return (
     <>
-    {showLogin?<LoginPopup setShowLogin={setShowLogin}/>:<></>}
-    <div className='app'>
-      
-      <Navbar setShowLogin={setShowLogin} /> {/* Pass the login props */}
-      <ToastContainer />
-      <hr/>
+      {showLogin ? <LoginPopup setShowLogin={setShowLogin} /> : <></>}
+      <div className='app'>
+
+        <Navbar setShowLogin={setShowLogin} /> {/* Pass the login props */}
+        <ToastContainer />
+        <hr />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path='/add-customer' element={<Customer/>} />
-          <Route path="/list_Service_Customer" element={<List_Service_Customer/>} />
-          <Route path="/list_Customer/FullList_Customer/:id" element={<FullList_Customer/>} />
-          <Route path="/list_Pending_Calls" element={<Pending_Calls/>} />
-          <Route path="/list_Pending/FullList_Pending/:id" element={<FullDetails_Pending/>} />
-          <Route path="/reminder" element = {<Reminder />} />
-          <Route path="/reminder/Fullist/:id" element={<FullDetails_Reminder/>} />
-          <Route path="/appointment" element = {<Appointment/>} />
-          <Route path="/appointment/FullList/:id" element = {<AppointmentDetails/>} />
-          <Route path="/today-earn" element = {<TodayEarn/>} />
-          <Route path="/service-history" element = {<ServiceHistory/>} />
-          <Route path="/contact-us" element = {<ContactUs/>} />
-          <Route path="/total-earning" element = {<TotalEarning/>} />
-          <Route path="/complete-service" element = {<MonthlyStats/>} />
-          <Route path="/subscription" element = {<SubsCription/>} />
-          <Route path="/booking-appointment" element = {<BookingAppointment/>} />
-          <Route path="/add-sale" element = {<AddSale/>} />
-          <Route path="/landing-page" element = {<LandingPage/>} />
-          <Route path="/completed-tasks" element = {<CompletedTask/>} />
+          <Route path='/add-customer' element={<Customer />} />
+          <Route path="/list_Service_Customer" element={<List_Service_Customer />} />
+          <Route path="/list_Customer/FullList_Customer/:id" element={<FullList_Customer />} />
+          <Route path="/list_Pending_Calls" element={<Pending_Calls />} />
+          <Route path="/list_Pending/FullList_Pending/:id" element={<FullDetails_Pending />} />
+          <Route path="/reminder" element={<Reminder />} />
+          <Route path="/reminder/Fullist/:id" element={<FullDetails_Reminder />} />
+          <Route path="/appointment" element={<Appointment />} />
+          <Route path="/appointment/FullList/:id" element={<AppointmentDetails />} />
+          <Route path="/today-earn" element={<TodayEarn />} />
+          <Route path="/service-history" element={<ServiceHistory />} />
+          <Route path="/contact-us" element={<ContactUs />} />
+          <Route path="/total-earning" element={<TotalEarning />} />
+          <Route path="/complete-service" element={<MonthlyStats />} />
+          <Route path="/subscription" element={<SubsCription />} />
+          <Route path="/booking-appointment" element={<BookingAppointment />} />
+          <Route path="/add-sale" element={<AddSale />} />
+          <Route path="/landing-page" element={<LandingPage />} />
+          <Route path="/completed-tasks" element={<CompletedTask />} />
 
-          
+
           {/* <Route path='/dob_reminder' element = {<Dob_reminder url={url} />} />
           <Route path='/dob/dob_wish/:id' element = {<Dob_wish url={url} />} /> */}
         </Routes>
 
         <Footer />
-    </div>
+      </div>
     </>
   )
 }
