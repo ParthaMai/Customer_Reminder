@@ -144,6 +144,24 @@ const AddSale = () => {
             return;
         }
 
+        // ✅ Remove all non-digit characters
+        let cleanNumber = String(mobileNumber)
+            .trim()
+            .replace(/[^0-9]/g, "");
+
+        // ✅ Remove leading 0
+        if (cleanNumber.startsWith("0")) {
+            cleanNumber = cleanNumber.substring(1);
+        }
+
+        // ✅ Add India country code if missing
+        if (cleanNumber.length === 10) {
+            cleanNumber = "91" + cleanNumber;
+        }
+        if (cleanNumber.length !== 12) {
+            alert("Invalid Indian number");
+            return;
+        }
         const message = `Hello ${customerData.name || "Customer"}, 😊\nHere is your invoice – you can check and download it anytime⬇️. \nThank you for choosing our service!`;
 
 
@@ -152,7 +170,7 @@ const AddSale = () => {
 
         // Open WhatsApp chat with pre-filled message
         window.open(
-            `https://wa.me/${mobileNumber}?text=${encodedMessage}`,
+            `https://wa.me/${cleanNumber}?text=${encodedMessage}`,
             "_blank"
         );
     };
@@ -228,7 +246,7 @@ const AddSale = () => {
                         }));
 
 
-                        toast.success(res.data.message);
+                        toast.success("Invoice created");
                     } else {
                         toast.error(res.data.message);
                         return false;
@@ -278,18 +296,21 @@ const AddSale = () => {
                 );
 
                 if (res.data.success) {
-                    toast.success("Customer + inovice created");
+                    toast.success("New Customer + inovice created");
                 } else {
                     toast.error(res.data.message);
                 }
             }
-            await axios.post(`${url}/api/totalEarning/Total-Earning`,
+            const result = await axios.post(`${url}/api/totalEarning/Total-Earning`,
                 {
                     totalPrice: totalPrice,
-                    serviceDate: data.serviceDate,
-                    userId: item?.userId   // safer
+                    serviceDate: data.serviceDate
                 },
                 { headers: { token } });
+
+                if(!result.data.success){
+                    toast.error(result.data.message)
+                }
 
             const res = await axios.post(`${url}/api/user/increment-bill`, {}, { headers: { token } });
             if (res.data.success) {
@@ -479,8 +500,8 @@ const AddSale = () => {
                 <hr />
                 <div className="field">
                     <select
+                    value={selectedNumber}
                         onChange={(e) => setSelectedNumber(e.target.value)}
-                        defaultValue=""
                     >
                         <option value="" disabled>
                             Select number

@@ -255,6 +255,24 @@ const AppointmentDetails = () => {
             return;
         }
 
+        // ✅ Remove all non-digit characters
+        let cleanNumber = String(mobileNumber)
+            .trim()
+            .replace(/[^0-9]/g, "");
+
+        // ✅ Remove leading 0
+        if (cleanNumber.startsWith("0")) {
+            cleanNumber = cleanNumber.substring(1);
+        }
+
+        // ✅ Add India country code if missing
+        if (cleanNumber.length === 10) {
+            cleanNumber = "91" + cleanNumber;
+        }
+        if (cleanNumber.length !== 12) {
+            alert("Invalid Indian number");
+            return;
+        }
         const message = `Hello ${item.name}, 😊\nHere is your invoice – you can check and download it anytime⬇️. \nThank you for choosing our service!`;
 
 
@@ -263,7 +281,7 @@ const AppointmentDetails = () => {
 
         // Open WhatsApp chat with pre-filled message
         window.open(
-            `https://wa.me/${mobileNumber}?text=${encodedMessage}`,
+            `https://wa.me/${cleanNumber}?text=${encodedMessage}`,
             "_blank"
         );
     };

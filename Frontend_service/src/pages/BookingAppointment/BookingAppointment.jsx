@@ -78,6 +78,25 @@ const BookingAppointment = () => {
             alert("No number selected");
             return;
         }
+
+         // ✅ Remove all non-digit characters
+        let cleanNumber = String(mobileNumber)
+            .trim()
+            .replace(/[^0-9]/g, "");
+
+        // ✅ Remove leading 0
+        if (cleanNumber.startsWith("0")) {
+            cleanNumber = cleanNumber.substring(1);
+        }
+
+        // ✅ Add India country code if missing
+        if (cleanNumber.length === 10) {
+            cleanNumber = "91" + cleanNumber;
+        }
+        if (cleanNumber.length !== 12) {
+            alert("Invalid Indian number");
+            return;
+        }
         const customerName = item?.name || data.name || "Customer";
 
         const message = `Hello ${customerName}, 😊\nYour appointment is scheduled on ${bookingData.bookingDate}.\nWe look forward to serving you. Thank you!`;
@@ -88,7 +107,7 @@ const BookingAppointment = () => {
 
         // Open WhatsApp chat with pre-filled message
         window.open(
-            `https://wa.me/${mobileNumber}?text=${encodedMessage}`,
+            `https://wa.me/${cleanNumber}?text=${encodedMessage}`,
             "_blank"
         );
     };
