@@ -146,7 +146,7 @@ const updateField = async (req, res) => {
     const updated = await CashModel.findByIdAndUpdate(
       _id,
       updateFields,
-      { new: true }
+      { returnDocument: "after" }
     );
 
     if (!updated) {
@@ -182,7 +182,7 @@ const updateReminder = async (req, res) => {
     const updated = await CashModel.findByIdAndUpdate(
       _id,
       { $set: payload },
-      { new: true }
+      { returnDocument: "after" }
     );
 
     if (!updated) {

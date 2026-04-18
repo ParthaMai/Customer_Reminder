@@ -30,8 +30,9 @@ const getMonthlyEarnings = async (req, res) => {
 
 const calculateTotalEarning = async (req, res) => {
   try {
-    const { totalPrice, serviceDate, userId } = req.body;
-    if (!totalPrice || !serviceDate || !userId) {
+    const { totalPrice, serviceDate } = req.body;
+    const userId = req.userId;
+    if (!totalPrice || !serviceDate) {
       return res.status(400).json({ success: false, message: "Missing data" });
     }
 
