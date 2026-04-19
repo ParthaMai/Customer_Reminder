@@ -6,21 +6,21 @@ const plans = [
     {
         title: "Free Trial",
         price: "₹0",
-        duration: "/45 Days",
+        duration: "/15 Days",
         features: ["All basic features", "No payment required", "Limited access"],
         badge: "Start Here",
     },
     {
         title: "Starter",
-        price: "₹125",
+        price: "₹99",
         duration: "/per month",
         features: ["500 Customers", "Full CRM", "Email Support"],
     },
     {
         title: "Growth",
-        price: "₹249",
+        price: "₹149",
         duration: "/per month",
-        features: ["1000 Customers", "Priority Support", "Advanced Tools"],
+        features: ["1500 Customers", "Priority Support", "Advanced Tools"],
         badge: "Most Popular",
         highlight: true,
     },
@@ -28,7 +28,7 @@ const plans = [
         title: "Pro",
         price: "₹299",
         duration: "/per month",
-        features: ["1500 Customers", "All Features", "Premium Support"],
+        features: ["Unlimited Customers", "All Features", "Premium Support"],
     },
 ];
 
