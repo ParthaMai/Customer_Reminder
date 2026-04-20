@@ -173,7 +173,7 @@ useEffect(() => {
                 <div className="top-accent"></div>
                 <span className="premium-label">Special Launch Pricing</span>
                 <h2 className="main-price">
-                    <span className="curr">₹</span>3
+                    <span className="curr">₹</span>2
                     <span className="per">/ user / year</span>
                 </h2>
                 <p className="desc-text">
@@ -198,7 +198,7 @@ useEffect(() => {
                         <div className="price-card">
                             <div className="popular-tag">Start Here</div>
                             <h3>Free Trial</h3>
-                            <div className="price">₹0<span>/45 Days</span></div>
+                            <div className="price">₹0<span>/15 Days</span></div>
                             <ul>
                                 <li>All basic features</li>
                                 <li>No payment required</li>
@@ -210,7 +210,7 @@ useEffect(() => {
                         {/* Starter */}
                         <div className="price-card">
                             <h3>Starter</h3>
-                            <div className="price">₹125<span>/per month</span></div>
+                            <div className="price">₹99<span>/per month</span></div>
                             <ul>
                                 <li>500 Customers</li>
                                 <li>Full CRM Access</li>
@@ -223,9 +223,9 @@ useEffect(() => {
                         <div className="price-card highlight">
                             <div className="popular-tag">Most Popular</div>
                             <h3>Growth</h3>
-                            <div className="price">₹249<span>/per month</span></div>
+                            <div className="price">₹149<span>/per month</span></div>
                             <ul>
-                                <li>1000 Customers</li>
+                                <li>1500 Customers</li>
                                 <li>Priority Support</li>
                                 <li>Advanced Tools</li>
                             </ul>
@@ -237,7 +237,7 @@ useEffect(() => {
                             <h3>Pro</h3>
                             <div className="price">₹299<span>/per month</span></div>
                             <ul>
-                                <li>1500 Customers</li>
+                                <li>Unlimited Customers</li>
                                 <li>All Features Included</li>
                                 <li>Premium Support</li>
                             </ul>
@@ -253,7 +253,7 @@ useEffect(() => {
                 <div className="cta-content">
                     <h2>Ready to transform your workflow?</h2>
                     <p>Join 1,000+ businesses growing with our Gromybusiness.com.</p>
-                    <button className="btn-white" onClick={() => navigate("/contact-us")}>Get Started for Free</button>
+                    <button className="btn-white" onClick={handleCall}>Get Started for Free</button>
                 </div>
             </section>
         </div>
