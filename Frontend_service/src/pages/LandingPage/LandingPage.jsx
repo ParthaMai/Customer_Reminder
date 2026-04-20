@@ -82,36 +82,36 @@ const features = [
 ];
 
 const LandingPage = () => {
-  
+
     const [toggle, setToggle] = useState(false);
     const handleCall = () => {
-    const number = toggle ? "9883737708" : "9735359121";
+        const number = toggle ? "9883737708" : "9735359121";
 
-    window.location.href = `tel:${number}`;
-    
-    setToggle(!toggle);
+        window.location.href = `tel:${number}`;
+
+        setToggle(!toggle);
     };
 
-useEffect(() => {
-  const elements = document.querySelectorAll(".reveal");
+    useEffect(() => {
+        const elements = document.querySelectorAll(".reveal");
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("active");
-        }
-      });
-    },
-    {
-      threshold: 0.15,
-    }
-  );
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("active");
+                    }
+                });
+            },
+            {
+                threshold: 0.15,
+            }
+        );
 
-  elements.forEach((el) => observer.observe(el));
+        elements.forEach((el) => observer.observe(el));
 
-  return () => observer.disconnect();
-}, []);
+        return () => observer.disconnect();
+    }, []);
     return (
         <div className="landing">
             {/* HERO SECTION */}
@@ -121,12 +121,12 @@ useEffect(() => {
                         <h1>GROW Your Business <span>Smarter</span></h1>
                         <div className="hero-image-wrapper">
                             <div className="glass-card main-video">
-                            <video
-                                src="https://res.cloudinary.com/dmos7gusc/video/upload/v1775905561/Promo_video_nb6v4j.mp4"
-                                autoPlay
-                                controls
-                                playsInline
-                            />
+                                <video
+                                    src="https://res.cloudinary.com/dmos7gusc/video/upload/v1775905561/Promo_video_nb6v4j.mp4"
+                                    autoPlay
+                                    controls
+                                    playsInline
+                                />
                             </div>
                             <div className="floating-badge badge-1">📈 +24% Sales</div>
                             <div className="floating-badge badge-2">👥 1.2k New Users</div>
