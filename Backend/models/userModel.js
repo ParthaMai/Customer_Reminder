@@ -38,6 +38,15 @@ const userSchema = new mongoose.Schema({
     totalBill:{
         type: Number,
         default: 0
+    },
+    plainCustomer:{
+        type: String
+    },
+    plainPrice:{
+        type: Number
+    },
+    Otp:{
+        type: Number
     }
 },
     { timestamps: true },
