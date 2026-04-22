@@ -45,9 +45,12 @@ const userSchema = new mongoose.Schema({
     plainPrice:{
         type: Number
     },
-    Otp:{
+    otp:{
         type: Number
-    }
+    },
+    otpExpiry: { 
+        type: Date 
+    },
 },
     { timestamps: true },
 );

@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 import validator from "validator"
 import cloudinary from "../config/cloudinary.js";
+import transporter from "../config/mail.js";
 
 // Login user
 const loginUser = async (req, res) => {
@@ -16,13 +17,13 @@ const loginUser = async (req, res) => {
     const user = await userModel.findOne({ mobile });
 
     if (!user) {
-      return res.json({ success: false, message: "user Doesn't exist Please Check Mobile Number" });
+      return res.json({ success: false, message: "Invalid mobile or password" });
     }
 
     const isMatch = await bcrypt.compare(password,user.password);
     
     if (!isMatch) {
-      return res.json({ success: false, message: "Invalid password" });
+      return res.json({ success: false, message: "Invalid mobile or password" });
     }
 
 
@@ -129,6 +130,7 @@ const registerUser = async (req, res) => {
 }
 
 
+// in storeContext 
 const getUserProfile = async (req, res) => {
   try {
     const user = await userModel.findById(req.userId).select("-password");
@@ -170,6 +172,89 @@ const incrementBill = async (req, res) => {
   }
 };
 
+// For send OTP on mail
+const sendOtp = async (req, res) => {
+  const { mobile } = req.body;
+
+  try {
+    // ✅ Validate mobile number
+    if (!mobile || !/^[0-9]{10}$/.test(mobile)) {
+      return res.json({ success: false, message: "Enter valid mobile number" });
+    }
+
+    // ✅ Find user using mobile
+    const user = await userModel.findOne({ mobile });
+    if (!user) {
+      return res.json({ success: false, message: "User not found OR Invalid Mobile Number" });
+    }
+
+    // ✅ Generate OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+    user.otp = otp;
+    user.otpExpiry = Date.now() + 5 * 60 * 1000; // 5 min
+    await user.save();
+
+    // ✅ Send OTP to user's email
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: user.email, // 🔥 important change
+      subject: "Password Reset OTP",
+      text: `Your OTP is ${otp}`,
+    });
+
+    res.json({ success: true, message: "OTP sent to registered email" });
+
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: "Error sending OTP" });
+  }
+};
+
+// OTP Verifiation
+const verifyOtpAndChangePassword = async (req, res) => {
+  const { mobile, otp, newPassword } = req.body;
+
+  try {
+    // ✅ Validate mobile
+    if (!mobile || !/^[0-9]{10}$/.test(mobile)) {
+      return res.json({ success: false, message: "Enter valid mobile number" });
+    }
+
+    // ✅ Find user using mobile
+    const user = await userModel.findOne({ mobile });
+
+    if (!user) {
+      return res.json({ success: false, message: "User not found OR Invalid Mobile Number" });
+    }
+
+    // ✅ Check OTP
+    if (user.otp.toString() !== otp.toString() || user.otpExpiry < Date.now()) {
+  return res.json({ success: false, message: "Invalid or expired OTP" });
+}
+
+    // ✅ Validate new password
+    if (!newPassword || newPassword.length < 8) {
+      return res.json({success: false, message: "Password must be at least 8 characters", });
+    }
+
+    // ✅ Hash password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+
+    // ✅ Clear OTP
+    user.otp = null;
+    user.otpExpiry = null;
+
+    await user.save();
+
+    res.json({ success: true, message: "Password changed successfully" });
+
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: "Error resetting password" });
+  }
+};
 
 
-export { loginUser, registerUser, getUserProfile, incrementBill };
+export { loginUser, registerUser, getUserProfile, incrementBill, sendOtp, verifyOtpAndChangePassword };
