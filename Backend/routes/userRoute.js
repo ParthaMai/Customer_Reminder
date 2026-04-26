@@ -14,4 +14,3 @@ userRouter.post("/send-otp", sendOtp);
 userRouter.post("/reset-password", verifyOtpAndChangePassword);
 
 export default userRouter;
-// now setup this userRouter in server.js file
