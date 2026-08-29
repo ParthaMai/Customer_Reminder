@@ -2,9 +2,9 @@ import axios from "axios";
 
 const axiosInstance = axios.create({
   // baseURL: "http://192.168.1.8:4000"
-  baseURL: "https://customer-reminder-backend.onrender.com"
+  // baseURL: "https://customer-reminder-backend.onrender.com"
   // baseURL: "http://13.201.29.150"
-  // baseURL: "https://server.gromybusiness.com"
+  baseURL: "https://server.gromybusiness.com"
   // baseURL : "https://server.gromybusiness.com"
 });
 
